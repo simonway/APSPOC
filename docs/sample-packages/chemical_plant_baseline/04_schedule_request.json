@@ -1,0 +1,228 @@
+{
+  "scenarioName": "chemical-plant-baseline-v1",
+  "scheduleStartAt": "2026-05-01T08:00:00Z",
+  "horizonMinutes": 2880,
+  "resources": [
+    {
+      "id": "reactor_r01",
+      "label": "Reactor-R01",
+      "resourceType": "REACTOR",
+      "sortOrder": 1
+    },
+    {
+      "id": "reactor_r02",
+      "label": "Reactor-R02",
+      "resourceType": "REACTOR",
+      "sortOrder": 2
+    },
+    {
+      "id": "reactor_r03",
+      "label": "Reactor-R03",
+      "resourceType": "REACTOR",
+      "sortOrder": 3
+    },
+    {
+      "id": "tank_t01",
+      "label": "Blend-Tank-T01",
+      "resourceType": "TANK",
+      "sortOrder": 4
+    },
+    {
+      "id": "tank_t02",
+      "label": "Blend-Tank-T02",
+      "resourceType": "TANK",
+      "sortOrder": 5
+    },
+    {
+      "id": "filter_f01",
+      "label": "Filter-F01",
+      "resourceType": "FILTER",
+      "sortOrder": 6
+    },
+    {
+      "id": "filter_f02",
+      "label": "Filter-F02",
+      "resourceType": "FILTER",
+      "sortOrder": 7
+    },
+    {
+      "id": "dryer_d01",
+      "label": "Dryer-D01",
+      "resourceType": "DRYER",
+      "sortOrder": 8
+    },
+    {
+      "id": "dryer_d02",
+      "label": "Dryer-D02",
+      "resourceType": "DRYER",
+      "sortOrder": 9
+    }
+  ],
+  "tasks": [
+    {
+      "id": "batch_pa101",
+      "label": "Batch PA-101",
+      "productCode": "PA-101",
+      "durationMinutes": 480,
+      "dueMinutes": 960,
+      "priority": 5,
+      "candidateResourceIds": ["reactor_r01", "reactor_r02"]
+    },
+    {
+      "id": "batch_pa102",
+      "label": "Batch PA-102",
+      "productCode": "PA-102",
+      "durationMinutes": 540,
+      "dueMinutes": 1320,
+      "priority": 4,
+      "candidateResourceIds": ["reactor_r01", "reactor_r02", "reactor_r03"]
+    },
+    {
+      "id": "batch_pa103",
+      "label": "Batch PA-103",
+      "productCode": "PA-103",
+      "durationMinutes": 600,
+      "dueMinutes": 1800,
+      "priority": 3,
+      "candidateResourceIds": ["reactor_r02", "reactor_r03"]
+    },
+    {
+      "id": "batch_sol201",
+      "label": "Batch SOL-201",
+      "productCode": "SOL-201",
+      "durationMinutes": 420,
+      "dueMinutes": 1020,
+      "priority": 5,
+      "candidateResourceIds": ["reactor_r01", "reactor_r03"]
+    },
+    {
+      "id": "batch_sol202",
+      "label": "Batch SOL-202",
+      "productCode": "SOL-202",
+      "durationMinutes": 360,
+      "dueMinutes": 1440,
+      "priority": 4,
+      "candidateResourceIds": ["reactor_r01", "reactor_r02", "reactor_r03"],
+      "pinnedResourceId": "reactor_r03"
+    },
+    {
+      "id": "blend_rs301",
+      "label": "Blend RS-301",
+      "productCode": "RS-301",
+      "durationMinutes": 300,
+      "dueMinutes": 1260,
+      "priority": 3,
+      "candidateResourceIds": ["tank_t01", "tank_t02"]
+    },
+    {
+      "id": "blend_rs302",
+      "label": "Blend RS-302",
+      "productCode": "RS-302",
+      "durationMinutes": 360,
+      "dueMinutes": 1680,
+      "priority": 4,
+      "candidateResourceIds": ["tank_t01", "tank_t02"]
+    },
+    {
+      "id": "blend_rs303",
+      "label": "Blend RS-303",
+      "productCode": "RS-303",
+      "durationMinutes": 240,
+      "dueMinutes": 2040,
+      "priority": 2,
+      "candidateResourceIds": ["tank_t02"]
+    },
+    {
+      "id": "polish_pf401",
+      "label": "Polish PF-401",
+      "productCode": "PF-401",
+      "durationMinutes": 280,
+      "dueMinutes": 1920,
+      "priority": 3,
+      "candidateResourceIds": ["filter_f01", "filter_f02"]
+    },
+    {
+      "id": "polish_pf402",
+      "label": "Polish PF-402",
+      "productCode": "PF-402",
+      "durationMinutes": 320,
+      "dueMinutes": 2160,
+      "priority": 2,
+      "candidateResourceIds": ["filter_f01", "filter_f02"]
+    },
+    {
+      "id": "dry_pd501",
+      "label": "Dry PD-501",
+      "productCode": "PD-501",
+      "durationMinutes": 420,
+      "dueMinutes": 2400,
+      "priority": 4,
+      "candidateResourceIds": ["dryer_d01", "dryer_d02"]
+    },
+    {
+      "id": "dry_pd502",
+      "label": "Dry PD-502",
+      "productCode": "PD-502",
+      "durationMinutes": 300,
+      "dueMinutes": 2640,
+      "priority": 2,
+      "candidateResourceIds": ["dryer_d01", "dryer_d02"],
+      "pinnedStartMinutes": 2040
+    }
+  ],
+  "downtimes": [
+    {
+      "id": "maintenance_reactor_r01_morning",
+      "resourceId": "reactor_r01",
+      "startMinutes": 240,
+      "endMinutes": 420,
+      "downtimeType": "MAINTENANCE",
+      "source": "CALENDAR",
+      "description": "Preventive maintenance window for Reactor-R01"
+    },
+    {
+      "id": "cleaning_reactor_r03_midshift",
+      "resourceId": "reactor_r03",
+      "startMinutes": 1080,
+      "endMinutes": 1260,
+      "downtimeType": "CLEANING",
+      "source": "CALENDAR",
+      "description": "Intermediate wash and clearance for Reactor-R03"
+    },
+    {
+      "id": "cip_tank_t02",
+      "resourceId": "tank_t02",
+      "startMinutes": 900,
+      "endMinutes": 1080,
+      "downtimeType": "CIP",
+      "source": "CALENDAR",
+      "description": "Tank-T02 cleaning cycle"
+    },
+    {
+      "id": "inspection_filter_f01",
+      "resourceId": "filter_f01",
+      "startMinutes": 1560,
+      "endMinutes": 1680,
+      "downtimeType": "INSPECTION",
+      "source": "CALENDAR",
+      "description": "Filter-F01 media inspection"
+    },
+    {
+      "id": "calibration_dryer_d02",
+      "resourceId": "dryer_d02",
+      "startMinutes": 1860,
+      "endMinutes": 1980,
+      "downtimeType": "CALIBRATION",
+      "source": "CALENDAR",
+      "description": "Dryer-D02 sensor calibration"
+    }
+  ],
+  "objectiveWeights": {
+    "tardiness": 100,
+    "makespan": 1
+  },
+  "solverConfig": {
+    "timeLimitSeconds": 10,
+    "numSearchWorkers": 4
+  }
+}

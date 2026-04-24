@@ -1,0 +1,56 @@
+[
+  {
+    "id": "reactor_r01",
+    "label": "Reactor-R01",
+    "resourceType": "REACTOR",
+    "sortOrder": 1
+  },
+  {
+    "id": "reactor_r02",
+    "label": "Reactor-R02",
+    "resourceType": "REACTOR",
+    "sortOrder": 2
+  },
+  {
+    "id": "reactor_r03",
+    "label": "Reactor-R03",
+    "resourceType": "REACTOR",
+    "sortOrder": 3
+  },
+  {
+    "id": "tank_t01",
+    "label": "Blend-Tank-T01",
+    "resourceType": "TANK",
+    "sortOrder": 4
+  },
+  {
+    "id": "tank_t02",
+    "label": "Blend-Tank-T02",
+    "resourceType": "TANK",
+    "sortOrder": 5
+  },
+  {
+    "id": "filter_f01",
+    "label": "Filter-F01",
+    "resourceType": "FILTER",
+    "sortOrder": 6
+  },
+  {
+    "id": "filter_f02",
+    "label": "Filter-F02",
+    "resourceType": "FILTER",
+    "sortOrder": 7
+  },
+  {
+    "id": "dryer_d01",
+    "label": "Dryer-D01",
+    "resourceType": "DRYER",
+    "sortOrder": 8
+  },
+  {
+    "id": "dryer_d02",
+    "label": "Dryer-D02",
+    "resourceType": "DRYER",
+    "sortOrder": 9
+  }
+]

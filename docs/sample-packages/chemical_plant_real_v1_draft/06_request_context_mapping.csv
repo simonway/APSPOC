@@ -1,0 +1,8 @@
+targetField,中文说明,status,draftValue,sourceSystem,sourceSheet,sourceField,transformRule,owner,remarks
+scenarioName,场景名称,PENDING,chemical-plant-real-v1-draft,,,,建议组合工厂/车间/计划周期/版本,,
+scheduleStartAt,排产起点时间,PENDING,2026-05-01T00:00:00Z,,,,统一转 ISO-8601 UTC,,
+horizonMinutes,排产窗口分钟数,PENDING,2880,,,,用结束时间减开始时间并换算分钟,,
+objectiveWeights.tardiness,延迟权重,DEFAULT,100,,,,暂按默认值保留,,
+objectiveWeights.makespan,工期权重,DEFAULT,1,,,,暂按默认值保留,,
+solverConfig.timeLimitSeconds,求解时限(秒),PENDING,10,,,,按任务量和环境限制调整,,
+solverConfig.numSearchWorkers,求解并行线程数,PENDING,4,,,,按部署环境 CPU 核数调整,,

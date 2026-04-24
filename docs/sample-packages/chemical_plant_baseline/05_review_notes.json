@@ -1,0 +1,19 @@
+{
+  "businessProfile": {
+    "plantType": "synthetic chemical batch plant",
+    "planningWindowMinutes": 2880,
+    "resourceFamilies": ["reactor", "tank", "filter", "dryer"],
+    "sampleIntent": "review and demo baseline"
+  },
+  "modelingNotes": [
+    "Tasks are modeled as independent resource-allocation jobs because the current solver request does not support stage precedence.",
+    "Downtime windows are intentionally included for every major resource family to exercise gantt rendering and no-overlap constraints.",
+    "One pinned resource example and one pinned start example are included to exercise the current request schema."
+  ],
+  "reviewChecklist": [
+    "Is this resource pool close enough to the target business domain?",
+    "Are task durations, due windows, and priorities realistic enough for discussion?",
+    "Should the next sample package introduce packaging, utilities, or hold resources via resourceType OTHER?",
+    "Do we need a second sample package that is smaller and easier for demos?"
+  ]
+}

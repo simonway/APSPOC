@@ -1,0 +1,85 @@
+{
+  "scenarioName": "reactor-poc-baseline",
+  "scheduleStartAt": "2026-04-15T08:00:00Z",
+  "horizonMinutes": 2880,
+  "resources": [
+    {
+      "id": "reactor_01",
+      "label": "Reactor-01",
+      "resourceType": "REACTOR",
+      "sortOrder": 1
+    },
+    {
+      "id": "reactor_02",
+      "label": "Reactor-02",
+      "resourceType": "REACTOR",
+      "sortOrder": 2
+    }
+  ],
+  "tasks": [
+    {
+      "id": "batch_A",
+      "label": "Batch A",
+      "productCode": "A",
+      "durationMinutes": 480,
+      "dueMinutes": 1080,
+      "priority": 3,
+      "candidateResourceIds": ["reactor_01", "reactor_02"]
+    },
+    {
+      "id": "batch_B",
+      "label": "Batch B",
+      "productCode": "B",
+      "durationMinutes": 720,
+      "dueMinutes": 900,
+      "priority": 5,
+      "candidateResourceIds": ["reactor_01", "reactor_02"]
+    },
+    {
+      "id": "batch_C",
+      "label": "Batch C",
+      "productCode": "C",
+      "durationMinutes": 600,
+      "dueMinutes": 1800,
+      "priority": 1,
+      "candidateResourceIds": ["reactor_01", "reactor_02"]
+    },
+    {
+      "id": "batch_D",
+      "label": "Batch D",
+      "productCode": "D",
+      "durationMinutes": 360,
+      "dueMinutes": 1440,
+      "priority": 4,
+      "candidateResourceIds": ["reactor_01", "reactor_02"]
+    },
+    {
+      "id": "batch_E",
+      "label": "Batch E",
+      "productCode": "E",
+      "durationMinutes": 540,
+      "dueMinutes": 2100,
+      "priority": 2,
+      "candidateResourceIds": ["reactor_01", "reactor_02"]
+    }
+  ],
+  "downtimes": [
+    {
+      "id": "maintenance_reactor_01_morning",
+      "resourceId": "reactor_01",
+      "startMinutes": 240,
+      "endMinutes": 420,
+      "downtimeType": "MAINTENANCE",
+      "source": "CALENDAR",
+      "description": "Preventive maintenance window"
+    }
+  ],
+  "objectiveWeights": {
+    "tardiness": 100,
+    "makespan": 1
+  },
+  "solverConfig": {
+    "timeLimitSeconds": 10,
+    "numSearchWorkers": 4
+  }
+}

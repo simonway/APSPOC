@@ -1,0 +1,68 @@
+{
+  "packageName": "chemical_plant_baseline",
+  "version": "v0.2",
+  "type": "synthetic-business-sample",
+  "domain": "chemical batch production scheduling",
+  "description": "Synthetic sample package aligned with the current APS POC API and solver capabilities, plus templates for mapping real business samples.",
+  "alignedCapabilities": [
+    "session-protected schedule job submission",
+    "multi-resource candidate assignment",
+    "resource downtime windows",
+    "version persistence and gantt output",
+    "objective weights and solver config"
+  ],
+  "limitations": [
+    "No stage-to-stage precedence is modeled because the current solver request does not support precedence constraints.",
+    "No changeover times are modeled because changeovers are reserved but not implemented in the current API.",
+    "No inventory or material balance constraints are modeled in this sample package."
+  ],
+  "files": [
+    {
+      "file": "01_resources.json",
+      "purpose": "Resource master sample"
+    },
+    {
+      "file": "02_tasks.json",
+      "purpose": "Task and demand sample"
+    },
+    {
+      "file": "03_downtimes.json",
+      "purpose": "Downtime calendar sample"
+    },
+    {
+      "file": "04_schedule_request.json",
+      "purpose": "Direct API request payload for POST /api/v1/schedule/jobs"
+    },
+    {
+      "file": "05_review_notes.json",
+      "purpose": "Review prompts and modeling notes"
+    },
+    {
+      "file": "06_request_context_mapping_template.csv",
+      "purpose": "Template for mapping real business schedule context and solver parameters"
+    },
+    {
+      "file": "07_resource_mapping_template.csv",
+      "purpose": "Template for mapping real business resource fields"
+    },
+    {
+      "file": "08_task_mapping_template.csv",
+      "purpose": "Template for mapping real business task fields"
+    },
+    {
+      "file": "09_downtime_mapping_template.csv",
+      "purpose": "Template for mapping real business downtime fields"
+    },
+    {
+      "file": "10_real_business_sample_collection_checklist.md",
+      "purpose": "Checklist for scoping and validating a first real business sample"
+    }
+  ],
+  "recommendedUsage": [
+    "Use 04_schedule_request.json directly with POST /api/v1/schedule/jobs.",
+    "Use 01/02/03 files as a business-facing decomposition of the same request.",
+    "Fill 06/07/08/09 templates before preparing a first real business sample.",
+    "Use 10_real_business_sample_collection_checklist.md to control sample scope and identify unsupported business constraints.",
+    "Treat this package as a synthetic review and demo baseline, then evolve it into a real business sample package."
+  ]
+}

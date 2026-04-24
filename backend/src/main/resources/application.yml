@@ -1,0 +1,33 @@
+server:
+  port: ${SERVER_PORT:8081}
+  servlet:
+    session:
+      cookie:
+        http-only: true
+        same-site: lax
+
+spring:
+  application:
+    name: aps-poc-backend
+  datasource:
+    url: ${APS_DB_URL:jdbc:postgresql://localhost:5432/aps_poc}
+    username: ${APS_DB_USERNAME:aps}
+    password: ${APS_DB_PASSWORD:aps}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+aps:
+  solver:
+    base-url: http://localhost:8000
+  auth:
+    username: ${APS_AUTH_USERNAME:admin}
+    password: ${APS_AUTH_PASSWORD:admin123}
+    session-timeout-minutes: ${APS_AUTH_SESSION_TIMEOUT_MINUTES:480}

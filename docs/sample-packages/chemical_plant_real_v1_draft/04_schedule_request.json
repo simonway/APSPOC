@@ -1,0 +1,16 @@
+{
+  "scenarioName": "chemical-plant-real-v1-draft",
+  "scheduleStartAt": "2026-05-01T00:00:00Z",
+  "horizonMinutes": 2880,
+  "resources": [],
+  "tasks": [],
+  "downtimes": [],
+  "objectiveWeights": {
+    "tardiness": 100,
+    "makespan": 1
+  },
+  "solverConfig": {
+    "timeLimitSeconds": 10,
+    "numSearchWorkers": 4
+  }
+}

@@ -1,0 +1,8 @@
+targetField,中文说明,是否必填,当前样例值,建议来源,来源系统,来源表或Sheet,来源字段,转换规则,待确认问题
+scenarioName,场景名称,是,chemical-plant-baseline-v1,计划场景命名规则,,,,建议组合工厂/产线/周期/版本信息,是否需要包含班次或车间编码
+scheduleStartAt,排产起点时间(ISO-8601 UTC),是,2026-05-01T08:00:00Z,计划开始时间,,,,将业务本地时间统一换算为 UTC 时间戳,工厂时区是否固定
+horizonMinutes,排产窗口分钟数,是,2880,计划周期,,,,用结束时间减开始时间并换算为分钟,窗口是固定 2 天还是按业务场景浮动
+objectiveWeights.tardiness,延迟权重,否,100,调度策略/默认参数,,,,POC 建议先保留 100,是否需要按场景区分权重
+objectiveWeights.makespan,工期权重,否,1,调度策略/默认参数,,,,POC 建议先保留 1,是否需要强调压缩总工期
+solverConfig.timeLimitSeconds,求解时限(秒),否,10,系统配置,,,,POC 建议 10-30 秒,是否需要按任务量分档
+solverConfig.numSearchWorkers,求解并行线程数,否,4,系统配置,,,,按部署环境 CPU 核数配置,部署环境可用核数是多少

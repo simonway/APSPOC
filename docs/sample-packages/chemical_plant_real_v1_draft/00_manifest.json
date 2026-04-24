@@ -1,0 +1,67 @@
+{
+  "packageName": "chemical_plant_real_v1_draft",
+  "version": "v0.1",
+  "type": "real-business-sample-draft",
+  "status": "assembly-draft",
+  "submitReady": false,
+  "domain": "chemical batch production scheduling",
+  "description": "First assembly draft for a real business sample package. Fill the staging CSV files first, then complete the JSON payload files.",
+  "basedOn": [
+    "docs/sample-packages/chemical_plant_baseline/04_schedule_request.json",
+    "docs/product/06_data_and_rules/真实业务样本映射说明.md"
+  ],
+  "currentAssumptions": [
+    "The first real sample should focus on one workshop or one production area.",
+    "The planning horizon should start with 2 to 7 days.",
+    "The current solver only supports independent tasks, candidate resources, downtimes, pinned resource, and pinned start constraints."
+  ],
+  "files": [
+    {
+      "file": "01_resources.json",
+      "purpose": "Final resource master JSON to be produced from 07_resource_staging.csv"
+    },
+    {
+      "file": "02_tasks.json",
+      "purpose": "Final task JSON to be produced from 08_task_staging.csv"
+    },
+    {
+      "file": "03_downtimes.json",
+      "purpose": "Final downtime JSON to be produced from 09_downtime_staging.csv"
+    },
+    {
+      "file": "04_schedule_request.json",
+      "purpose": "Final request payload assembled from 01/02/03 and 06_request_context_mapping.csv"
+    },
+    {
+      "file": "05_package_notes.md",
+      "purpose": "Package usage notes and completion criteria"
+    },
+    {
+      "file": "06_request_context_mapping.csv",
+      "purpose": "Mapping table for scenario parameters and solver settings"
+    },
+    {
+      "file": "07_resource_staging.csv",
+      "purpose": "Row-level staging table for real business resource data"
+    },
+    {
+      "file": "08_task_staging.csv",
+      "purpose": "Row-level staging table for real business task data"
+    },
+    {
+      "file": "09_downtime_staging.csv",
+      "purpose": "Row-level staging table for real business downtime data"
+    },
+    {
+      "file": "10_data_gap_register.md",
+      "purpose": "Register of unresolved mapping issues and unsupported business constraints"
+    }
+  ],
+  "completionChecklist": [
+    "06_request_context_mapping.csv has confirmed draft values and source fields.",
+    "07_resource_staging.csv has enough rows to generate a non-empty 01_resources.json.",
+    "08_task_staging.csv has enough rows to generate a non-empty 02_tasks.json.",
+    "09_downtime_staging.csv is either filled or explicitly confirmed empty for the selected horizon.",
+    "04_schedule_request.json is updated and can be submitted to POST /api/v1/schedule/jobs."
+  ]
+}

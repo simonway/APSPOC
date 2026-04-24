@@ -1,0 +1,47 @@
+[
+  {
+    "id": "maintenance_reactor_r01_morning",
+    "resourceId": "reactor_r01",
+    "startMinutes": 240,
+    "endMinutes": 420,
+    "downtimeType": "MAINTENANCE",
+    "source": "CALENDAR",
+    "description": "Preventive maintenance window for Reactor-R01"
+  },
+  {
+    "id": "cleaning_reactor_r03_midshift",
+    "resourceId": "reactor_r03",
+    "startMinutes": 1080,
+    "endMinutes": 1260,
+    "downtimeType": "CLEANING",
+    "source": "CALENDAR",
+    "description": "Intermediate wash and clearance for Reactor-R03"
+  },
+  {
+    "id": "cip_tank_t02",
+    "resourceId": "tank_t02",
+    "startMinutes": 900,
+    "endMinutes": 1080,
+    "downtimeType": "CIP",
+    "source": "CALENDAR",
+    "description": "Tank-T02 cleaning cycle"
+  },
+  {
+    "id": "inspection_filter_f01",
+    "resourceId": "filter_f01",
+    "startMinutes": 1560,
+    "endMinutes": 1680,
+    "downtimeType": "INSPECTION",
+    "source": "CALENDAR",
+    "description": "Filter-F01 media inspection"
+  },
+  {
+    "id": "calibration_dryer_d02",
+    "resourceId": "dryer_d02",
+    "startMinutes": 1860,
+    "endMinutes": 1980,
+    "downtimeType": "CALIBRATION",
+    "source": "CALENDAR",
+    "description": "Dryer-D02 sensor calibration"
+  }
+]

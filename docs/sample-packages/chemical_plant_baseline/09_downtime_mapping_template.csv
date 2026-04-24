@@ -1,0 +1,8 @@
+targetField,中文说明,是否必填,当前样例值,建议来源,来源系统,来源表或Sheet,来源字段,转换规则,待确认问题
+id,停机唯一标识,是,maintenance_reactor_r01_morning,维护计划/停机台账,,,,建议统一为英文小写+下划线且在本次请求内唯一,停机编号是否已有统一编码
+resourceId,关联资源编号,是,reactor_r01,设备编码/维护对象,,,,必须映射到 07_resource_mapping_template.csv 中的资源 id,维护系统设备编码与排产资源编码如何对齐
+startMinutes,停机开始分钟,是,240,停机开始时间,,,,用开始时间减 scheduleStartAt 并换算为分钟且必须大于等于 0,跨天停机如何统一时区
+endMinutes,停机结束分钟,是,420,停机结束时间,,,,用结束时间减 scheduleStartAt 并换算为分钟且必须大于 startMinutes,超出 horizon 的停机是否截断还是剔除
+downtimeType,停机类型,是,MAINTENANCE,停机分类,,,,建议保留业务类型如 MAINTENANCE/CLEANING/CIP/INSPECTION,是否需要统一停机类型字典
+source,停机来源,否,CALENDAR,来源系统/录入方式,,,,建议使用 CALENDAR/MANUAL 等可追溯值,是否区分系统下发与人工补录
+description,停机说明,否,Preventive maintenance window for Reactor-R01,维护说明/备注,,,,保留业务原文或简要归纳,是否需要记录工单号或检修单号

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="aps-api-base" content="">
+    <title>APS Control Deck</title>
+    <link rel="stylesheet" href="/styles.css?v=20260424b">
+</head>
+<body>
+<div id="auth-shell" class="auth-shell">
+    <section class="auth-visual-panel">
+        <img class="auth-visual-image" src="/chemical-login-hero.jpg" alt="">
+        <div class="auth-visual-scrim"></div>
+        <div class="auth-visual-grid"></div>
+        <div class="auth-visual-content">
+            <div class="auth-visual-copy">
+                <span class="auth-visual-mark" aria-hidden="true"></span>
+                <h1 data-i18n="auth.visualTitle">Keep plant rhythm and plan versions aligned</h1>
+                <p class="auth-visual-description" data-i18n="auth.visualDescription">
+                    One calm entry point for batch rhythm, downtime windows, and schedule versions.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="auth-card">
+        <div class="auth-card-head">
+            <div class="auth-brand-block">
+                <span class="auth-brand-mark" aria-hidden="true"></span>
+                <h2 class="auth-card-title" data-i18n="auth.brandTitle">APS Control Deck</h2>
+            </div>
+            <div class="auth-toolbar">
+                <div class="auth-locale-switch" role="group" aria-label="Language">
+                    <button class="auth-locale-button" type="button" data-locale-option="zh">中</button>
+                    <button class="auth-locale-button" type="button" data-locale-option="en">EN</button>
+                </div>
+            </div>
+        </div>
+
+        <form id="login-form" class="login-form">
+            <div class="field-group">
+                <label class="field-label" for="username-input" data-i18n="auth.usernameLabel">Username</label>
+                <input
+                        id="username-input"
+                        class="text-input"
+                        type="text"
+                        autocomplete="username"
+                        data-i18n-placeholder="auth.usernamePlaceholder"
+                        placeholder="Enter username"
+                >
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="password-input" data-i18n="auth.passwordLabel">Password</label>
+                <input
+                        id="password-input"
+                        class="text-input"
+                        type="password"
+                        autocomplete="current-password"
+                        data-i18n-placeholder="auth.passwordPlaceholder"
+                        placeholder="Enter password"
+                >
+            </div>
+
+            <button id="login-button" class="action-button action-button-primary" type="submit" data-i18n="auth.submit">
+                Enter Workspace
+            </button>
+            <p id="auth-feedback" class="auth-feedback hidden" role="status"></p>
+        </form>
+    </section>
+</div>
+
+<div id="app-shell" class="page-shell hidden">
+    <header class="hero-panel">
+        <div class="hero-copy">
+            <p class="eyebrow" data-i18n="hero.eyebrow">APS POC</p>
+            <h1 data-i18n="hero.title">Control Deck</h1>
+            <p class="hero-text" data-i18n="hero.description">
+                Inspect schedule versions, launch the sample scenario, and read the current Gantt result directly from the backend orchestration service.
+            </p>
+        </div>
+        <div class="hero-actions">
+            <div class="hero-actions-top">
+                <div class="session-card">
+                    <span class="job-status-label" data-i18n="session.signedInAs">Signed in as</span>
+                    <strong id="session-user">-</strong>
+                </div>
+                <div class="hero-utility-actions">
+                    <button id="account-settings-button" class="action-button action-button-secondary" type="button" data-i18n="actions.accountSettings">
+                        Account Settings
+                    </button>
+                    <button id="logout-button" class="action-button action-button-secondary" type="button" data-i18n="actions.logout">
+                        Sign Out
+                    </button>
+                </div>
+            </div>
+            <div class="hero-command-strip">
+                <div class="hero-primary-actions">
+                    <button id="run-sample-button" class="action-button action-button-primary" type="button" data-i18n="actions.runSample">
+                        Run Sample Schedule
+                    </button>
+                    <button id="refresh-button" class="action-button action-button-secondary" type="button" data-i18n="actions.refresh">
+                        Refresh Data
+                    </button>
+                </div>
+                <div class="job-status-card">
+                    <span class="job-status-label" data-i18n="job.latestJobLabel">Latest Job</span>
+                    <strong id="job-status-text">Idle</strong>
+                    <span id="job-status-detail" class="job-status-detail">No background job is being tracked.</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section class="summary-grid">
+        <article class="summary-card">
+            <span class="summary-label" data-i18n="summary.totalVersionsLabel">Versions</span>
+            <strong id="summary-total-versions" class="summary-value">0</strong>
+            <span class="summary-footnote" data-i18n="summary.totalVersionsFootnote">Persisted schedule snapshots</span>
+        </article>
+        <article class="summary-card">
+            <span class="summary-label" data-i18n="summary.publishedVersionsLabel">Published</span>
+            <strong id="summary-published-versions" class="summary-value">0</strong>
+            <span class="summary-footnote" data-i18n="summary.publishedVersionsFootnote">Current live plan count</span>
+        </article>
+        <article class="summary-card">
+            <span class="summary-label" data-i18n="summary.selectedStatusLabel">Selected Status</span>
+            <strong id="summary-selected-status" class="summary-value">None</strong>
+            <span id="summary-selected-name" class="summary-footnote">Choose a version to inspect.</span>
+        </article>
+        <article class="summary-card">
+            <span class="summary-label" data-i18n="summary.lastRefreshLabel">Last Refresh</span>
+            <strong id="summary-last-refresh" class="summary-value">Waiting</strong>
+            <span class="summary-footnote" data-i18n="summary.lastRefreshFootnote">Client-side fetch timestamp</span>
+        </article>
+    </section>
+
+    <main id="workspace-grid" class="workspace-grid">
+        <aside id="versions-panel" class="versions-panel panel">
+            <div class="panel-head">
+                <div class="versions-panel-copy">
+                    <p class="panel-eyebrow" data-i18n="versions.eyebrow">Schedule Versions</p>
+                    <h2 data-i18n="versions.title">Snapshots</h2>
+                </div>
+                <button id="versions-panel-toggle-button" class="versions-panel-toggle" type="button" aria-label="Collapse versions panel" title="Collapse versions panel">
+                    <span id="versions-panel-toggle-icon" aria-hidden="true">◀</span>
+                </button>
+            </div>
+            <div id="versions-panel-rail" class="versions-panel-rail" data-state="NONE">
+                <div class="versions-rail-head">
+                    <span class="versions-rail-kicker" data-i18n="versions.eyebrow">Schedule Versions</span>
+                    <strong class="versions-rail-title" data-i18n="versions.title">Snapshots</strong>
+                </div>
+                <div class="versions-rail-metrics">
+                    <span class="versions-rail-metric">
+                        <strong id="versions-rail-total">0</strong>
+                        <small data-i18n="summary.totalVersionsLabel">Versions</small>
+                    </span>
+                    <span class="versions-rail-metric">
+                        <strong id="versions-rail-published">0</strong>
+                        <small data-i18n="summary.publishedVersionsLabel">Published</small>
+                    </span>
+                </div>
+                <div class="versions-rail-status">
+                    <span class="versions-rail-status-label" data-i18n="summary.selectedStatusLabel">Selected Status</span>
+                    <strong id="versions-rail-selected-status">None</strong>
+                </div>
+            </div>
+            <div id="version-list" class="version-list"></div>
+        </aside>
+
+        <section class="viewer-panel panel">
+            <div class="panel-head viewer-head">
+                <div class="viewer-copy">
+                    <p class="panel-eyebrow" data-i18n="viewer.eyebrow">Version Detail</p>
+                    <h2 id="viewer-title">No version selected</h2>
+                    <p id="viewer-subtitle" class="panel-subtitle">
+                        Generate the sample scenario or pick an existing version from the left panel.
+                    </p>
+                </div>
+                <div class="viewer-actions">
+                    <button id="kpi-toggle-button" class="panel-toggle-button" type="button" aria-pressed="false">
+                        <span data-i18n="gantt.metricsPanel">Metrics</span>
+                    </button>
+                    <button id="publish-button" class="action-button action-button-secondary" type="button" disabled data-i18n="actions.publish">
+                        Publish Version
+                    </button>
+                </div>
+            </div>
+
+            <section id="kpi-grid" class="kpi-grid">
+                <article class="kpi-card">
+                    <span class="kpi-label" data-i18n="kpi.weightedTardiness">Weighted Tardiness</span>
+                    <strong id="kpi-tardiness" class="kpi-value">-</strong>
+                </article>
+                <article class="kpi-card">
+                    <span class="kpi-label" data-i18n="kpi.makespan">Makespan</span>
+                    <strong id="kpi-makespan" class="kpi-value">-</strong>
+                </article>
+                <article class="kpi-card">
+                    <span class="kpi-label" data-i18n="kpi.lateTasks">Late Tasks</span>
+                    <strong id="kpi-late-count" class="kpi-value">-</strong>
+                </article>
+                <article class="kpi-card">
+                    <span class="kpi-label" data-i18n="kpi.avgUtilization">Schedule Efficiency</span>
+                    <strong id="kpi-utilization" class="kpi-value">-</strong>
+                </article>
+            </section>
+
+            <section class="gantt-panel">
+                <div class="gantt-panel-head">
+                    <div>
+                        <p class="panel-eyebrow" data-i18n="gantt.eyebrow">Gantt View</p>
+                        <h3 data-i18n="gantt.title">Resource Timeline</h3>
+                    </div>
+                    <div class="gantt-panel-head-side">
+                        <div id="gantt-legend" class="legend">
+                            <span class="legend-item"><span class="legend-swatch legend-task"></span><span data-i18n="gantt.legendTask">Task</span></span>
+                            <span class="legend-item"><span class="legend-swatch legend-late"></span><span data-i18n="gantt.legendLateTask">Late Task</span></span>
+                            <span class="legend-item"><span class="legend-swatch legend-pinned"></span><span data-i18n="gantt.legendPinned">Pinned</span></span>
+                            <span class="legend-item"><span class="legend-swatch legend-draft"></span><span data-i18n="gantt.legendDraft">Draft</span></span>
+                            <span class="legend-item"><span class="legend-swatch legend-conflict"></span><span data-i18n="gantt.legendConflict">Conflict</span></span>
+                            <span class="legend-item"><span class="legend-swatch legend-downtime"></span><span data-i18n="gantt.legendDowntime">Downtime</span></span>
+                        </div>
+                        <div class="gantt-panel-controls">
+                            <button id="gantt-legend-toggle-button" class="panel-toggle-button" type="button" aria-pressed="false">
+                                <span data-i18n="gantt.legendPanel">Legend</span>
+                            </button>
+                            <button id="gantt-detail-toggle-button" class="panel-toggle-button" type="button" aria-pressed="false">
+                                <span data-i18n="gantt.detailPanel">Detail</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+	                <div class="gantt-toolbar">
+	                    <div class="gantt-toolbar-group">
+	                        <button id="gantt-zoom-out-button" class="action-button action-button-secondary" type="button" data-i18n="actions.zoomOut">
+	                            Zoom Out
+                        </button>
+                        <button id="gantt-fit-button" class="action-button action-button-secondary" type="button" data-i18n="actions.fitTimeline">
+                            Fit
+                        </button>
+                        <button id="gantt-zoom-in-button" class="action-button action-button-secondary" type="button" data-i18n="actions.zoomIn">
+                            Zoom In
+                        </button>
+                        <button id="gantt-reset-draft-button" class="action-button action-button-secondary" type="button" data-i18n="actions.resetDraft">
+                            Reset Draft
+                        </button>
+                        <button id="gantt-trial-button" class="action-button action-button-secondary" type="button" data-i18n="actions.trialSolve">
+                            Trial Solve
+                        </button>
+                        <button id="gantt-label-lock-button" class="action-button action-button-secondary" type="button" aria-pressed="true">
+                            <span id="gantt-label-lock-text">Columns Locked</span>
+                        </button>
+                    </div>
+	                    <div class="gantt-toolbar-status">
+	                        <span id="gantt-zoom-value" class="gantt-toolbar-chip">100%</span>
+	                        <span id="gantt-draft-status" class="gantt-toolbar-chip" data-i18n="gantt.draftClean">No local draft</span>
+	                    </div>
+	                </div>
+
+	                <section id="gantt-drag-hud" class="gantt-drag-hud hidden" aria-live="polite">
+	                    <div class="gantt-drag-hud-head">
+	                        <strong id="gantt-drag-mode" class="gantt-drag-hud-mode">-</strong>
+	                        <span class="gantt-drag-hud-snap">
+	                            <small data-i18n="gantt.dragSnapLabel">Snap</small>
+	                            <strong id="gantt-drag-snap">-</strong>
+	                        </span>
+	                    </div>
+	                    <div id="gantt-drag-status" class="gantt-drag-hud-status hidden">-</div>
+	                    <div class="gantt-drag-hud-grid">
+	                        <span class="gantt-drag-hud-item">
+	                            <small data-i18n="misc.start">Start</small>
+	                            <strong id="gantt-drag-start">-</strong>
+	                        </span>
+	                        <span class="gantt-drag-hud-item">
+	                            <small data-i18n="misc.end">End</small>
+	                            <strong id="gantt-drag-end">-</strong>
+	                        </span>
+	                        <span class="gantt-drag-hud-item">
+	                            <small data-i18n="misc.duration">Duration</small>
+	                            <strong id="gantt-drag-duration">-</strong>
+	                        </span>
+	                        <span class="gantt-drag-hud-item">
+	                            <small data-i18n="misc.resource">Resource</small>
+	                            <strong id="gantt-drag-resource">-</strong>
+	                        </span>
+	                    </div>
+	                </section>
+
+	                <section id="gantt-detail-card" class="gantt-detail-card">
+                    <div class="gantt-detail-head">
+                        <div>
+                            <p class="panel-eyebrow" data-i18n="gantt.detailEyebrow">Task Detail</p>
+                            <h4 data-i18n="gantt.detailTitle">Selected Task</h4>
+                        </div>
+                    </div>
+                    <div id="gantt-detail-empty" class="gantt-detail-empty" data-i18n="gantt.detailEmpty">
+                        Select a task bar to inspect its details.
+                    </div>
+                    <div id="gantt-detail-content" class="gantt-detail-content hidden">
+                        <div class="gantt-detail-summary">
+                            <strong id="gantt-detail-title">-</strong>
+                            <span id="gantt-detail-subtitle" class="gantt-detail-subtitle">-</span>
+                        </div>
+                        <div id="gantt-detail-badges" class="gantt-detail-badges"></div>
+                        <div id="gantt-detail-grid" class="gantt-detail-grid"></div>
+                        <p id="gantt-detail-hint" class="gantt-detail-hint"></p>
+                    </div>
+                </section>
+
+                <div id="gantt-empty-state" class="empty-state">
+                    No version data loaded yet.
+                </div>
+
+                <div id="gantt-scroll" class="gantt-scroll hidden">
+                    <div id="gantt-board" class="gantt-board"></div>
+                </div>
+            </section>
+        </section>
+    </main>
+</div>
+
+<div id="account-overlay" class="dialog-overlay hidden">
+    <div class="dialog-card">
+        <div class="dialog-head">
+            <div>
+                <p class="panel-eyebrow" data-i18n="account.eyebrow">Account</p>
+                <h2 data-i18n="account.title">Update Credentials</h2>
+                <p class="panel-subtitle" data-i18n="account.description">
+                    Update the username used for login, and optionally set a new password.
+                </p>
+            </div>
+            <button id="account-close-button" class="action-button action-button-secondary" type="button" data-i18n="account.close">
+                Close
+            </button>
+        </div>
+
+        <form id="account-form" class="account-form">
+            <div class="field-group">
+                <label class="field-label" for="account-username-input" data-i18n="account.usernameLabel">Username</label>
+                <input
+                        id="account-username-input"
+                        class="text-input"
+                        type="text"
+                        autocomplete="username"
+                        data-i18n-placeholder="account.usernamePlaceholder"
+                        placeholder="Enter a new username"
+                >
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="account-current-password-input" data-i18n="account.currentPasswordLabel">Current Password</label>
+                <input
+                        id="account-current-password-input"
+                        class="text-input"
+                        type="password"
+                        autocomplete="current-password"
+                        data-i18n-placeholder="account.currentPasswordPlaceholder"
+                        placeholder="Enter current password"
+                >
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="account-new-password-input" data-i18n="account.newPasswordLabel">New Password</label>
+                <input
+                        id="account-new-password-input"
+                        class="text-input"
+                        type="password"
+                        autocomplete="new-password"
+                        data-i18n-placeholder="account.newPasswordPlaceholder"
+                        placeholder="Leave blank to keep the current password"
+                >
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="account-confirm-password-input" data-i18n="account.confirmPasswordLabel">Confirm New Password</label>
+                <input
+                        id="account-confirm-password-input"
+                        class="text-input"
+                        type="password"
+                        autocomplete="new-password"
+                        data-i18n-placeholder="account.confirmPasswordPlaceholder"
+                        placeholder="Re-enter the new password"
+                >
+            </div>
+
+            <p class="account-hint" data-i18n="account.passwordHint">
+                Leave the new password fields blank if you only want to change the username.
+            </p>
+            <p id="account-feedback" class="auth-feedback hidden" role="status"></p>
+
+            <div class="dialog-actions">
+                <button id="account-cancel-button" class="action-button action-button-secondary" type="button" data-i18n="account.cancel">
+                    Cancel
+                </button>
+                <button id="account-save-button" class="action-button action-button-primary" type="submit" data-i18n="account.save">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<template id="version-item-template">
+    <button class="version-item" type="button">
+        <span class="version-status-chip"></span>
+        <strong class="version-name"></strong>
+        <span class="version-meta"></span>
+        <span class="version-kpi"></span>
+    </button>
+</template>
+
+<script src="/app.js?v=20260424b"></script>
+</body>
+</html>
