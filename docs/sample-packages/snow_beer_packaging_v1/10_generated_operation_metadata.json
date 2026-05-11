@@ -1,0 +1,2727 @@
+{
+  "scenarioName": "snow-beer-packaging-v1",
+  "dataVersion": "snow_beer_packaging_v1_2026_05_06",
+  "scheduleStartAt": "2026-12-24T00:00:00Z",
+  "horizonMinutes": 8640,
+  "requestedDemandQuantity": 73,
+  "plannedDemandQuantity": 47,
+  "inventoryBalanceCount": 23,
+  "inventoryDemandCount": 16,
+  "inventoryCoveredQuantity": 26,
+  "operationCount": 47,
+  "demandCount": 16,
+  "resourceCount": 3,
+  "downtimeCount": 2,
+  "setupRuleCount": 6,
+  "precedencePairCount": 0,
+  "bridgeAdjustmentCount": 0,
+  "demandCoverages": [
+    {
+      "demandId": "dem_a500_spot_1224",
+      "productCode": "31015630002000000",
+      "requestedQuantity": 2,
+      "inventoryCoveredQuantity": 2,
+      "plannedQuantity": 0,
+      "dueMinutes": 720,
+      "priority": 5
+    },
+    {
+      "demandId": "dem_a500_1225",
+      "productCode": "31015630002000000",
+      "requestedQuantity": 6,
+      "inventoryCoveredQuantity": 2,
+      "plannedQuantity": 4,
+      "dueMinutes": 2160,
+      "priority": 4
+    },
+    {
+      "demandId": "dem_a500_1227",
+      "productCode": "31015630002000000",
+      "requestedQuantity": 7,
+      "inventoryCoveredQuantity": 0,
+      "plannedQuantity": 7,
+      "dueMinutes": 5040,
+      "priority": 4
+    },
+    {
+      "demandId": "dem_a500_1229",
+      "productCode": "31015630002000000",
+      "requestedQuantity": 8,
+      "inventoryCoveredQuantity": 0,
+      "plannedQuantity": 8,
+      "dueMinutes": 7920,
+      "priority": 3
+    },
+    {
+      "demandId": "dem_a330_1225",
+      "productCode": "31015630006000000",
+      "requestedQuantity": 3,
+      "inventoryCoveredQuantity": 3,
+      "plannedQuantity": 0,
+      "dueMinutes": 2160,
+      "priority": 4
+    },
+    {
+      "demandId": "dem_a330_1227",
+      "productCode": "31015630006000000",
+      "requestedQuantity": 3,
+      "inventoryCoveredQuantity": 3,
+      "plannedQuantity": 0,
+      "dueMinutes": 5040,
+      "priority": 3
+    },
+    {
+      "demandId": "dem_a330_1229",
+      "productCode": "31015630006000000",
+      "requestedQuantity": 4,
+      "inventoryCoveredQuantity": 1,
+      "plannedQuantity": 3,
+      "dueMinutes": 7920,
+      "priority": 3
+    },
+    {
+      "demandId": "dem_10a500_1225",
+      "productCode": "31015630003000000",
+      "requestedQuantity": 3,
+      "inventoryCoveredQuantity": 3,
+      "plannedQuantity": 0,
+      "dueMinutes": 2160,
+      "priority": 4
+    },
+    {
+      "demandId": "dem_10a500_1227",
+      "productCode": "31015630003000000",
+      "requestedQuantity": 3,
+      "inventoryCoveredQuantity": 2,
+      "plannedQuantity": 1,
+      "dueMinutes": 5040,
+      "priority": 3
+    },
+    {
+      "demandId": "dem_10a500_1229",
+      "productCode": "31015630003000000",
+      "requestedQuantity": 4,
+      "inventoryCoveredQuantity": 0,
+      "plannedQuantity": 4,
+      "dueMinutes": 7920,
+      "priority": 3
+    },
+    {
+      "demandId": "dem_b600_1225",
+      "productCode": "31015630004000000",
+      "requestedQuantity": 5,
+      "inventoryCoveredQuantity": 5,
+      "plannedQuantity": 0,
+      "dueMinutes": 2160,
+      "priority": 4
+    },
+    {
+      "demandId": "dem_b600_1227",
+      "productCode": "31015630004000000",
+      "requestedQuantity": 5,
+      "inventoryCoveredQuantity": 1,
+      "plannedQuantity": 4,
+      "dueMinutes": 5040,
+      "priority": 3
+    },
+    {
+      "demandId": "dem_b600_1229",
+      "productCode": "31015630004000000",
+      "requestedQuantity": 5,
+      "inventoryCoveredQuantity": 0,
+      "plannedQuantity": 5,
+      "dueMinutes": 7920,
+      "priority": 3
+    },
+    {
+      "demandId": "dem_c600_1225",
+      "productCode": "31015630005000000",
+      "requestedQuantity": 5,
+      "inventoryCoveredQuantity": 4,
+      "plannedQuantity": 1,
+      "dueMinutes": 2160,
+      "priority": 4
+    },
+    {
+      "demandId": "dem_c600_1227",
+      "productCode": "31015630005000000",
+      "requestedQuantity": 5,
+      "inventoryCoveredQuantity": 0,
+      "plannedQuantity": 5,
+      "dueMinutes": 5040,
+      "priority": 3
+    },
+    {
+      "demandId": "dem_c600_1229",
+      "productCode": "31015630005000000",
+      "requestedQuantity": 5,
+      "inventoryCoveredQuantity": 0,
+      "plannedQuantity": 5,
+      "dueMinutes": 7920,
+      "priority": 3
+    }
+  ],
+  "inventoryBalances": [
+    {
+      "itemCode": "31015630002000000",
+      "availableQuantity": 4,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "31015630006000000",
+      "availableQuantity": 7,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "31015630003000000",
+      "availableQuantity": 5,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "31015630004000000",
+      "availableQuantity": 6,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "31015630005000000",
+      "availableQuantity": 4,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "BB_A500_LOT",
+      "availableQuantity": 19,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "BB_A330_LOT",
+      "availableQuantity": 3,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "BB_10A500_LOT",
+      "availableQuantity": 5,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "BB_B600_LOT",
+      "availableQuantity": 9,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "BB_C600_LOT",
+      "availableQuantity": 11,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CAP_A_LOT",
+      "availableQuantity": 27,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CTN_A1_LOT",
+      "availableQuantity": 19,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "LBL_A1_LOT",
+      "availableQuantity": 19,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CTN_A2_LOT",
+      "availableQuantity": 3,
+      "availableFromMinutes": 2880,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "LBL_A2_LOT",
+      "availableQuantity": 3,
+      "availableFromMinutes": 2880,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CTN_A3_LOT",
+      "availableQuantity": 5,
+      "availableFromMinutes": 2160,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "LBL_A3_LOT",
+      "availableQuantity": 5,
+      "availableFromMinutes": 2160,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CAP_B_LOT",
+      "availableQuantity": 9,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CTN_B_LOT",
+      "availableQuantity": 9,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "LBL_B_LOT",
+      "availableQuantity": 9,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CAP_C_LOT",
+      "availableQuantity": 11,
+      "availableFromMinutes": 1440,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CTN_C_LOT",
+      "availableQuantity": 11,
+      "availableFromMinutes": 1440,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "LBL_C_LOT",
+      "availableQuantity": 11,
+      "availableFromMinutes": 1440,
+      "safetyStockQuantity": 0
+    }
+  ],
+  "inventoryDemands": [
+    {
+      "demandId": "dem_a500_spot_1224",
+      "itemCode": "31015630002000000",
+      "quantity": 2,
+      "dueMinutes": 720
+    },
+    {
+      "demandId": "dem_a500_1225",
+      "itemCode": "31015630002000000",
+      "quantity": 6,
+      "dueMinutes": 2160
+    },
+    {
+      "demandId": "dem_a500_1227",
+      "itemCode": "31015630002000000",
+      "quantity": 7,
+      "dueMinutes": 5040
+    },
+    {
+      "demandId": "dem_a500_1229",
+      "itemCode": "31015630002000000",
+      "quantity": 8,
+      "dueMinutes": 7920
+    },
+    {
+      "demandId": "dem_a330_1225",
+      "itemCode": "31015630006000000",
+      "quantity": 3,
+      "dueMinutes": 2160
+    },
+    {
+      "demandId": "dem_a330_1227",
+      "itemCode": "31015630006000000",
+      "quantity": 3,
+      "dueMinutes": 5040
+    },
+    {
+      "demandId": "dem_a330_1229",
+      "itemCode": "31015630006000000",
+      "quantity": 4,
+      "dueMinutes": 7920
+    },
+    {
+      "demandId": "dem_10a500_1225",
+      "itemCode": "31015630003000000",
+      "quantity": 3,
+      "dueMinutes": 2160
+    },
+    {
+      "demandId": "dem_10a500_1227",
+      "itemCode": "31015630003000000",
+      "quantity": 3,
+      "dueMinutes": 5040
+    },
+    {
+      "demandId": "dem_10a500_1229",
+      "itemCode": "31015630003000000",
+      "quantity": 4,
+      "dueMinutes": 7920
+    },
+    {
+      "demandId": "dem_b600_1225",
+      "itemCode": "31015630004000000",
+      "quantity": 5,
+      "dueMinutes": 2160
+    },
+    {
+      "demandId": "dem_b600_1227",
+      "itemCode": "31015630004000000",
+      "quantity": 5,
+      "dueMinutes": 5040
+    },
+    {
+      "demandId": "dem_b600_1229",
+      "itemCode": "31015630004000000",
+      "quantity": 5,
+      "dueMinutes": 7920
+    },
+    {
+      "demandId": "dem_c600_1225",
+      "itemCode": "31015630005000000",
+      "quantity": 5,
+      "dueMinutes": 2160
+    },
+    {
+      "demandId": "dem_c600_1227",
+      "itemCode": "31015630005000000",
+      "quantity": 5,
+      "dueMinutes": 5040
+    },
+    {
+      "demandId": "dem_c600_1229",
+      "itemCode": "31015630005000000",
+      "quantity": 5,
+      "dueMinutes": 7920
+    }
+  ],
+  "operations": [
+    {
+      "operationId": "dem_a500_1225__u01__01_pack",
+      "demandId": "dem_a500_1225",
+      "demandUnitIndex": 1,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_8a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 180,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 2160,
+      "priority": 4,
+      "quantity": "6",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_1225__u02__01_pack",
+      "demandId": "dem_a500_1225",
+      "demandUnitIndex": 2,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_8a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 180,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 2160,
+      "priority": 4,
+      "quantity": "6",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_1225__u03__01_pack",
+      "demandId": "dem_a500_1225",
+      "demandUnitIndex": 3,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_8a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 180,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 2160,
+      "priority": 4,
+      "quantity": "6",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_1225__u04__01_pack",
+      "demandId": "dem_a500_1225",
+      "demandUnitIndex": 4,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_8a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 180,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 2160,
+      "priority": 4,
+      "quantity": "6",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_1227__u01__01_pack",
+      "demandId": "dem_a500_1227",
+      "demandUnitIndex": 1,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_8a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 180,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 5040,
+      "priority": 4,
+      "quantity": "7",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_1227__u02__01_pack",
+      "demandId": "dem_a500_1227",
+      "demandUnitIndex": 2,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_8a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 180,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 5040,
+      "priority": 4,
+      "quantity": "7",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_1227__u03__01_pack",
+      "demandId": "dem_a500_1227",
+      "demandUnitIndex": 3,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_8a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 180,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 5040,
+      "priority": 4,
+      "quantity": "7",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_1227__u04__01_pack",
+      "demandId": "dem_a500_1227",
+      "demandUnitIndex": 4,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_8a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 180,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 5040,
+      "priority": 4,
+      "quantity": "7",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_1227__u05__01_pack",
+      "demandId": "dem_a500_1227",
+      "demandUnitIndex": 5,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_8a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 180,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 5040,
+      "priority": 4,
+      "quantity": "7",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_1227__u06__01_pack",
+      "demandId": "dem_a500_1227",
+      "demandUnitIndex": 6,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_8a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 180,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 5040,
+      "priority": 4,
+      "quantity": "7",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_1227__u07__01_pack",
+      "demandId": "dem_a500_1227",
+      "demandUnitIndex": 7,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_8a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 180,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 5040,
+      "priority": 4,
+      "quantity": "7",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_1229__u01__01_pack",
+      "demandId": "dem_a500_1229",
+      "demandUnitIndex": 1,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_8a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 180,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "8",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_1229__u02__01_pack",
+      "demandId": "dem_a500_1229",
+      "demandUnitIndex": 2,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_8a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 180,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "8",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_1229__u03__01_pack",
+      "demandId": "dem_a500_1229",
+      "demandUnitIndex": 3,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_8a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 180,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "8",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_1229__u04__01_pack",
+      "demandId": "dem_a500_1229",
+      "demandUnitIndex": 4,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_8a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 180,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "8",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_1229__u05__01_pack",
+      "demandId": "dem_a500_1229",
+      "demandUnitIndex": 5,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_8a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 180,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "8",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_1229__u06__01_pack",
+      "demandId": "dem_a500_1229",
+      "demandUnitIndex": 6,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_8a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 180,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "8",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_1229__u07__01_pack",
+      "demandId": "dem_a500_1229",
+      "demandUnitIndex": 7,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_8a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 180,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "8",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_1229__u08__01_pack",
+      "demandId": "dem_a500_1229",
+      "demandUnitIndex": 8,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_8a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 180,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "8",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a330_1229__u01__01_pack",
+      "demandId": "dem_a330_1229",
+      "demandUnitIndex": 1,
+      "productCode": "31015630006000000",
+      "recipeId": "rcp_8a330_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 220,
+      "candidateResourceIds": [
+        "pack_l1"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_330",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A330_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A2_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A2_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630006000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "4",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a330_1229__u02__01_pack",
+      "demandId": "dem_a330_1229",
+      "demandUnitIndex": 2,
+      "productCode": "31015630006000000",
+      "recipeId": "rcp_8a330_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 220,
+      "candidateResourceIds": [
+        "pack_l1"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_330",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A330_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A2_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A2_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630006000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "4",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a330_1229__u03__01_pack",
+      "demandId": "dem_a330_1229",
+      "demandUnitIndex": 3,
+      "productCode": "31015630006000000",
+      "recipeId": "rcp_8a330_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 220,
+      "candidateResourceIds": [
+        "pack_l1"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_330",
+      "materialInputs": [
+        {
+          "itemCode": "BB_A330_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A2_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A2_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630006000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "4",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_10a500_1227__u01__01_pack",
+      "demandId": "dem_10a500_1227",
+      "demandUnitIndex": 1,
+      "productCode": "31015630003000000",
+      "recipeId": "rcp_10a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 150,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_10A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A3_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A3_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630003000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 5040,
+      "priority": 3,
+      "quantity": "3",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_10a500_1229__u01__01_pack",
+      "demandId": "dem_10a500_1229",
+      "demandUnitIndex": 1,
+      "productCode": "31015630003000000",
+      "recipeId": "rcp_10a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 150,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_10A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A3_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A3_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630003000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "4",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_10a500_1229__u02__01_pack",
+      "demandId": "dem_10a500_1229",
+      "demandUnitIndex": 2,
+      "productCode": "31015630003000000",
+      "recipeId": "rcp_10a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 150,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_10A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A3_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A3_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630003000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "4",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_10a500_1229__u03__01_pack",
+      "demandId": "dem_10a500_1229",
+      "demandUnitIndex": 3,
+      "productCode": "31015630003000000",
+      "recipeId": "rcp_10a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 150,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_10A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A3_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A3_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630003000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "4",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_10a500_1229__u04__01_pack",
+      "demandId": "dem_10a500_1229",
+      "demandUnitIndex": 4,
+      "productCode": "31015630003000000",
+      "recipeId": "rcp_10a500_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 150,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BB_10A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A3_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A3_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630003000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "4",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_b600_1227__u01__01_pack",
+      "demandId": "dem_b600_1227",
+      "demandUnitIndex": 1,
+      "productCode": "31015630004000000",
+      "recipeId": "rcp_8b600_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 270,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BB_B600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630004000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 5040,
+      "priority": 3,
+      "quantity": "5",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_b600_1227__u02__01_pack",
+      "demandId": "dem_b600_1227",
+      "demandUnitIndex": 2,
+      "productCode": "31015630004000000",
+      "recipeId": "rcp_8b600_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 270,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BB_B600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630004000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 5040,
+      "priority": 3,
+      "quantity": "5",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_b600_1227__u03__01_pack",
+      "demandId": "dem_b600_1227",
+      "demandUnitIndex": 3,
+      "productCode": "31015630004000000",
+      "recipeId": "rcp_8b600_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 270,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BB_B600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630004000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 5040,
+      "priority": 3,
+      "quantity": "5",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_b600_1227__u04__01_pack",
+      "demandId": "dem_b600_1227",
+      "demandUnitIndex": 4,
+      "productCode": "31015630004000000",
+      "recipeId": "rcp_8b600_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 270,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BB_B600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630004000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 5040,
+      "priority": 3,
+      "quantity": "5",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_b600_1229__u01__01_pack",
+      "demandId": "dem_b600_1229",
+      "demandUnitIndex": 1,
+      "productCode": "31015630004000000",
+      "recipeId": "rcp_8b600_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 270,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BB_B600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630004000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "5",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_b600_1229__u02__01_pack",
+      "demandId": "dem_b600_1229",
+      "demandUnitIndex": 2,
+      "productCode": "31015630004000000",
+      "recipeId": "rcp_8b600_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 270,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BB_B600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630004000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "5",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_b600_1229__u03__01_pack",
+      "demandId": "dem_b600_1229",
+      "demandUnitIndex": 3,
+      "productCode": "31015630004000000",
+      "recipeId": "rcp_8b600_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 270,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BB_B600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630004000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "5",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_b600_1229__u04__01_pack",
+      "demandId": "dem_b600_1229",
+      "demandUnitIndex": 4,
+      "productCode": "31015630004000000",
+      "recipeId": "rcp_8b600_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 270,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BB_B600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630004000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "5",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_b600_1229__u05__01_pack",
+      "demandId": "dem_b600_1229",
+      "demandUnitIndex": 5,
+      "productCode": "31015630004000000",
+      "recipeId": "rcp_8b600_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 270,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BB_B600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630004000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "5",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_c600_1225__u01__01_pack",
+      "demandId": "dem_c600_1225",
+      "demandUnitIndex": 1,
+      "productCode": "31015630005000000",
+      "recipeId": "rcp_9c600_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 270,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 2160,
+      "priority": 4,
+      "quantity": "5",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_c600_1227__u01__01_pack",
+      "demandId": "dem_c600_1227",
+      "demandUnitIndex": 1,
+      "productCode": "31015630005000000",
+      "recipeId": "rcp_9c600_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 270,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 5040,
+      "priority": 3,
+      "quantity": "5",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_c600_1227__u02__01_pack",
+      "demandId": "dem_c600_1227",
+      "demandUnitIndex": 2,
+      "productCode": "31015630005000000",
+      "recipeId": "rcp_9c600_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 270,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 5040,
+      "priority": 3,
+      "quantity": "5",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_c600_1227__u03__01_pack",
+      "demandId": "dem_c600_1227",
+      "demandUnitIndex": 3,
+      "productCode": "31015630005000000",
+      "recipeId": "rcp_9c600_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 270,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 5040,
+      "priority": 3,
+      "quantity": "5",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_c600_1227__u04__01_pack",
+      "demandId": "dem_c600_1227",
+      "demandUnitIndex": 4,
+      "productCode": "31015630005000000",
+      "recipeId": "rcp_9c600_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 270,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 5040,
+      "priority": 3,
+      "quantity": "5",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_c600_1227__u05__01_pack",
+      "demandId": "dem_c600_1227",
+      "demandUnitIndex": 5,
+      "productCode": "31015630005000000",
+      "recipeId": "rcp_9c600_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 270,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 5040,
+      "priority": 3,
+      "quantity": "5",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_c600_1229__u01__01_pack",
+      "demandId": "dem_c600_1229",
+      "demandUnitIndex": 1,
+      "productCode": "31015630005000000",
+      "recipeId": "rcp_9c600_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 270,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "5",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_c600_1229__u02__01_pack",
+      "demandId": "dem_c600_1229",
+      "demandUnitIndex": 2,
+      "productCode": "31015630005000000",
+      "recipeId": "rcp_9c600_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 270,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "5",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_c600_1229__u03__01_pack",
+      "demandId": "dem_c600_1229",
+      "demandUnitIndex": 3,
+      "productCode": "31015630005000000",
+      "recipeId": "rcp_9c600_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 270,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "5",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_c600_1229__u04__01_pack",
+      "demandId": "dem_c600_1229",
+      "demandUnitIndex": 4,
+      "productCode": "31015630005000000",
+      "recipeId": "rcp_9c600_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 270,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "5",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_c600_1229__u05__01_pack",
+      "demandId": "dem_c600_1229",
+      "demandUnitIndex": 5,
+      "productCode": "31015630005000000",
+      "recipeId": "rcp_9c600_pkg_v1",
+      "operationCode": "PACK",
+      "operationName": "包装",
+      "sequence": 1,
+      "durationMinutes": 270,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 7920,
+      "priority": 3,
+      "quantity": "5",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    }
+  ],
+  "precedencePairs": [],
+  "setupRules": [
+    {
+      "fromSetupGroup": "PKG_330",
+      "toSetupGroup": "PKG_500",
+      "resourceType": "OTHER",
+      "resourceId": null,
+      "setupMinutes": 60
+    },
+    {
+      "fromSetupGroup": "PKG_500",
+      "toSetupGroup": "PKG_330",
+      "resourceType": "OTHER",
+      "resourceId": null,
+      "setupMinutes": 60
+    },
+    {
+      "fromSetupGroup": "PKG_330",
+      "toSetupGroup": "PKG_600",
+      "resourceType": "OTHER",
+      "resourceId": null,
+      "setupMinutes": 60
+    },
+    {
+      "fromSetupGroup": "PKG_600",
+      "toSetupGroup": "PKG_330",
+      "resourceType": "OTHER",
+      "resourceId": null,
+      "setupMinutes": 60
+    },
+    {
+      "fromSetupGroup": "PKG_500",
+      "toSetupGroup": "PKG_600",
+      "resourceType": "OTHER",
+      "resourceId": null,
+      "setupMinutes": 60
+    },
+    {
+      "fromSetupGroup": "PKG_600",
+      "toSetupGroup": "PKG_500",
+      "resourceType": "OTHER",
+      "resourceId": null,
+      "setupMinutes": 60
+    }
+  ],
+  "bridgeAdjustments": []
+}

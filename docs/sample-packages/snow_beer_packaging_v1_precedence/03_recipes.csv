@@ -1,0 +1,11 @@
+recipeId,productCode,operationCode,operationName,sequence,durationMinutes,candidateResourceIds,materialInputs,materialOutputs,setupGroup,remarks
+rcp_8a500_pkg_prec_v1,31015630002000000,PREP,Line Prep,1,30,pack_l1|pack_l2|pack_l3,BB_A500_LOT:1|CAP_A_LOT:1|CTN_A1_LOT:1|LBL_A1_LOT:1,INT_31015630002000000_READY:1,PKG_500,"Stage split for precedence smoke"
+rcp_8a500_pkg_prec_v1,31015630002000000,PACK,Final Packing,2,150,pack_l1|pack_l2|pack_l3,INT_31015630002000000_READY:1,31015630002000000:1,PKG_500,"Stage split preserves total duration"
+rcp_8a330_pkg_prec_v1,31015630006000000,PREP,Line Prep,1,40,pack_l1,BB_A330_LOT:1|CAP_A_LOT:1|CTN_A2_LOT:1|LBL_A2_LOT:1,INT_31015630006000000_READY:1,PKG_330,"Stage split for precedence smoke"
+rcp_8a330_pkg_prec_v1,31015630006000000,PACK,Final Packing,2,180,pack_l1,INT_31015630006000000_READY:1,31015630006000000:1,PKG_330,"Stage split preserves total duration"
+rcp_10a500_pkg_prec_v1,31015630003000000,PREP,Line Prep,1,30,pack_l1|pack_l2|pack_l3,BB_10A500_LOT:1|CAP_A_LOT:1|CTN_A3_LOT:1|LBL_A3_LOT:1,INT_31015630003000000_READY:1,PKG_500,"Stage split for precedence smoke"
+rcp_10a500_pkg_prec_v1,31015630003000000,PACK,Final Packing,2,120,pack_l1|pack_l2|pack_l3,INT_31015630003000000_READY:1,31015630003000000:1,PKG_500,"Stage split preserves total duration"
+rcp_8b600_pkg_prec_v1,31015630004000000,PREP,Line Prep,1,45,pack_l2|pack_l3,BB_B600_LOT:1|CAP_B_LOT:1|CTN_B_LOT:1|LBL_B_LOT:1,INT_31015630004000000_READY:1,PKG_600,"Stage split for precedence smoke"
+rcp_8b600_pkg_prec_v1,31015630004000000,PACK,Final Packing,2,225,pack_l2|pack_l3,INT_31015630004000000_READY:1,31015630004000000:1,PKG_600,"Stage split preserves total duration"
+rcp_9c600_pkg_prec_v1,31015630005000000,PREP,Line Prep,1,45,pack_l2|pack_l3,BB_C600_LOT:1|CAP_C_LOT:1|CTN_C_LOT:1|LBL_C_LOT:1,INT_31015630005000000_READY:1,PKG_600,"Stage split for precedence smoke"
+rcp_9c600_pkg_prec_v1,31015630005000000,PACK,Final Packing,2,225,pack_l2|pack_l3,INT_31015630005000000_READY:1,31015630005000000:1,PKG_600,"Stage split preserves total duration"

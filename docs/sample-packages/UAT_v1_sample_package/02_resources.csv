@@ -1,0 +1,11 @@
+id,label,resourceType,sortOrder,capacity,remarks
+reactor_r01,Reactor-R01,REACTOR,1,,"Primary reactor line A"
+reactor_r02,Reactor-R02,REACTOR,2,,"Primary reactor line B"
+reactor_r03,Reactor-R03,REACTOR,3,,"Solvent-capable reactor"
+filter_f01,Filter-F01,FILTER,4,,"General polishing filter"
+filter_f02,Filter-F02,FILTER,5,,"Solvent-capable polishing filter"
+dryer_d01,Dryer-D01,DRYER,6,,"Primary dryer"
+dryer_d02,Dryer-D02,DRYER,7,,"Backup dryer"
+tank_t01,Blend-Tank-T01,TANK,8,,"General blending tank"
+tank_t02,Blend-Tank-T02,TANK,9,,"Solvent blending tank"
+pack_p01,Pack-Line-P01,OTHER,10,,"Packaging line for resin family"

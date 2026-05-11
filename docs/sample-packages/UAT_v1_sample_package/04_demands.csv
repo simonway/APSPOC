@@ -1,0 +1,9 @@
+demandId,productCode,quantity,dueMinutes,priority,fixedResourceId,fixedStartMinutes,remarks
+ord_pa101_001,PA-101,1,1500,5,reactor_r01,60,"Pinned first batch on Reactor-R01"
+ord_pa101_002,PA-101,1,2160,3,,,"Standard PA-101 batch"
+ord_pa102_001,PA-102,1,1920,5,,,"Urgent PA-102 order"
+ord_pa102_002,PA-102,1,3360,2,,,"Lower-priority replenishment"
+ord_sol201_001,SOL-201,1,1920,5,reactor_r03,180,"Solvent order requires Reactor-R03 start slot"
+ord_sol201_002,SOL-201,1,2880,4,,,"Secondary solvent batch"
+ord_rs301_001,RS-301,1,2520,4,,,"Resin blend for midweek dispatch"
+ord_rs301_002,RS-301,1,4200,2,,1320,"Customer-specific packaging window"

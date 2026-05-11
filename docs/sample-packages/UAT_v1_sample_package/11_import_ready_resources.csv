@@ -1,0 +1,11 @@
+id,label,resourceType,sortOrder
+reactor_r01,Reactor-R01,REACTOR,1
+reactor_r02,Reactor-R02,REACTOR,2
+reactor_r03,Reactor-R03,REACTOR,3
+filter_f01,Filter-F01,FILTER,4
+filter_f02,Filter-F02,FILTER,5
+dryer_d01,Dryer-D01,DRYER,6
+dryer_d02,Dryer-D02,DRYER,7
+tank_t01,Blend-Tank-T01,TANK,8
+tank_t02,Blend-Tank-T02,TANK,9
+pack_p01,Pack-Line-P01,OTHER,10

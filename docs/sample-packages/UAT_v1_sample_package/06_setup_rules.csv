@@ -1,0 +1,7 @@
+fromSetupGroup,toSetupGroup,resourceType,resourceId,setupMinutes,remarks
+REACT_A,REACT_SOL,REACTOR,,60,"Polymer to solvent transition"
+REACT_SOL,REACT_A,REACTOR,,75,"Solvent to polymer cleanup"
+BLEND_SOL,BLEND_RS,TANK,,45,"Solvent residue cleanup before resin blend"
+BLEND_RS,BLEND_SOL,TANK,,45,"Resin residue cleanup before solvent blend"
+FILT_STD,FILT_SOL,FILTER,,30,"Filter media switch for solvent run"
+FILT_SOL,FILT_STD,FILTER,,30,"Filter media switch back to standard run"

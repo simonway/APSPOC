@@ -1,0 +1,12 @@
+recipeId,productCode,operationCode,operationName,sequence,durationMinutes,candidateResourceIds,materialInputs,materialOutputs,setupGroup,remarks
+rcp_pa101_v1,PA-101,REACT,Reaction Stage,1,480,reactor_r01|reactor_r02,RM-MONO_A:2|RM-CAT_A:1,INT-PA101-SLURRY:1,REACT_A,"Core polymer reaction"
+rcp_pa101_v1,PA-101,FILTER,Polish Filtration,2,240,filter_f01|filter_f02,INT-PA101-SLURRY:1,INT-PA101-WET:1,FILT_STD,"Shared polishing stage"
+rcp_pa101_v1,PA-101,DRY,Final Drying,3,300,dryer_d01|dryer_d02,INT-PA101-WET:1,PA-101:1,DRY_STD,"Drying before release"
+rcp_pa102_v1,PA-102,REACT,Reaction Stage,1,540,reactor_r02|reactor_r03,RM-MONO_B:2|RM-CAT_A:1,INT-PA102-SLURRY:1,REACT_A,"Longer polymer reaction"
+rcp_pa102_v1,PA-102,FILTER,Polish Filtration,2,260,filter_f01|filter_f02,INT-PA102-SLURRY:1,INT-PA102-WET:1,FILT_STD,"Shared polishing stage"
+rcp_pa102_v1,PA-102,DRY,Final Drying,3,330,dryer_d01|dryer_d02,INT-PA102-WET:1,PA-102:1,DRY_STD,"Drying before release"
+rcp_sol201_v1,SOL-201,REACT,Solvent Reaction,1,420,reactor_r01|reactor_r03,RM-SOL_BASE:1|RM-SOL_ACT:1,INT-SOL201-REACT:1,REACT_SOL,"Solvent-compatible reaction"
+rcp_sol201_v1,SOL-201,BLEND,Intermediate Blend,2,180,tank_t01|tank_t02,INT-SOL201-REACT:1|RM-SOL_ADD:1,INT-SOL201-BLEND:1,BLEND_SOL,"Blend solvent additives"
+rcp_sol201_v1,SOL-201,FILTER,Final Filtration,3,200,filter_f01|filter_f02,INT-SOL201-BLEND:1,SOL-201:1,FILT_SOL,"Final solvent polish"
+rcp_rs301_v1,RS-301,BLEND,Resin Blending,1,300,tank_t01|tank_t02,RM-RESIN_BASE:1|RM-RESIN_ADD:1,INT-RS301-BULK:1,BLEND_RS,"Resin blend preparation"
+rcp_rs301_v1,RS-301,PACK,Packaging,2,180,pack_p01,INT-RS301-BULK:1,RS-301:1,PACK_RS,"Fill and label"

@@ -1,0 +1,3 @@
+id,resourceId,startMinutes,endMinutes,downtimeType,source,description
+service_pack_l2_day3,pack_l2,3360,3720,SERVICE,ASSUMPTION,Synthetic service window added because the source sample does not specify explicit maintenance dates
+service_pack_l3_day5,pack_l3,6240,6600,SERVICE,ASSUMPTION,Synthetic service window added because the source sample does not specify explicit maintenance dates
