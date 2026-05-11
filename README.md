@@ -156,20 +156,18 @@ export APS_AUTH_PASSWORD=your-password
 The login page supports both Chinese and English, and the selected language is applied to the whole UI.
 After signing in, use the `Account Settings` action in the top-right area of the workspace to change the username and password.
 
-## Claude CLI Proxy
+## Local Workspace Notes
 
-This repo also contains `auto_switch_proxy.py` for the Claude CLI -> Claude primary / Codex fallback setup.
+Some local environments may carry helper scripts or proxy tooling alongside this repository. Those files are not part of the APS product scope or release scope.
 
-- project-level Claude config now points this repo to `http://127.0.0.1:4000`
-- `scripts/claude-session-start-proxy.sh` can auto-start the local proxy on session start
-- the script now treats older proxy builds on `4000` as stale and restarts them with the current repo version
-- the proxy now sends Claude CLI traffic to Claude first and only falls back to Codex Responses when Claude is unavailable
+- do not include local-only helper files such as `auto_switch_proxy.py` in APS commit or release planning
+- if a local helper file repeatedly appears in `git status`, prefer local exclusion or `skip-worktree` handling
+- release and acceptance scope should stay limited to APS product code, docs, scripts, and sample packages
 
-Notes:
+Reference:
 
-- the proxy start hook only starts the local proxy process; it does not replace your Anthropic API key
-- the proxy config is project-scoped through `.claude/settings.json`, so it applies in this repo and its subdirectories, not globally
-- if `claude` reports `Bad CPU type in executable` on macOS, you are launching an `arm64` Claude binary from an `x86_64` shell, so run Claude from a native `arm64` terminal instead
+- [本地运行、重启、验收与排障](/Users/simon/Documents/MyProgramming/APSPOC/docs/runbooks/本地运行_重启_验收_排障.md:1)
+- [2026-05-11_v0.2.0_pre-release_状态说明.md](/Users/simon/Documents/MyProgramming/APSPOC/docs/release/2026-05-11_v0.2.0_pre-release_状态说明.md:1)
 
 ## Submit a Sample Job
 
