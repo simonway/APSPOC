@@ -3,11 +3,14 @@ package com.apspoc.backend.persistence;
 import com.apspoc.backend.domain.GanttData;
 import com.apspoc.backend.domain.ScheduleJob;
 import com.apspoc.backend.domain.ScheduleVersion;
+import com.apspoc.backend.domain.VersionAuditEvent;
 import com.apspoc.backend.persistence.entity.GanttBarEntity;
+import com.apspoc.backend.persistence.entity.GanttChangeoverEntity;
 import com.apspoc.backend.persistence.entity.GanttDowntimeEntity;
 import com.apspoc.backend.persistence.entity.GanttRowEntity;
 import com.apspoc.backend.persistence.entity.ScheduleJobEntity;
 import com.apspoc.backend.persistence.entity.ScheduleVersionEntity;
+import com.apspoc.backend.persistence.entity.VersionAuditEventEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedHashMap;
@@ -19,10 +22,13 @@ public class SchedulePersistenceMapper {
 
     public void updateJobEntity(ScheduleJobEntity target, ScheduleJob job) {
         target.setScenarioName(job.scenarioName());
+        target.setActorUsername(job.actorUsername());
         target.setStatus(job.status());
         target.setSolverStatus(job.solverStatus());
         target.setVersionId(job.versionId());
+        target.setFailureReason(job.failureReason());
         target.setErrorMessage(job.errorMessage());
+        target.setSourceRequestJson(job.sourceRequestJson());
         target.setCreatedAt(job.createdAt());
         target.setCompletedAt(job.completedAt());
     }
@@ -31,10 +37,13 @@ public class SchedulePersistenceMapper {
         return new ScheduleJob(
                 entity.getId(),
                 entity.getScenarioName(),
+                entity.getActorUsername(),
+                entity.getSourceRequestJson(),
                 entity.getCreatedAt(),
                 entity.getStatus(),
                 entity.getSolverStatus(),
                 entity.getVersionId(),
+                entity.getFailureReason(),
                 entity.getErrorMessage(),
                 entity.getCompletedAt()
         );
@@ -48,6 +57,8 @@ public class SchedulePersistenceMapper {
         target.setCreatedAt(version.createdAt());
         target.setPublishedAt(version.publishedAt());
         target.setSourceRequestJson(version.sourceRequestJson());
+        target.setReleaseNote(version.releaseNote());
+        target.setCreatedBy(version.createdBy());
         target.setTotalWeightedTardiness(version.ganttData().kpis().totalWeightedTardiness());
         target.setTotalMakespan(version.ganttData().kpis().totalMakespan());
         target.setLateTaskCount(version.ganttData().kpis().lateTaskCount());
@@ -95,6 +106,32 @@ public class SchedulePersistenceMapper {
             downtimeEntity.setDescription(downtime.description());
             target.getDowntimes().add(downtimeEntity);
         }
+
+        target.getChangeovers().clear();
+        for (GanttData.Changeover changeover : version.ganttData().changeovers()) {
+            GanttChangeoverEntity changeoverEntity = new GanttChangeoverEntity();
+            changeoverEntity.setVersion(target);
+            changeoverEntity.setChangeoverCode(changeover.id());
+            changeoverEntity.setRowCode(changeover.rowId());
+            changeoverEntity.setFromTaskCode(changeover.fromTaskId());
+            changeoverEntity.setToTaskCode(changeover.toTaskId());
+            changeoverEntity.setStartMs(changeover.startMs());
+            changeoverEntity.setEndMs(changeover.endMs());
+            changeoverEntity.setDurationMinutes(changeover.durationMinutes());
+            target.getChangeovers().add(changeoverEntity);
+        }
+    }
+
+    public VersionAuditEvent toDomain(VersionAuditEventEntity entity) {
+        return new VersionAuditEvent(
+                entity.getId(),
+                entity.getTargetVersionId(),
+                entity.getEventType(),
+                entity.getPreviousPublishedVersionId(),
+                entity.getActorUsername(),
+                entity.getComment(),
+                entity.getCreatedAt()
+        );
     }
 
     public ScheduleVersion toSummaryDomain(ScheduleVersionEntity entity) {
@@ -131,6 +168,8 @@ public class SchedulePersistenceMapper {
                 entity.getCreatedAt(),
                 entity.getPublishedAt(),
                 entity.getSourceRequestJson(),
+                entity.getReleaseNote(),
+                entity.getCreatedBy(),
                 new GanttData(
                         rows,
                         bars,
@@ -181,6 +220,17 @@ public class SchedulePersistenceMapper {
                         downtime.getDescription()
                 ))
                 .toList();
+        List<GanttData.Changeover> changeovers = entity.getChangeovers().stream()
+                .map(changeover -> new GanttData.Changeover(
+                        changeover.getChangeoverCode(),
+                        changeover.getRowCode(),
+                        changeover.getFromTaskCode(),
+                        changeover.getToTaskCode(),
+                        changeover.getStartMs(),
+                        changeover.getEndMs(),
+                        changeover.getDurationMinutes()
+                ))
+                .toList();
 
         return new ScheduleVersion(
                 entity.getId(),
@@ -191,11 +241,13 @@ public class SchedulePersistenceMapper {
                 entity.getCreatedAt(),
                 entity.getPublishedAt(),
                 entity.getSourceRequestJson(),
+                entity.getReleaseNote(),
+                entity.getCreatedBy(),
                 new GanttData(
                         rows,
                         bars,
                         downtimes,
-                        List.of(),
+                        changeovers,
                         new GanttData.KpiSnapshot(
                                 entity.getTotalWeightedTardiness(),
                                 entity.getTotalMakespan(),

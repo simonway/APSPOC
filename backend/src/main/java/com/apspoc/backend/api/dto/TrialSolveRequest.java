@@ -20,7 +20,8 @@ public record TrialSolveRequest(
             @NotBlank String barId,
             @NotBlank String rowId,
             @NotNull Long startMs,
-            @NotNull @Positive Long endMs
+            @NotNull @Positive Long endMs,
+            Boolean pinned
     ) {
     }
 }

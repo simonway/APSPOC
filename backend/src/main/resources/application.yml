@@ -26,8 +26,18 @@ management:
 
 aps:
   solver:
-    base-url: http://localhost:8000
+    base-url: http://127.0.0.1:8000
   auth:
-    username: ${APS_AUTH_USERNAME:admin}
-    password: ${APS_AUTH_PASSWORD:admin123}
     session-timeout-minutes: ${APS_AUTH_SESSION_TIMEOUT_MINUTES:480}
+    admin:
+      username: ${APS_AUTH_USERNAME:admin}
+      password: ${APS_AUTH_PASSWORD:admin123}
+    planner:
+      username: ${APS_AUTH_PLANNER_USERNAME:planner}
+      password: ${APS_AUTH_PLANNER_PASSWORD:planner123}
+    approver:
+      username: ${APS_AUTH_APPROVER_USERNAME:approver}
+      password: ${APS_AUTH_APPROVER_PASSWORD:approver123}
+    viewer:
+      username: ${APS_AUTH_VIEWER_USERNAME:viewer}
+      password: ${APS_AUTH_VIEWER_PASSWORD:viewer123}

@@ -2,7 +2,10 @@ package com.apspoc.backend.domain;
 
 public enum VersionStatus {
     DRAFT,
-    PUBLISHED,
-    ARCHIVED
+    READY_FOR_RELEASE,
+    APPROVED,
+    REJECTED,
+    RELEASED,
+    ARCHIVED,
+    ROLLED_BACK
 }
-

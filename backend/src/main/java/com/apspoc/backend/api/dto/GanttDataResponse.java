@@ -9,24 +9,37 @@ public record GanttDataResponse(
         String versionId,
         String versionName,
         String status,
+        String createdBy,
+        String releaseNote,
         KpiResponse kpis,
         List<RowResponse> rows,
         List<BarResponse> bars,
         List<DowntimeResponse> downtimes,
-        List<ChangeoverResponse> changeovers
+        List<ChangeoverResponse> changeovers,
+        List<InventoryCoverageResponse> inventoryCoverages
 ) {
 
     public static GanttDataResponse from(ScheduleVersion version) {
+        return from(version, List.of());
+    }
+
+    public static GanttDataResponse from(
+            ScheduleVersion version,
+            List<InventoryCoverageResponse> inventoryCoverages
+    ) {
         GanttData ganttData = version.ganttData();
         return new GanttDataResponse(
                 version.id(),
                 version.versionName(),
                 version.status().name(),
+                version.createdBy(),
+                version.releaseNote(),
                 KpiResponse.from(ganttData.kpis()),
                 ganttData.rows().stream().map(RowResponse::from).toList(),
                 ganttData.bars().stream().map(BarResponse::from).toList(),
                 ganttData.downtimes().stream().map(DowntimeResponse::from).toList(),
-                ganttData.changeovers().stream().map(ChangeoverResponse::from).toList()
+                ganttData.changeovers().stream().map(ChangeoverResponse::from).toList(),
+                inventoryCoverages == null ? List.of() : List.copyOf(inventoryCoverages)
         );
     }
 
@@ -130,5 +143,16 @@ public record GanttDataResponse(
             );
         }
     }
-}
 
+    public record InventoryCoverageResponse(
+            String id,
+            String demandId,
+            String itemCode,
+            int requestedQuantity,
+            int coveredQuantity,
+            int priority,
+            long dueDateMs,
+            boolean fullyCovered
+    ) {
+    }
+}

@@ -7,9 +7,11 @@ import java.time.Instant;
 public record ScheduleJobResponse(
         String jobId,
         String scenarioName,
+        String actorUsername,
         String status,
         String solverStatus,
         String versionId,
+        String failureReason,
         String errorMessage,
         Instant createdAt,
         Instant completedAt
@@ -19,13 +21,14 @@ public record ScheduleJobResponse(
         return new ScheduleJobResponse(
                 job.id(),
                 job.scenarioName(),
+                job.actorUsername(),
                 job.status().name(),
                 job.solverStatus(),
                 job.versionId(),
+                job.failureReason() == null ? null : job.failureReason().name(),
                 job.errorMessage(),
                 job.createdAt(),
                 job.completedAt()
         );
     }
 }
-

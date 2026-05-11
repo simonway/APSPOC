@@ -2,14 +2,13 @@ package com.apspoc.backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 @Configuration
 public class AsyncConfig {
 
     @Bean(name = "apsTaskExecutor")
-    public TaskExecutor apsTaskExecutor() {
+    public ThreadPoolTaskExecutor apsTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setThreadNamePrefix("aps-job-");
         executor.setCorePoolSize(2);
@@ -19,4 +18,3 @@ public class AsyncConfig {
         return executor;
     }
 }
-

@@ -7,8 +7,13 @@ public record SolverResponse(
         String status,
         long solveTimeMs,
         List<ScheduledTask> scheduledTasks,
+        List<Changeover> changeovers,
         Kpis kpis
 ) {
+    public SolverResponse {
+        scheduledTasks = scheduledTasks == null ? List.of() : List.copyOf(scheduledTasks);
+        changeovers = changeovers == null ? List.of() : List.copyOf(changeovers);
+    }
 
     public record ScheduledTask(
             String taskId,
@@ -20,6 +25,17 @@ public record SolverResponse(
     ) {
     }
 
+    public record Changeover(
+            String id,
+            String resourceId,
+            String fromTaskId,
+            String toTaskId,
+            int startMinutes,
+            int endMinutes,
+            int durationMinutes
+    ) {
+    }
+
     public record Kpis(
             int totalWeightedTardiness,
             int totalMakespan,
@@ -28,4 +44,3 @@ public record SolverResponse(
     ) {
     }
 }
-

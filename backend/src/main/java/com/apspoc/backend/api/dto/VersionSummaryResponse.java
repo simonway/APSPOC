@@ -12,7 +12,9 @@ public record VersionSummaryResponse(
         String triggerType,
         String scenarioDescription,
         Instant createdAt,
+        String createdBy,
         Instant publishedAt,
+        String releaseNote,
         int totalWeightedTardiness,
         int totalMakespan,
         int lateTaskCount,
@@ -28,7 +30,9 @@ public record VersionSummaryResponse(
                 version.triggerType().name(),
                 version.scenarioDescription(),
                 version.createdAt(),
+                version.createdBy(),
                 version.publishedAt(),
+                version.releaseNote(),
                 kpi.totalWeightedTardiness(),
                 kpi.totalMakespan(),
                 kpi.lateTaskCount(),
@@ -36,4 +40,3 @@ public record VersionSummaryResponse(
         );
     }
 }
-
