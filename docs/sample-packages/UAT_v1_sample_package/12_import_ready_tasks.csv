@@ -1,0 +1,23 @@
+id,label,productCode,durationMinutes,dueMinutes,priority,candidateResourceIds,pinnedResourceId,pinnedStartMinutes,predecessorTaskIds,setupGroup
+ord_pa101_001__01_react,ord_pa101_001 / Reaction Stage,PA-101,480,1500,5,"reactor_r01,reactor_r02",reactor_r01,,,REACT_A
+ord_pa101_001__02_filter,ord_pa101_001 / Polish Filtration,PA-101,240,1500,5,"filter_f01,filter_f02",,,ord_pa101_001__01_react,FILT_STD
+ord_pa101_001__03_dry,ord_pa101_001 / Final Drying,PA-101,300,1500,5,"dryer_d01,dryer_d02",,,ord_pa101_001__02_filter,DRY_STD
+ord_pa101_002__01_react,ord_pa101_002 / Reaction Stage,PA-101,480,2160,3,"reactor_r01,reactor_r02",,,,REACT_A
+ord_pa101_002__02_filter,ord_pa101_002 / Polish Filtration,PA-101,240,2160,3,"filter_f01,filter_f02",,,ord_pa101_002__01_react,FILT_STD
+ord_pa101_002__03_dry,ord_pa101_002 / Final Drying,PA-101,300,2160,3,"dryer_d01,dryer_d02",,,ord_pa101_002__02_filter,DRY_STD
+ord_pa102_001__01_react,ord_pa102_001 / Reaction Stage,PA-102,540,1920,5,"reactor_r02,reactor_r03",,,,REACT_A
+ord_pa102_001__02_filter,ord_pa102_001 / Polish Filtration,PA-102,260,1920,5,"filter_f01,filter_f02",,,ord_pa102_001__01_react,FILT_STD
+ord_pa102_001__03_dry,ord_pa102_001 / Final Drying,PA-102,330,1920,5,"dryer_d01,dryer_d02",,,ord_pa102_001__02_filter,DRY_STD
+ord_pa102_002__01_react,ord_pa102_002 / Reaction Stage,PA-102,540,3360,2,"reactor_r02,reactor_r03",,,,REACT_A
+ord_pa102_002__02_filter,ord_pa102_002 / Polish Filtration,PA-102,260,3360,2,"filter_f01,filter_f02",,,ord_pa102_002__01_react,FILT_STD
+ord_pa102_002__03_dry,ord_pa102_002 / Final Drying,PA-102,330,3360,2,"dryer_d01,dryer_d02",,,ord_pa102_002__02_filter,DRY_STD
+ord_sol201_001__01_react,ord_sol201_001 / Solvent Reaction,SOL-201,420,1920,5,"reactor_r01,reactor_r03",reactor_r03,180,,REACT_SOL
+ord_sol201_001__02_blend,ord_sol201_001 / Intermediate Blend,SOL-201,180,1920,5,"tank_t01,tank_t02",,,ord_sol201_001__01_react,BLEND_SOL
+ord_sol201_001__03_filter,ord_sol201_001 / Final Filtration,SOL-201,200,1920,5,"filter_f01,filter_f02",,,ord_sol201_001__02_blend,FILT_SOL
+ord_sol201_002__01_react,ord_sol201_002 / Solvent Reaction,SOL-201,420,2880,4,"reactor_r01,reactor_r03",,,,REACT_SOL
+ord_sol201_002__02_blend,ord_sol201_002 / Intermediate Blend,SOL-201,180,2880,4,"tank_t01,tank_t02",,,ord_sol201_002__01_react,BLEND_SOL
+ord_sol201_002__03_filter,ord_sol201_002 / Final Filtration,SOL-201,200,2880,4,"filter_f01,filter_f02",,,ord_sol201_002__02_blend,FILT_SOL
+ord_rs301_001__01_blend,ord_rs301_001 / Resin Blending,RS-301,300,2520,4,"tank_t01,tank_t02",,,,BLEND_RS
+ord_rs301_001__02_pack,ord_rs301_001 / Packaging,RS-301,180,2520,4,pack_p01,,,ord_rs301_001__01_blend,PACK_RS
+ord_rs301_002__01_blend,ord_rs301_002 / Resin Blending,RS-301,300,4200,2,"tank_t01,tank_t02",,1320,,BLEND_RS
+ord_rs301_002__02_pack,ord_rs301_002 / Packaging,RS-301,180,4200,2,pack_p01,,,ord_rs301_002__01_blend,PACK_RS

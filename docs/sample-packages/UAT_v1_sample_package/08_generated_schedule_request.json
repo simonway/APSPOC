@@ -1,0 +1,920 @@
+{
+  "scenarioName": "uat-v1-chemical-plant-mvp",
+  "dataVersion": "uat_v1_2026_04_28",
+  "scheduleStartAt": "2026-05-05T08:00:00Z",
+  "horizonMinutes": 10080,
+  "resources": [
+    {
+      "id": "reactor_r01",
+      "label": "Reactor-R01",
+      "resourceType": "REACTOR",
+      "sortOrder": 1
+    },
+    {
+      "id": "reactor_r02",
+      "label": "Reactor-R02",
+      "resourceType": "REACTOR",
+      "sortOrder": 2
+    },
+    {
+      "id": "reactor_r03",
+      "label": "Reactor-R03",
+      "resourceType": "REACTOR",
+      "sortOrder": 3
+    },
+    {
+      "id": "filter_f01",
+      "label": "Filter-F01",
+      "resourceType": "FILTER",
+      "sortOrder": 4
+    },
+    {
+      "id": "filter_f02",
+      "label": "Filter-F02",
+      "resourceType": "FILTER",
+      "sortOrder": 5
+    },
+    {
+      "id": "dryer_d01",
+      "label": "Dryer-D01",
+      "resourceType": "DRYER",
+      "sortOrder": 6
+    },
+    {
+      "id": "dryer_d02",
+      "label": "Dryer-D02",
+      "resourceType": "DRYER",
+      "sortOrder": 7
+    },
+    {
+      "id": "tank_t01",
+      "label": "Blend-Tank-T01",
+      "resourceType": "TANK",
+      "sortOrder": 8
+    },
+    {
+      "id": "tank_t02",
+      "label": "Blend-Tank-T02",
+      "resourceType": "TANK",
+      "sortOrder": 9
+    },
+    {
+      "id": "pack_p01",
+      "label": "Pack-Line-P01",
+      "resourceType": "OTHER",
+      "sortOrder": 10
+    }
+  ],
+  "tasks": [
+    {
+      "id": "ord_pa101_001__01_react",
+      "label": "ord_pa101_001 / Reaction Stage",
+      "productCode": "PA-101",
+      "durationMinutes": 480,
+      "dueMinutes": 1500,
+      "priority": 5,
+      "candidateResourceIds": [
+        "reactor_r01",
+        "reactor_r02"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "RM-MONO_A",
+          "quantity": 2
+        },
+        {
+          "itemCode": "RM-CAT_A",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT-PA101-SLURRY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "REACT_A",
+      "pinnedResourceId": "reactor_r01"
+    },
+    {
+      "id": "ord_pa101_001__02_filter",
+      "label": "ord_pa101_001 / Polish Filtration",
+      "productCode": "PA-101",
+      "durationMinutes": 240,
+      "dueMinutes": 1500,
+      "priority": 5,
+      "candidateResourceIds": [
+        "filter_f01",
+        "filter_f02"
+      ],
+      "predecessorTaskIds": [
+        "ord_pa101_001__01_react"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT-PA101-SLURRY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT-PA101-WET",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "FILT_STD"
+    },
+    {
+      "id": "ord_pa101_001__03_dry",
+      "label": "ord_pa101_001 / Final Drying",
+      "productCode": "PA-101",
+      "durationMinutes": 300,
+      "dueMinutes": 1500,
+      "priority": 5,
+      "candidateResourceIds": [
+        "dryer_d01",
+        "dryer_d02"
+      ],
+      "predecessorTaskIds": [
+        "ord_pa101_001__02_filter"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT-PA101-WET",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "PA-101",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "DRY_STD"
+    },
+    {
+      "id": "ord_pa101_002__01_react",
+      "label": "ord_pa101_002 / Reaction Stage",
+      "productCode": "PA-101",
+      "durationMinutes": 480,
+      "dueMinutes": 2160,
+      "priority": 3,
+      "candidateResourceIds": [
+        "reactor_r01",
+        "reactor_r02"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "RM-MONO_A",
+          "quantity": 2
+        },
+        {
+          "itemCode": "RM-CAT_A",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT-PA101-SLURRY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "REACT_A"
+    },
+    {
+      "id": "ord_pa101_002__02_filter",
+      "label": "ord_pa101_002 / Polish Filtration",
+      "productCode": "PA-101",
+      "durationMinutes": 240,
+      "dueMinutes": 2160,
+      "priority": 3,
+      "candidateResourceIds": [
+        "filter_f01",
+        "filter_f02"
+      ],
+      "predecessorTaskIds": [
+        "ord_pa101_002__01_react"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT-PA101-SLURRY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT-PA101-WET",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "FILT_STD"
+    },
+    {
+      "id": "ord_pa101_002__03_dry",
+      "label": "ord_pa101_002 / Final Drying",
+      "productCode": "PA-101",
+      "durationMinutes": 300,
+      "dueMinutes": 2160,
+      "priority": 3,
+      "candidateResourceIds": [
+        "dryer_d01",
+        "dryer_d02"
+      ],
+      "predecessorTaskIds": [
+        "ord_pa101_002__02_filter"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT-PA101-WET",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "PA-101",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "DRY_STD"
+    },
+    {
+      "id": "ord_pa102_001__01_react",
+      "label": "ord_pa102_001 / Reaction Stage",
+      "productCode": "PA-102",
+      "durationMinutes": 540,
+      "dueMinutes": 1920,
+      "priority": 5,
+      "candidateResourceIds": [
+        "reactor_r02",
+        "reactor_r03"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "RM-MONO_B",
+          "quantity": 2
+        },
+        {
+          "itemCode": "RM-CAT_A",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT-PA102-SLURRY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "REACT_A"
+    },
+    {
+      "id": "ord_pa102_001__02_filter",
+      "label": "ord_pa102_001 / Polish Filtration",
+      "productCode": "PA-102",
+      "durationMinutes": 260,
+      "dueMinutes": 1920,
+      "priority": 5,
+      "candidateResourceIds": [
+        "filter_f01",
+        "filter_f02"
+      ],
+      "predecessorTaskIds": [
+        "ord_pa102_001__01_react"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT-PA102-SLURRY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT-PA102-WET",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "FILT_STD"
+    },
+    {
+      "id": "ord_pa102_001__03_dry",
+      "label": "ord_pa102_001 / Final Drying",
+      "productCode": "PA-102",
+      "durationMinutes": 330,
+      "dueMinutes": 1920,
+      "priority": 5,
+      "candidateResourceIds": [
+        "dryer_d01",
+        "dryer_d02"
+      ],
+      "predecessorTaskIds": [
+        "ord_pa102_001__02_filter"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT-PA102-WET",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "PA-102",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "DRY_STD"
+    },
+    {
+      "id": "ord_pa102_002__01_react",
+      "label": "ord_pa102_002 / Reaction Stage",
+      "productCode": "PA-102",
+      "durationMinutes": 540,
+      "dueMinutes": 3360,
+      "priority": 2,
+      "candidateResourceIds": [
+        "reactor_r02",
+        "reactor_r03"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "RM-MONO_B",
+          "quantity": 2
+        },
+        {
+          "itemCode": "RM-CAT_A",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT-PA102-SLURRY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "REACT_A"
+    },
+    {
+      "id": "ord_pa102_002__02_filter",
+      "label": "ord_pa102_002 / Polish Filtration",
+      "productCode": "PA-102",
+      "durationMinutes": 260,
+      "dueMinutes": 3360,
+      "priority": 2,
+      "candidateResourceIds": [
+        "filter_f01",
+        "filter_f02"
+      ],
+      "predecessorTaskIds": [
+        "ord_pa102_002__01_react"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT-PA102-SLURRY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT-PA102-WET",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "FILT_STD"
+    },
+    {
+      "id": "ord_pa102_002__03_dry",
+      "label": "ord_pa102_002 / Final Drying",
+      "productCode": "PA-102",
+      "durationMinutes": 330,
+      "dueMinutes": 3360,
+      "priority": 2,
+      "candidateResourceIds": [
+        "dryer_d01",
+        "dryer_d02"
+      ],
+      "predecessorTaskIds": [
+        "ord_pa102_002__02_filter"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT-PA102-WET",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "PA-102",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "DRY_STD"
+    },
+    {
+      "id": "ord_sol201_001__01_react",
+      "label": "ord_sol201_001 / Solvent Reaction",
+      "productCode": "SOL-201",
+      "durationMinutes": 420,
+      "dueMinutes": 1920,
+      "priority": 5,
+      "candidateResourceIds": [
+        "reactor_r01",
+        "reactor_r03"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "RM-SOL_BASE",
+          "quantity": 1
+        },
+        {
+          "itemCode": "RM-SOL_ACT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT-SOL201-REACT",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "REACT_SOL",
+      "pinnedResourceId": "reactor_r03",
+      "pinnedStartMinutes": 180
+    },
+    {
+      "id": "ord_sol201_001__02_blend",
+      "label": "ord_sol201_001 / Intermediate Blend",
+      "productCode": "SOL-201",
+      "durationMinutes": 180,
+      "dueMinutes": 1920,
+      "priority": 5,
+      "candidateResourceIds": [
+        "tank_t01",
+        "tank_t02"
+      ],
+      "predecessorTaskIds": [
+        "ord_sol201_001__01_react"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT-SOL201-REACT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "RM-SOL_ADD",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT-SOL201-BLEND",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "BLEND_SOL"
+    },
+    {
+      "id": "ord_sol201_001__03_filter",
+      "label": "ord_sol201_001 / Final Filtration",
+      "productCode": "SOL-201",
+      "durationMinutes": 200,
+      "dueMinutes": 1920,
+      "priority": 5,
+      "candidateResourceIds": [
+        "filter_f01",
+        "filter_f02"
+      ],
+      "predecessorTaskIds": [
+        "ord_sol201_001__02_blend"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT-SOL201-BLEND",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "SOL-201",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "FILT_SOL"
+    },
+    {
+      "id": "ord_sol201_002__01_react",
+      "label": "ord_sol201_002 / Solvent Reaction",
+      "productCode": "SOL-201",
+      "durationMinutes": 420,
+      "dueMinutes": 2880,
+      "priority": 4,
+      "candidateResourceIds": [
+        "reactor_r01",
+        "reactor_r03"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "RM-SOL_BASE",
+          "quantity": 1
+        },
+        {
+          "itemCode": "RM-SOL_ACT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT-SOL201-REACT",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "REACT_SOL"
+    },
+    {
+      "id": "ord_sol201_002__02_blend",
+      "label": "ord_sol201_002 / Intermediate Blend",
+      "productCode": "SOL-201",
+      "durationMinutes": 180,
+      "dueMinutes": 2880,
+      "priority": 4,
+      "candidateResourceIds": [
+        "tank_t01",
+        "tank_t02"
+      ],
+      "predecessorTaskIds": [
+        "ord_sol201_002__01_react"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT-SOL201-REACT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "RM-SOL_ADD",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT-SOL201-BLEND",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "BLEND_SOL"
+    },
+    {
+      "id": "ord_sol201_002__03_filter",
+      "label": "ord_sol201_002 / Final Filtration",
+      "productCode": "SOL-201",
+      "durationMinutes": 200,
+      "dueMinutes": 2880,
+      "priority": 4,
+      "candidateResourceIds": [
+        "filter_f01",
+        "filter_f02"
+      ],
+      "predecessorTaskIds": [
+        "ord_sol201_002__02_blend"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT-SOL201-BLEND",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "SOL-201",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "FILT_SOL"
+    },
+    {
+      "id": "ord_rs301_001__01_blend",
+      "label": "ord_rs301_001 / Resin Blending",
+      "productCode": "RS-301",
+      "durationMinutes": 300,
+      "dueMinutes": 2520,
+      "priority": 4,
+      "candidateResourceIds": [
+        "tank_t01",
+        "tank_t02"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "RM-RESIN_BASE",
+          "quantity": 1
+        },
+        {
+          "itemCode": "RM-RESIN_ADD",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT-RS301-BULK",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "BLEND_RS"
+    },
+    {
+      "id": "ord_rs301_001__02_pack",
+      "label": "ord_rs301_001 / Packaging",
+      "productCode": "RS-301",
+      "durationMinutes": 180,
+      "dueMinutes": 2520,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_p01"
+      ],
+      "predecessorTaskIds": [
+        "ord_rs301_001__01_blend"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT-RS301-BULK",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "RS-301",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PACK_RS"
+    },
+    {
+      "id": "ord_rs301_002__01_blend",
+      "label": "ord_rs301_002 / Resin Blending",
+      "productCode": "RS-301",
+      "durationMinutes": 300,
+      "dueMinutes": 4200,
+      "priority": 2,
+      "candidateResourceIds": [
+        "tank_t01",
+        "tank_t02"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "RM-RESIN_BASE",
+          "quantity": 1
+        },
+        {
+          "itemCode": "RM-RESIN_ADD",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT-RS301-BULK",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "BLEND_RS",
+      "pinnedStartMinutes": 1320
+    },
+    {
+      "id": "ord_rs301_002__02_pack",
+      "label": "ord_rs301_002 / Packaging",
+      "productCode": "RS-301",
+      "durationMinutes": 180,
+      "dueMinutes": 4200,
+      "priority": 2,
+      "candidateResourceIds": [
+        "pack_p01"
+      ],
+      "predecessorTaskIds": [
+        "ord_rs301_002__01_blend"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT-RS301-BULK",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "RS-301",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PACK_RS"
+    }
+  ],
+  "downtimes": [
+    {
+      "id": "maint_reactor_r01_day1",
+      "resourceId": "reactor_r01",
+      "startMinutes": 240,
+      "endMinutes": 420,
+      "downtimeType": "MAINTENANCE",
+      "source": "CALENDAR",
+      "description": "Preventive maintenance"
+    },
+    {
+      "id": "clean_reactor_r03_day2",
+      "resourceId": "reactor_r03",
+      "startMinutes": 1560,
+      "endMinutes": 1740,
+      "downtimeType": "CLEANING",
+      "source": "CALENDAR",
+      "description": "Solvent wash and clearance"
+    },
+    {
+      "id": "inspect_filter_f01_day3",
+      "resourceId": "filter_f01",
+      "startMinutes": 2880,
+      "endMinutes": 3000,
+      "downtimeType": "INSPECTION",
+      "source": "CALENDAR",
+      "description": "Media inspection"
+    },
+    {
+      "id": "cip_tank_t02_day2",
+      "resourceId": "tank_t02",
+      "startMinutes": 1260,
+      "endMinutes": 1440,
+      "downtimeType": "CIP",
+      "source": "CALENDAR",
+      "description": "CIP cleaning cycle"
+    },
+    {
+      "id": "calibrate_dryer_d02_day4",
+      "resourceId": "dryer_d02",
+      "startMinutes": 3720,
+      "endMinutes": 3840,
+      "downtimeType": "CALIBRATION",
+      "source": "CALENDAR",
+      "description": "Sensor calibration"
+    },
+    {
+      "id": "service_pack_p01_day5",
+      "resourceId": "pack_p01",
+      "startMinutes": 4380,
+      "endMinutes": 4560,
+      "downtimeType": "SERVICE",
+      "source": "CALENDAR",
+      "description": "Packaging line service window"
+    }
+  ],
+  "setupRules": [
+    {
+      "fromSetupGroup": "REACT_A",
+      "toSetupGroup": "REACT_SOL",
+      "resourceType": "REACTOR",
+      "resourceId": null,
+      "setupMinutes": 60
+    },
+    {
+      "fromSetupGroup": "REACT_SOL",
+      "toSetupGroup": "REACT_A",
+      "resourceType": "REACTOR",
+      "resourceId": null,
+      "setupMinutes": 75
+    },
+    {
+      "fromSetupGroup": "BLEND_SOL",
+      "toSetupGroup": "BLEND_RS",
+      "resourceType": "TANK",
+      "resourceId": null,
+      "setupMinutes": 45
+    },
+    {
+      "fromSetupGroup": "BLEND_RS",
+      "toSetupGroup": "BLEND_SOL",
+      "resourceType": "TANK",
+      "resourceId": null,
+      "setupMinutes": 45
+    },
+    {
+      "fromSetupGroup": "FILT_STD",
+      "toSetupGroup": "FILT_SOL",
+      "resourceType": "FILTER",
+      "resourceId": null,
+      "setupMinutes": 30
+    },
+    {
+      "fromSetupGroup": "FILT_SOL",
+      "toSetupGroup": "FILT_STD",
+      "resourceType": "FILTER",
+      "resourceId": null,
+      "setupMinutes": 30
+    }
+  ],
+  "inventoryBalances": [
+    {
+      "itemCode": "RM-MONO_A",
+      "availableQuantity": 6,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 1
+    },
+    {
+      "itemCode": "RM-CAT_A",
+      "availableQuantity": 5,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 1
+    },
+    {
+      "itemCode": "RM-MONO_B",
+      "availableQuantity": 5,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 1
+    },
+    {
+      "itemCode": "RM-SOL_BASE",
+      "availableQuantity": 3,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "RM-SOL_ACT",
+      "availableQuantity": 3,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "RM-SOL_ADD",
+      "availableQuantity": 3,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "RM-RESIN_BASE",
+      "availableQuantity": 3,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "RM-RESIN_ADD",
+      "availableQuantity": 3,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    }
+  ],
+  "inventoryDemands": [
+    {
+      "demandId": "ord_pa101_001",
+      "itemCode": "PA-101",
+      "quantity": 1,
+      "dueMinutes": 1500
+    },
+    {
+      "demandId": "ord_pa101_002",
+      "itemCode": "PA-101",
+      "quantity": 1,
+      "dueMinutes": 2160
+    },
+    {
+      "demandId": "ord_pa102_001",
+      "itemCode": "PA-102",
+      "quantity": 1,
+      "dueMinutes": 1920
+    },
+    {
+      "demandId": "ord_pa102_002",
+      "itemCode": "PA-102",
+      "quantity": 1,
+      "dueMinutes": 3360
+    },
+    {
+      "demandId": "ord_sol201_001",
+      "itemCode": "SOL-201",
+      "quantity": 1,
+      "dueMinutes": 1920
+    },
+    {
+      "demandId": "ord_sol201_002",
+      "itemCode": "SOL-201",
+      "quantity": 1,
+      "dueMinutes": 2880
+    },
+    {
+      "demandId": "ord_rs301_001",
+      "itemCode": "RS-301",
+      "quantity": 1,
+      "dueMinutes": 2520
+    },
+    {
+      "demandId": "ord_rs301_002",
+      "itemCode": "RS-301",
+      "quantity": 1,
+      "dueMinutes": 4200
+    }
+  ],
+  "objectiveWeights": {
+    "tardiness": 100,
+    "makespan": 1
+  },
+  "solverConfig": {
+    "timeLimitSeconds": 120,
+    "numSearchWorkers": 4
+  }
+}

@@ -1,9 +1,15 @@
 package com.apspoc.backend.domain;
 
 public enum JobStatus {
-    PENDING,
+    CREATED,
+    QUEUED,
     RUNNING,
-    DONE,
-    FAILED
-}
+    SUCCEEDED,
+    FAILED,
+    TIMEOUT,
+    CANCELLED;
 
+    public boolean isTerminal() {
+        return this == SUCCEEDED || this == FAILED || this == TIMEOUT || this == CANCELLED;
+    }
+}

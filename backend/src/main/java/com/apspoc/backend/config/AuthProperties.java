@@ -9,8 +9,15 @@ import jakarta.validation.constraints.NotBlank;
 @Validated
 @ConfigurationProperties(prefix = "aps.auth")
 public record AuthProperties(
-        @NotBlank String username,
-        @NotBlank String password,
-        @Min(1) int sessionTimeoutMinutes
+        @Min(1) int sessionTimeoutMinutes,
+        SeedUser admin,
+        SeedUser planner,
+        SeedUser approver,
+        SeedUser viewer
 ) {
+    public record SeedUser(
+            @NotBlank String username,
+            @NotBlank String password
+    ) {
+    }
 }

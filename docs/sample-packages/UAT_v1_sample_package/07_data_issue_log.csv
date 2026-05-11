@@ -1,0 +1,5 @@
+issueId,severity,status,category,description,owner,resolution
+ISSUE-01,INFO,CLOSED,TimeBaseline,"scheduleStartAt and all relative minutes are already normalized to UTC minutes from the scenario start",Planner,"No action needed"
+ISSUE-02,WARN,OPEN,QuantitySemantics,"quantity is retained for review but does not yet expand to multiple generated operation chains",Product,"Decide in M1 whether quantity affects batch expansion"
+ISSUE-03,WARN,OPEN,SetupCoverage,"setup rules only cover cross-family switches used by this sample, not all same-family combinations",Algorithm,"Extend only if the trial line needs finer setup behavior"
+ISSUE-04,WARN,OPEN,BridgeRelaxation,"ord_pa101_001 fixed start on reactor_r01 overlaps a downtime window; the baseline generated request relaxes pinnedStartMinutes and preserves the original constraint in operation metadata",Algorithm,"Keep the bridge relaxation for current smoke runs; revisit once fixed-constraint conflict handling is formalized"

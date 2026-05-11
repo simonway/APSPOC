@@ -48,11 +48,11 @@ public class VersionTrialSolveService {
         this.objectMapper = objectMapper;
     }
 
-    public ScheduleJob submitTrialSolve(String versionId, TrialSolveRequest request) {
+    public ScheduleJob submitTrialSolve(String versionId, TrialSolveRequest request, String actorUsername) {
         ScheduleVersion version = versionService.getVersion(versionId);
         CreateScheduleJobRequest baseRequest = resolveBaseRequest(version);
         CreateScheduleJobRequest trialRequest = buildTrialRequest(version, baseRequest, request);
-        return schedulingJobService.submit(trialRequest);
+        return schedulingJobService.submit(trialRequest, actorUsername);
     }
 
     private CreateScheduleJobRequest resolveBaseRequest(ScheduleVersion version) {
@@ -130,17 +130,23 @@ public class VersionTrialSolveService {
                 .toList();
 
         List<CreateScheduleJobRequest.TaskInput> tasks = ganttData.bars().stream()
-                .map(bar -> new CreateScheduleJobRequest.TaskInput(
-                        bar.id(),
-                        bar.label(),
-                        bar.productCode(),
-                        Math.max(1, minutesBetween(bar.startMs(), bar.endMs())),
-                        Math.max(1, minutesBetween(baseMs, bar.dueDateMs())),
-                        bar.priority(),
-                        List.of(bar.rowId()),
-                        null,
-                        null
-                ))
+                .map(bar -> {
+                    String pinnedResourceId = bar.pinned() ? bar.rowId() : null;
+                    Integer pinnedStartMinutes = bar.pinned()
+                            ? Math.max(0, minutesBetween(baseMs, bar.startMs()))
+                            : null;
+                    return new CreateScheduleJobRequest.TaskInput(
+                            bar.id(),
+                            bar.label(),
+                            bar.productCode(),
+                            Math.max(1, minutesBetween(bar.startMs(), bar.endMs())),
+                            Math.max(1, minutesBetween(baseMs, bar.dueDateMs())),
+                            bar.priority(),
+                            List.of(bar.rowId()),
+                            pinnedResourceId,
+                            pinnedStartMinutes
+                    );
+                })
                 .toList();
 
         List<CreateScheduleJobRequest.DowntimeInput> downtimes = ganttData.downtimes().stream()
@@ -167,7 +173,9 @@ public class VersionTrialSolveService {
                 tasks,
                 downtimes,
                 new CreateScheduleJobRequest.ObjectiveWeights(DEFAULT_TARDINESS_WEIGHT, DEFAULT_MAKESPAN_WEIGHT),
-                new CreateScheduleJobRequest.SolverConfig(DEFAULT_SOLVER_TIME_LIMIT_SECONDS, DEFAULT_SOLVER_WORKERS)
+                new CreateScheduleJobRequest.SolverConfig(DEFAULT_SOLVER_TIME_LIMIT_SECONDS, DEFAULT_SOLVER_WORKERS),
+                null,
+                List.of()
         );
     }
 
@@ -197,7 +205,11 @@ public class VersionTrialSolveService {
                 tasks,
                 baseRequest.downtimes(),
                 baseRequest.objectiveWeights(),
-                baseRequest.solverConfig()
+                baseRequest.solverConfig(),
+                baseRequest.dataVersion(),
+                baseRequest.setupRules(),
+                baseRequest.inventoryBalances(),
+                baseRequest.inventoryDemands()
         );
     }
 
@@ -243,9 +255,12 @@ public class VersionTrialSolveService {
             candidateResourceIds.add(currentRowId);
         }
 
-        String pinnedResourceId = baseTask.pinnedResourceId();
-        Integer pinnedStartMinutes = baseTask.pinnedStartMinutes();
-        if (draftBar != null) {
+        boolean currentPinned = draftBar != null && draftBar.pinned() != null
+                ? draftBar.pinned()
+                : versionBar.pinned();
+        String pinnedResourceId = null;
+        Integer pinnedStartMinutes = null;
+        if (currentPinned) {
             pinnedResourceId = currentRowId;
             pinnedStartMinutes = Math.max(0, minutesBetween(baseMs, currentStartMs));
         }
@@ -259,7 +274,11 @@ public class VersionTrialSolveService {
                 baseTask.priority(),
                 candidateResourceIds,
                 pinnedResourceId,
-                pinnedStartMinutes
+                pinnedStartMinutes,
+                baseTask.predecessorTaskIds(),
+                baseTask.setupGroup(),
+                baseTask.materialInputs(),
+                baseTask.materialOutputs()
         );
     }
 

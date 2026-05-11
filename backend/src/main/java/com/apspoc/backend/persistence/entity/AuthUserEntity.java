@@ -1,7 +1,12 @@
 package com.apspoc.backend.persistence.entity;
 
+import com.apspoc.backend.domain.UserRole;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
@@ -11,10 +16,9 @@ import java.time.Instant;
 @Table(name = "auth_user")
 public class AuthUserEntity {
 
-    public static final short SINGLETON_ID = 1;
-
     @Id
-    private Short id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -22,17 +26,17 @@ public class AuthUserEntity {
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private UserRole role;
+
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
-    protected AuthUserEntity() {
+    public AuthUserEntity() {
     }
 
-    public AuthUserEntity(Short id) {
-        this.id = id;
-    }
-
-    public Short getId() {
+    public Long getId() {
         return id;
     }
 
@@ -50,6 +54,14 @@ public class AuthUserEntity {
 
     public void setPasswordHash(String passwordHash) {
         this.passwordHash = passwordHash;
+    }
+
+    public UserRole getRole() {
+        return role;
+    }
+
+    public void setRole(UserRole role) {
+        this.role = role;
     }
 
     public Instant getUpdatedAt() {

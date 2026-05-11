@@ -1,0 +1,7 @@
+fromSetupGroup,toSetupGroup,resourceType,resourceId,setupMinutes,remarks
+PKG_330,PKG_500,OTHER,,60,"330ml -> 500ml changeover"
+PKG_500,PKG_330,OTHER,,60,"500ml -> 330ml changeover"
+PKG_330,PKG_600,OTHER,,60,"330ml -> 600ml changeover"
+PKG_600,PKG_330,OTHER,,60,"600ml -> 330ml changeover"
+PKG_500,PKG_600,OTHER,,60,"500ml -> 600ml changeover"
+PKG_600,PKG_500,OTHER,,60,"600ml -> 500ml changeover"

@@ -1,0 +1,9 @@
+itemCode,availableQuantity,availableFromMinutes,safetyStockQuantity
+RM-MONO_A,6,0,1
+RM-CAT_A,5,0,1
+RM-MONO_B,5,0,1
+RM-SOL_BASE,3,0,0
+RM-SOL_ACT,3,0,0
+RM-SOL_ADD,3,0,0
+RM-RESIN_BASE,3,0,0
+RM-RESIN_ADD,3,0,0

@@ -1,0 +1,7 @@
+id,resourceId,startMinutes,endMinutes,downtimeType,source,description
+maint_reactor_r01_day1,reactor_r01,240,420,MAINTENANCE,CALENDAR,Preventive maintenance
+clean_reactor_r03_day2,reactor_r03,1560,1740,CLEANING,CALENDAR,Solvent wash and clearance
+inspect_filter_f01_day3,filter_f01,2880,3000,INSPECTION,CALENDAR,Media inspection
+cip_tank_t02_day2,tank_t02,1260,1440,CIP,CALENDAR,CIP cleaning cycle
+calibrate_dryer_d02_day4,dryer_d02,3720,3840,CALIBRATION,CALENDAR,Sensor calibration
+service_pack_p01_day5,pack_p01,4380,4560,SERVICE,CALENDAR,Packaging line service window

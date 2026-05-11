@@ -1,0 +1,9 @@
+field,value,notes
+scenarioName,uat-v1-chemical-plant-mvp,Single-workshop UAT sample
+dataVersion,uat_v1_2026_04_28,Sample version tag
+scheduleStartAt,2026-05-05T08:00:00Z,UTC baseline
+horizonMinutes,10080,7-day horizon
+objectiveWeights.tardiness,100,Keep tardiness dominant
+objectiveWeights.makespan,1,Secondary objective
+solverConfig.timeLimitSeconds,120,Longer timeout for UAT-sized samples
+solverConfig.numSearchWorkers,4,Local baseline worker count

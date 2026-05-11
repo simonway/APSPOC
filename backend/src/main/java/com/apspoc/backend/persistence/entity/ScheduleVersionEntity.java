@@ -46,6 +46,12 @@ public class ScheduleVersionEntity {
     @Column(name = "source_request_json")
     private String sourceRequestJson;
 
+    @Column(name = "release_note")
+    private String releaseNote;
+
+    @Column(name = "created_by", nullable = false)
+    private String createdBy;
+
     @Column(name = "total_weighted_tardiness", nullable = false)
     private int totalWeightedTardiness;
 
@@ -69,6 +75,10 @@ public class ScheduleVersionEntity {
     @OneToMany(mappedBy = "version", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("startMs ASC")
     private final List<GanttDowntimeEntity> downtimes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "version", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("startMs ASC")
+    private final List<GanttChangeoverEntity> changeovers = new ArrayList<>();
 
     protected ScheduleVersionEntity() {
     }
@@ -137,6 +147,22 @@ public class ScheduleVersionEntity {
         this.sourceRequestJson = sourceRequestJson;
     }
 
+    public String getReleaseNote() {
+        return releaseNote;
+    }
+
+    public void setReleaseNote(String releaseNote) {
+        this.releaseNote = releaseNote;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
     public int getTotalWeightedTardiness() {
         return totalWeightedTardiness;
     }
@@ -179,5 +205,9 @@ public class ScheduleVersionEntity {
 
     public List<GanttDowntimeEntity> getDowntimes() {
         return downtimes;
+    }
+
+    public List<GanttChangeoverEntity> getChangeovers() {
+        return changeovers;
     }
 }

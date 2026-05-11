@@ -15,6 +15,6 @@ public class AuthBootstrap implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) {
-        authService.ensureDefaultUser();
+        authService.ensureDefaultUsers();
     }
 }
