@@ -43,7 +43,7 @@ rtk python3 scripts/build_uat_sample_package.py --check
 End-to-end smoke:
 
 ```bash
-rtk python3 scripts/uat_package_smoke.py
+rtk python3 scripts/uat_package_smoke.py docs/sample-packages/UAT_v1_sample_package
 ```
 
 Smoke summary defaults to:

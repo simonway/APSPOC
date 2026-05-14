@@ -103,10 +103,10 @@ if (( RUN_SMOKE )); then
         python3 scripts/release_smoke.py
     )
 
-    log "运行 UAT sample package 导入批次到排程 smoke ..."
+    log "运行 Snow Beer 第三期主链路 UAT sample package 导入批次到排程 smoke ..."
     (
         cd "$ROOT_DIR"
-        python3 scripts/uat_package_smoke.py
+        python3 scripts/uat_package_smoke.py docs/sample-packages/snow_beer_main_chain_phase3
     )
 
     log "smoke 汇总已写入 .runtime/release-smoke-summary.json"

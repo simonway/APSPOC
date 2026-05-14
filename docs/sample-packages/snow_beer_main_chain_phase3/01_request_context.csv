@@ -1,0 +1,10 @@
+field,value,notes
+scenarioName,snow-beer-main-chain-phase3,Phase 3 Snow Beer main-chain demo sample
+dataVersion,snow_beer_main_chain_phase3_2026_05_12,Sample version tag
+scheduleStartAt,2026-12-24T00:00:00Z,UTC baseline equals local 2026-12-24 08:00
+horizonMinutes,4320,3-day horizon for a compact main-chain smoke
+objectiveWeights.tardiness,100,Keep due-date pressure dominant
+objectiveWeights.earliness,2,Pull terminal packaging lots closer to demand due dates
+objectiveWeights.makespan,1,Secondary objective
+solverConfig.timeLimitSeconds,120,Local smoke baseline
+solverConfig.numSearchWorkers,4,Local baseline worker count

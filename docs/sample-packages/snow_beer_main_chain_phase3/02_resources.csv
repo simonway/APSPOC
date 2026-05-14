@@ -1,0 +1,9 @@
+id,label,resourceType,sortOrder,capacity,remarks
+mash_k1,糖化1锅,REACTOR,1,50KL,"Discrete sugarization proxy resource"
+mash_k2,糖化2锅,REACTOR,2,50KL,"Discrete sugarization proxy resource"
+ferm_t1,发酵1罐,TANK,3,50KL,"Discrete fermentation task resource no maturity window in Phase 3"
+ferm_t2,发酵2罐,TANK,4,100KL,"Discrete fermentation task resource no tank-mixing rule in Phase 3"
+filt_f1,过滤1线,FILTER,5,80KL,"Discrete filtration proxy resource"
+filt_f2,过滤2线,FILTER,6,80KL,"Discrete filtration proxy resource"
+pack_l1,包装1线,OTHER,7,500ml,"Packaging line for A500 family"
+pack_l2,包装2线,OTHER,8,500ml/600ml,"Packaging line for A500 and B600 families"

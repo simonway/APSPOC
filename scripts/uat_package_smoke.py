@@ -22,7 +22,7 @@ from release_smoke import SmokeError
 from release_smoke import ensure_status
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
-DEFAULT_PACKAGE_DIR = ROOT_DIR / "docs" / "sample-packages" / "UAT_v1_sample_package"
+DEFAULT_PACKAGE_DIR = ROOT_DIR / "docs" / "sample-packages" / "snow_beer_main_chain_phase3"
 DEFAULT_SUMMARY_PATH = ROOT_DIR / ".runtime" / "uat-package-smoke-summary.json"
 DEFAULT_POLL_TIMEOUT_SECONDS = int(os.environ.get("APS_UAT_SMOKE_POLL_TIMEOUT_SECONDS", "180"))
 

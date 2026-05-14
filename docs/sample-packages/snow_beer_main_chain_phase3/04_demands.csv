@@ -1,0 +1,4 @@
+demandId,productCode,quantity,dueMinutes,priority,fixedResourceId,fixedStartMinutes,remarks
+dem_a500_spot_1224,31015630002000000,1,720,5,,,"Temporary inserted order protected by highest priority"
+dem_a500_1225,31015630002000000,1,2160,4,,,"Committed A500 demand slice"
+dem_b600_1225,31015630004000000,2,2880,4,,,"Committed B600 demand slice with one lot covered by opening inventory"

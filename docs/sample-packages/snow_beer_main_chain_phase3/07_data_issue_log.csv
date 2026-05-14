@@ -1,0 +1,5 @@
+issueId,severity,status,category,description,owner,resolution
+ISSUE-01,INFO,OPEN,PhaseBoundary,"Sugarization fermentation filtration and packaging are modeled as fixed-duration discrete tasks for Phase 3",Product,"Move maturity windows tank occupation non-mixing and continuous-flow details to Phase 4"
+ISSUE-02,INFO,OPEN,QuantityModel,"All quantities are pre-aggregated lot units rather than raw KL or bottle counts",Planner,"Use the package as a main-chain scheduling demo sample not a mass-balance accounting source"
+ISSUE-03,WARN,OPEN,InventoryEventModel,"InventoryBalance supports one availability checkpoint per item so material arrivals are compressed",Algorithm,"Use availableFromMinutes only as a demo checkpoint in Phase 3"
+ISSUE-04,INFO,OPEN,DowntimeAssumption,"Shift and maintenance effects are represented by explicit downtime windows",Planner,"Do not introduce calendar logic in Phase 3"

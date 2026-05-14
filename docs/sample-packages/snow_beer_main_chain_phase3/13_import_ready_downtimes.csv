@@ -1,0 +1,3 @@
+id,resourceId,startMinutes,endMinutes,downtimeType,source,description
+service_ferm_t1_day1,ferm_t1,600,720,SERVICE,ASSUMPTION,Synthetic fermentation resource service window for downtime smoke
+service_pack_l2_day2,pack_l2,1800,1920,SERVICE,ASSUMPTION,Synthetic packaging service window for downtime smoke
