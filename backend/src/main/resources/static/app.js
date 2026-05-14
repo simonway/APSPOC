@@ -6573,6 +6573,8 @@ function getRequiredGovernanceComment(titleKey) {
         return comment;
     }
     setJobStatusWithText(titleKey, t("governance.commentRequired"));
+    elements.versionActionCommentInput.scrollIntoView({ block: "center", behavior: "smooth" });
+    elements.versionActionCommentInput.focus();
     return null;
 }
 
