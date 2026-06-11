@@ -592,17 +592,6 @@ public class ModelImportService {
             ));
         }
 
-        if (downtimes.isEmpty()) {
-            throw validationError(
-                    rows.sheetName(),
-                    1,
-                    null,
-                    null,
-                    "NO_DATA_ROWS",
-                    "The downtime import file does not contain any data rows",
-                    "Add at least one downtime row below the header."
-            );
-        }
         return downtimes;
     }
 

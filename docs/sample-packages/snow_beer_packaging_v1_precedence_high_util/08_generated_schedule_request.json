@@ -1,0 +1,3464 @@
+{
+  "scenarioName": "snow-beer-packaging-v1-precedence-high-util",
+  "dataVersion": "snow_beer_packaging_v1_precedence_high_util_2026_05_15",
+  "scheduleStartAt": "2026-12-24T00:00:00Z",
+  "horizonMinutes": 8640,
+  "resources": [
+    {
+      "id": "pack_l1",
+      "label": "包装1线",
+      "resourceType": "OTHER",
+      "sortOrder": 1
+    },
+    {
+      "id": "pack_l2",
+      "label": "包装2线",
+      "resourceType": "OTHER",
+      "sortOrder": 2
+    },
+    {
+      "id": "pack_l3",
+      "label": "包装3线",
+      "resourceType": "OTHER",
+      "sortOrder": 3
+    }
+  ],
+  "tasks": [
+    {
+      "id": "dem_a500_1225__u01__01_prep",
+      "label": "dem_a500_1225 / U01 / Line Prep",
+      "productCode": "31015630002000000",
+      "durationMinutes": 30,
+      "dueMinutes": 2160,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1225__u01__02_pack",
+      "label": "dem_a500_1225 / U01 / Final Packing",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 2160,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_1225__u01__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1225__u02__01_prep",
+      "label": "dem_a500_1225 / U02 / Line Prep",
+      "productCode": "31015630002000000",
+      "durationMinutes": 30,
+      "dueMinutes": 2160,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1225__u02__02_pack",
+      "label": "dem_a500_1225 / U02 / Final Packing",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 2160,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_1225__u02__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1225__u03__01_prep",
+      "label": "dem_a500_1225 / U03 / Line Prep",
+      "productCode": "31015630002000000",
+      "durationMinutes": 30,
+      "dueMinutes": 2160,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1225__u03__02_pack",
+      "label": "dem_a500_1225 / U03 / Final Packing",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 2160,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_1225__u03__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1225__u04__01_prep",
+      "label": "dem_a500_1225 / U04 / Line Prep",
+      "productCode": "31015630002000000",
+      "durationMinutes": 30,
+      "dueMinutes": 2160,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1225__u04__02_pack",
+      "label": "dem_a500_1225 / U04 / Final Packing",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 2160,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_1225__u04__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1227__u01__01_prep",
+      "label": "dem_a500_1227 / U01 / Line Prep",
+      "productCode": "31015630002000000",
+      "durationMinutes": 30,
+      "dueMinutes": 5040,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1227__u01__02_pack",
+      "label": "dem_a500_1227 / U01 / Final Packing",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 5040,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_1227__u01__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1227__u02__01_prep",
+      "label": "dem_a500_1227 / U02 / Line Prep",
+      "productCode": "31015630002000000",
+      "durationMinutes": 30,
+      "dueMinutes": 5040,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1227__u02__02_pack",
+      "label": "dem_a500_1227 / U02 / Final Packing",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 5040,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_1227__u02__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1227__u03__01_prep",
+      "label": "dem_a500_1227 / U03 / Line Prep",
+      "productCode": "31015630002000000",
+      "durationMinutes": 30,
+      "dueMinutes": 5040,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1227__u03__02_pack",
+      "label": "dem_a500_1227 / U03 / Final Packing",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 5040,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_1227__u03__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1227__u04__01_prep",
+      "label": "dem_a500_1227 / U04 / Line Prep",
+      "productCode": "31015630002000000",
+      "durationMinutes": 30,
+      "dueMinutes": 5040,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1227__u04__02_pack",
+      "label": "dem_a500_1227 / U04 / Final Packing",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 5040,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_1227__u04__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1227__u05__01_prep",
+      "label": "dem_a500_1227 / U05 / Line Prep",
+      "productCode": "31015630002000000",
+      "durationMinutes": 30,
+      "dueMinutes": 5040,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1227__u05__02_pack",
+      "label": "dem_a500_1227 / U05 / Final Packing",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 5040,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_1227__u05__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1227__u06__01_prep",
+      "label": "dem_a500_1227 / U06 / Line Prep",
+      "productCode": "31015630002000000",
+      "durationMinutes": 30,
+      "dueMinutes": 5040,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1227__u06__02_pack",
+      "label": "dem_a500_1227 / U06 / Final Packing",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 5040,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_1227__u06__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1227__u07__01_prep",
+      "label": "dem_a500_1227 / U07 / Line Prep",
+      "productCode": "31015630002000000",
+      "durationMinutes": 30,
+      "dueMinutes": 5040,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1227__u07__02_pack",
+      "label": "dem_a500_1227 / U07 / Final Packing",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 5040,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_1227__u07__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1229__u01__01_prep",
+      "label": "dem_a500_1229 / U01 / Line Prep",
+      "productCode": "31015630002000000",
+      "durationMinutes": 30,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1229__u01__02_pack",
+      "label": "dem_a500_1229 / U01 / Final Packing",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_1229__u01__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1229__u02__01_prep",
+      "label": "dem_a500_1229 / U02 / Line Prep",
+      "productCode": "31015630002000000",
+      "durationMinutes": 30,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1229__u02__02_pack",
+      "label": "dem_a500_1229 / U02 / Final Packing",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_1229__u02__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1229__u03__01_prep",
+      "label": "dem_a500_1229 / U03 / Line Prep",
+      "productCode": "31015630002000000",
+      "durationMinutes": 30,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1229__u03__02_pack",
+      "label": "dem_a500_1229 / U03 / Final Packing",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_1229__u03__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1229__u04__01_prep",
+      "label": "dem_a500_1229 / U04 / Line Prep",
+      "productCode": "31015630002000000",
+      "durationMinutes": 30,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1229__u04__02_pack",
+      "label": "dem_a500_1229 / U04 / Final Packing",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_1229__u04__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1229__u05__01_prep",
+      "label": "dem_a500_1229 / U05 / Line Prep",
+      "productCode": "31015630002000000",
+      "durationMinutes": 30,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1229__u05__02_pack",
+      "label": "dem_a500_1229 / U05 / Final Packing",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_1229__u05__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1229__u06__01_prep",
+      "label": "dem_a500_1229 / U06 / Line Prep",
+      "productCode": "31015630002000000",
+      "durationMinutes": 30,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1229__u06__02_pack",
+      "label": "dem_a500_1229 / U06 / Final Packing",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_1229__u06__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1229__u07__01_prep",
+      "label": "dem_a500_1229 / U07 / Line Prep",
+      "productCode": "31015630002000000",
+      "durationMinutes": 30,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1229__u07__02_pack",
+      "label": "dem_a500_1229 / U07 / Final Packing",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_1229__u07__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1229__u08__01_prep",
+      "label": "dem_a500_1229 / U08 / Line Prep",
+      "productCode": "31015630002000000",
+      "durationMinutes": 30,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A1_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A1_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a500_1229__u08__02_pack",
+      "label": "dem_a500_1229 / U08 / Final Packing",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_1229__u08__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630002000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_a330_1229__u01__01_prep",
+      "label": "dem_a330_1229 / U01 / Line Prep",
+      "productCode": "31015630006000000",
+      "durationMinutes": 40,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A330_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A2_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A2_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630006000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_330"
+    },
+    {
+      "id": "dem_a330_1229__u01__02_pack",
+      "label": "dem_a330_1229 / U01 / Final Packing",
+      "productCode": "31015630006000000",
+      "durationMinutes": 180,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1"
+      ],
+      "predecessorTaskIds": [
+        "dem_a330_1229__u01__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630006000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630006000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_330"
+    },
+    {
+      "id": "dem_a330_1229__u02__01_prep",
+      "label": "dem_a330_1229 / U02 / Line Prep",
+      "productCode": "31015630006000000",
+      "durationMinutes": 40,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A330_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A2_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A2_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630006000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_330"
+    },
+    {
+      "id": "dem_a330_1229__u02__02_pack",
+      "label": "dem_a330_1229 / U02 / Final Packing",
+      "productCode": "31015630006000000",
+      "durationMinutes": 180,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1"
+      ],
+      "predecessorTaskIds": [
+        "dem_a330_1229__u02__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630006000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630006000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_330"
+    },
+    {
+      "id": "dem_a330_1229__u03__01_prep",
+      "label": "dem_a330_1229 / U03 / Line Prep",
+      "productCode": "31015630006000000",
+      "durationMinutes": 40,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_A330_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A2_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A2_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630006000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_330"
+    },
+    {
+      "id": "dem_a330_1229__u03__02_pack",
+      "label": "dem_a330_1229 / U03 / Final Packing",
+      "productCode": "31015630006000000",
+      "durationMinutes": 180,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1"
+      ],
+      "predecessorTaskIds": [
+        "dem_a330_1229__u03__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630006000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630006000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_330"
+    },
+    {
+      "id": "dem_10a500_1227__u01__01_prep",
+      "label": "dem_10a500_1227 / U01 / Line Prep",
+      "productCode": "31015630003000000",
+      "durationMinutes": 30,
+      "dueMinutes": 5040,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_10A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A3_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A3_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630003000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_10a500_1227__u01__02_pack",
+      "label": "dem_10a500_1227 / U01 / Final Packing",
+      "productCode": "31015630003000000",
+      "durationMinutes": 120,
+      "dueMinutes": 5040,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_10a500_1227__u01__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630003000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630003000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_10a500_1229__u01__01_prep",
+      "label": "dem_10a500_1229 / U01 / Line Prep",
+      "productCode": "31015630003000000",
+      "durationMinutes": 30,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_10A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A3_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A3_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630003000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_10a500_1229__u01__02_pack",
+      "label": "dem_10a500_1229 / U01 / Final Packing",
+      "productCode": "31015630003000000",
+      "durationMinutes": 120,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_10a500_1229__u01__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630003000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630003000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_10a500_1229__u02__01_prep",
+      "label": "dem_10a500_1229 / U02 / Line Prep",
+      "productCode": "31015630003000000",
+      "durationMinutes": 30,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_10A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A3_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A3_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630003000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_10a500_1229__u02__02_pack",
+      "label": "dem_10a500_1229 / U02 / Final Packing",
+      "productCode": "31015630003000000",
+      "durationMinutes": 120,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_10a500_1229__u02__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630003000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630003000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_10a500_1229__u03__01_prep",
+      "label": "dem_10a500_1229 / U03 / Line Prep",
+      "productCode": "31015630003000000",
+      "durationMinutes": 30,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_10A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A3_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A3_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630003000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_10a500_1229__u03__02_pack",
+      "label": "dem_10a500_1229 / U03 / Final Packing",
+      "productCode": "31015630003000000",
+      "durationMinutes": 120,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_10a500_1229__u03__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630003000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630003000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_10a500_1229__u04__01_prep",
+      "label": "dem_10a500_1229 / U04 / Line Prep",
+      "productCode": "31015630003000000",
+      "durationMinutes": 30,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_10A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A3_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A3_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630003000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_10a500_1229__u04__02_pack",
+      "label": "dem_10a500_1229 / U04 / Final Packing",
+      "productCode": "31015630003000000",
+      "durationMinutes": 120,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_10a500_1229__u04__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630003000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630003000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_b600_1227__u01__01_prep",
+      "label": "dem_b600_1227 / U01 / Line Prep",
+      "productCode": "31015630004000000",
+      "durationMinutes": 45,
+      "dueMinutes": 5040,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_B600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630004000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_b600_1227__u01__02_pack",
+      "label": "dem_b600_1227 / U01 / Final Packing",
+      "productCode": "31015630004000000",
+      "durationMinutes": 225,
+      "dueMinutes": 5040,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_b600_1227__u01__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630004000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630004000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_b600_1227__u02__01_prep",
+      "label": "dem_b600_1227 / U02 / Line Prep",
+      "productCode": "31015630004000000",
+      "durationMinutes": 45,
+      "dueMinutes": 5040,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_B600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630004000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_b600_1227__u02__02_pack",
+      "label": "dem_b600_1227 / U02 / Final Packing",
+      "productCode": "31015630004000000",
+      "durationMinutes": 225,
+      "dueMinutes": 5040,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_b600_1227__u02__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630004000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630004000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_b600_1227__u03__01_prep",
+      "label": "dem_b600_1227 / U03 / Line Prep",
+      "productCode": "31015630004000000",
+      "durationMinutes": 45,
+      "dueMinutes": 5040,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_B600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630004000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_b600_1227__u03__02_pack",
+      "label": "dem_b600_1227 / U03 / Final Packing",
+      "productCode": "31015630004000000",
+      "durationMinutes": 225,
+      "dueMinutes": 5040,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_b600_1227__u03__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630004000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630004000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_b600_1227__u04__01_prep",
+      "label": "dem_b600_1227 / U04 / Line Prep",
+      "productCode": "31015630004000000",
+      "durationMinutes": 45,
+      "dueMinutes": 5040,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_B600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630004000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_b600_1227__u04__02_pack",
+      "label": "dem_b600_1227 / U04 / Final Packing",
+      "productCode": "31015630004000000",
+      "durationMinutes": 225,
+      "dueMinutes": 5040,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_b600_1227__u04__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630004000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630004000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_b600_1229__u01__01_prep",
+      "label": "dem_b600_1229 / U01 / Line Prep",
+      "productCode": "31015630004000000",
+      "durationMinutes": 45,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_B600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630004000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_b600_1229__u01__02_pack",
+      "label": "dem_b600_1229 / U01 / Final Packing",
+      "productCode": "31015630004000000",
+      "durationMinutes": 225,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_b600_1229__u01__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630004000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630004000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_b600_1229__u02__01_prep",
+      "label": "dem_b600_1229 / U02 / Line Prep",
+      "productCode": "31015630004000000",
+      "durationMinutes": 45,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_B600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630004000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_b600_1229__u02__02_pack",
+      "label": "dem_b600_1229 / U02 / Final Packing",
+      "productCode": "31015630004000000",
+      "durationMinutes": 225,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_b600_1229__u02__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630004000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630004000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_b600_1229__u03__01_prep",
+      "label": "dem_b600_1229 / U03 / Line Prep",
+      "productCode": "31015630004000000",
+      "durationMinutes": 45,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_B600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630004000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_b600_1229__u03__02_pack",
+      "label": "dem_b600_1229 / U03 / Final Packing",
+      "productCode": "31015630004000000",
+      "durationMinutes": 225,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_b600_1229__u03__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630004000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630004000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_b600_1229__u04__01_prep",
+      "label": "dem_b600_1229 / U04 / Line Prep",
+      "productCode": "31015630004000000",
+      "durationMinutes": 45,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_B600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630004000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_b600_1229__u04__02_pack",
+      "label": "dem_b600_1229 / U04 / Final Packing",
+      "productCode": "31015630004000000",
+      "durationMinutes": 225,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_b600_1229__u04__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630004000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630004000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_b600_1229__u05__01_prep",
+      "label": "dem_b600_1229 / U05 / Line Prep",
+      "productCode": "31015630004000000",
+      "durationMinutes": 45,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_B600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630004000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_b600_1229__u05__02_pack",
+      "label": "dem_b600_1229 / U05 / Final Packing",
+      "productCode": "31015630004000000",
+      "durationMinutes": 225,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_b600_1229__u05__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630004000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630004000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1225__u01__01_prep",
+      "label": "dem_c600_1225 / U01 / Line Prep",
+      "productCode": "31015630005000000",
+      "durationMinutes": 45,
+      "dueMinutes": 2160,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1225__u01__02_pack",
+      "label": "dem_c600_1225 / U01 / Final Packing",
+      "productCode": "31015630005000000",
+      "durationMinutes": 225,
+      "dueMinutes": 2160,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_c600_1225__u01__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1227__u01__01_prep",
+      "label": "dem_c600_1227 / U01 / Line Prep",
+      "productCode": "31015630005000000",
+      "durationMinutes": 45,
+      "dueMinutes": 5040,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1227__u01__02_pack",
+      "label": "dem_c600_1227 / U01 / Final Packing",
+      "productCode": "31015630005000000",
+      "durationMinutes": 225,
+      "dueMinutes": 5040,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_c600_1227__u01__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1227__u02__01_prep",
+      "label": "dem_c600_1227 / U02 / Line Prep",
+      "productCode": "31015630005000000",
+      "durationMinutes": 45,
+      "dueMinutes": 5040,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1227__u02__02_pack",
+      "label": "dem_c600_1227 / U02 / Final Packing",
+      "productCode": "31015630005000000",
+      "durationMinutes": 225,
+      "dueMinutes": 5040,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_c600_1227__u02__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1227__u03__01_prep",
+      "label": "dem_c600_1227 / U03 / Line Prep",
+      "productCode": "31015630005000000",
+      "durationMinutes": 45,
+      "dueMinutes": 5040,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1227__u03__02_pack",
+      "label": "dem_c600_1227 / U03 / Final Packing",
+      "productCode": "31015630005000000",
+      "durationMinutes": 225,
+      "dueMinutes": 5040,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_c600_1227__u03__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1227__u04__01_prep",
+      "label": "dem_c600_1227 / U04 / Line Prep",
+      "productCode": "31015630005000000",
+      "durationMinutes": 45,
+      "dueMinutes": 5040,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1227__u04__02_pack",
+      "label": "dem_c600_1227 / U04 / Final Packing",
+      "productCode": "31015630005000000",
+      "durationMinutes": 225,
+      "dueMinutes": 5040,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_c600_1227__u04__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1227__u05__01_prep",
+      "label": "dem_c600_1227 / U05 / Line Prep",
+      "productCode": "31015630005000000",
+      "durationMinutes": 45,
+      "dueMinutes": 5040,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1227__u05__02_pack",
+      "label": "dem_c600_1227 / U05 / Final Packing",
+      "productCode": "31015630005000000",
+      "durationMinutes": 225,
+      "dueMinutes": 5040,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_c600_1227__u05__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1229__u01__01_prep",
+      "label": "dem_c600_1229 / U01 / Line Prep",
+      "productCode": "31015630005000000",
+      "durationMinutes": 45,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1229__u01__02_pack",
+      "label": "dem_c600_1229 / U01 / Final Packing",
+      "productCode": "31015630005000000",
+      "durationMinutes": 225,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_c600_1229__u01__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1229__u02__01_prep",
+      "label": "dem_c600_1229 / U02 / Line Prep",
+      "productCode": "31015630005000000",
+      "durationMinutes": 45,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1229__u02__02_pack",
+      "label": "dem_c600_1229 / U02 / Final Packing",
+      "productCode": "31015630005000000",
+      "durationMinutes": 225,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_c600_1229__u02__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1229__u03__01_prep",
+      "label": "dem_c600_1229 / U03 / Line Prep",
+      "productCode": "31015630005000000",
+      "durationMinutes": 45,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1229__u03__02_pack",
+      "label": "dem_c600_1229 / U03 / Final Packing",
+      "productCode": "31015630005000000",
+      "durationMinutes": 225,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_c600_1229__u03__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1229__u04__01_prep",
+      "label": "dem_c600_1229 / U04 / Line Prep",
+      "productCode": "31015630005000000",
+      "durationMinutes": 45,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1229__u04__02_pack",
+      "label": "dem_c600_1229 / U04 / Final Packing",
+      "productCode": "31015630005000000",
+      "durationMinutes": 225,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_c600_1229__u04__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1229__u05__01_prep",
+      "label": "dem_c600_1229 / U05 / Line Prep",
+      "productCode": "31015630005000000",
+      "durationMinutes": 45,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "BB_C600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_C_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_C_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    },
+    {
+      "id": "dem_c600_1229__u05__02_pack",
+      "label": "dem_c600_1229 / U05 / Final Packing",
+      "productCode": "31015630005000000",
+      "durationMinutes": 225,
+      "dueMinutes": 7920,
+      "priority": 3,
+      "candidateResourceIds": [
+        "pack_l2",
+        "pack_l3"
+      ],
+      "predecessorTaskIds": [
+        "dem_c600_1229__u05__01_prep"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "INT_31015630005000000_READY",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630005000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    }
+  ],
+  "downtimes": [],
+  "setupRules": [
+    {
+      "fromSetupGroup": "PKG_330",
+      "toSetupGroup": "PKG_500",
+      "resourceType": "OTHER",
+      "resourceId": null,
+      "setupMinutes": 60
+    },
+    {
+      "fromSetupGroup": "PKG_500",
+      "toSetupGroup": "PKG_330",
+      "resourceType": "OTHER",
+      "resourceId": null,
+      "setupMinutes": 60
+    },
+    {
+      "fromSetupGroup": "PKG_330",
+      "toSetupGroup": "PKG_600",
+      "resourceType": "OTHER",
+      "resourceId": null,
+      "setupMinutes": 60
+    },
+    {
+      "fromSetupGroup": "PKG_600",
+      "toSetupGroup": "PKG_330",
+      "resourceType": "OTHER",
+      "resourceId": null,
+      "setupMinutes": 60
+    },
+    {
+      "fromSetupGroup": "PKG_500",
+      "toSetupGroup": "PKG_600",
+      "resourceType": "OTHER",
+      "resourceId": null,
+      "setupMinutes": 60
+    },
+    {
+      "fromSetupGroup": "PKG_600",
+      "toSetupGroup": "PKG_500",
+      "resourceType": "OTHER",
+      "resourceId": null,
+      "setupMinutes": 60
+    }
+  ],
+  "inventoryBalances": [
+    {
+      "itemCode": "31015630002000000",
+      "availableQuantity": 4,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "31015630006000000",
+      "availableQuantity": 7,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "31015630003000000",
+      "availableQuantity": 5,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "31015630004000000",
+      "availableQuantity": 6,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "31015630005000000",
+      "availableQuantity": 4,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "BB_A500_LOT",
+      "availableQuantity": 19,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "BB_A330_LOT",
+      "availableQuantity": 3,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "BB_10A500_LOT",
+      "availableQuantity": 5,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "BB_B600_LOT",
+      "availableQuantity": 9,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "BB_C600_LOT",
+      "availableQuantity": 11,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CAP_A_LOT",
+      "availableQuantity": 27,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CTN_A1_LOT",
+      "availableQuantity": 19,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "LBL_A1_LOT",
+      "availableQuantity": 19,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CTN_A2_LOT",
+      "availableQuantity": 3,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "LBL_A2_LOT",
+      "availableQuantity": 3,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CTN_A3_LOT",
+      "availableQuantity": 5,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "LBL_A3_LOT",
+      "availableQuantity": 5,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CAP_B_LOT",
+      "availableQuantity": 9,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CTN_B_LOT",
+      "availableQuantity": 9,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "LBL_B_LOT",
+      "availableQuantity": 9,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CAP_C_LOT",
+      "availableQuantity": 11,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CTN_C_LOT",
+      "availableQuantity": 11,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "LBL_C_LOT",
+      "availableQuantity": 11,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    }
+  ],
+  "inventoryDemands": [
+    {
+      "demandId": "dem_a500_spot_1224",
+      "itemCode": "31015630002000000",
+      "quantity": 2,
+      "dueMinutes": 720
+    },
+    {
+      "demandId": "dem_a500_1225",
+      "itemCode": "31015630002000000",
+      "quantity": 6,
+      "dueMinutes": 2160
+    },
+    {
+      "demandId": "dem_a500_1227",
+      "itemCode": "31015630002000000",
+      "quantity": 7,
+      "dueMinutes": 5040
+    },
+    {
+      "demandId": "dem_a500_1229",
+      "itemCode": "31015630002000000",
+      "quantity": 8,
+      "dueMinutes": 7920
+    },
+    {
+      "demandId": "dem_a330_1225",
+      "itemCode": "31015630006000000",
+      "quantity": 3,
+      "dueMinutes": 2160
+    },
+    {
+      "demandId": "dem_a330_1227",
+      "itemCode": "31015630006000000",
+      "quantity": 3,
+      "dueMinutes": 5040
+    },
+    {
+      "demandId": "dem_a330_1229",
+      "itemCode": "31015630006000000",
+      "quantity": 4,
+      "dueMinutes": 7920
+    },
+    {
+      "demandId": "dem_10a500_1225",
+      "itemCode": "31015630003000000",
+      "quantity": 3,
+      "dueMinutes": 2160
+    },
+    {
+      "demandId": "dem_10a500_1227",
+      "itemCode": "31015630003000000",
+      "quantity": 3,
+      "dueMinutes": 5040
+    },
+    {
+      "demandId": "dem_10a500_1229",
+      "itemCode": "31015630003000000",
+      "quantity": 4,
+      "dueMinutes": 7920
+    },
+    {
+      "demandId": "dem_b600_1225",
+      "itemCode": "31015630004000000",
+      "quantity": 5,
+      "dueMinutes": 2160
+    },
+    {
+      "demandId": "dem_b600_1227",
+      "itemCode": "31015630004000000",
+      "quantity": 5,
+      "dueMinutes": 5040
+    },
+    {
+      "demandId": "dem_b600_1229",
+      "itemCode": "31015630004000000",
+      "quantity": 5,
+      "dueMinutes": 7920
+    },
+    {
+      "demandId": "dem_c600_1225",
+      "itemCode": "31015630005000000",
+      "quantity": 5,
+      "dueMinutes": 2160
+    },
+    {
+      "demandId": "dem_c600_1227",
+      "itemCode": "31015630005000000",
+      "quantity": 5,
+      "dueMinutes": 5040
+    },
+    {
+      "demandId": "dem_c600_1229",
+      "itemCode": "31015630005000000",
+      "quantity": 5,
+      "dueMinutes": 7920
+    }
+  ],
+  "objectiveWeights": {
+    "tardiness": 100,
+    "earliness": 0,
+    "makespan": 1
+  },
+  "solverConfig": {
+    "timeLimitSeconds": 120,
+    "numSearchWorkers": 4
+  }
+}

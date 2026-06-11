@@ -1,0 +1,10 @@
+field,value,notes
+scenarioName,snow-beer-packaging-v1-precedence-high-util,High-utilization precedence demo variant
+dataVersion,snow_beer_packaging_v1_precedence_high_util_2026_05_15,Sample version tag
+scheduleStartAt,2026-12-24T00:00:00Z,UTC baseline equals local 2026-12-24 08:00
+horizonMinutes,8640,6-day horizon through local 2026-12-30 08:00
+objectiveWeights.tardiness,100,Keep due-date pressure dominant
+objectiveWeights.earliness,0,Do not penalize early completion in this variant
+objectiveWeights.makespan,1,Keep compactness as secondary objective
+solverConfig.timeLimitSeconds,120,Local smoke baseline
+solverConfig.numSearchWorkers,4,Local baseline worker count

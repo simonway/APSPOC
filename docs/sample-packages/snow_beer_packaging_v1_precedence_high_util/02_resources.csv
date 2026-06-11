@@ -1,0 +1,4 @@
+id,label,resourceType,sortOrder,capacity,remarks
+pack_l1,包装1线,OTHER,1,,"额定 4 万瓶/h, 线效率 90%, 可生产 A500 / 10A500 / A330"
+pack_l2,包装2线,OTHER,2,,"额定 6 万瓶/h, 线效率 90%, 可生产 A500 / 10A500 / B600 / C600"
+pack_l3,包装3线,OTHER,3,,"额定 3.6 万瓶/h, 线效率 90%, 可生产 A500 / 10A500 / B600 / C600"

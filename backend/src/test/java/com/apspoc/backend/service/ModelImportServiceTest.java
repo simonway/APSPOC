@@ -207,6 +207,20 @@ class ModelImportServiceTest {
     }
 
     @Test
+    void importDowntimesAcceptsHeaderOnlyCsvAsEmptyOptionalSection() {
+        MockMultipartFile file = new MockMultipartFile(
+                "file",
+                "downtimes.csv",
+                "text/csv",
+                "id,resourceId,startMinutes,endMinutes,downtimeType,source,description\n".getBytes(StandardCharsets.UTF_8)
+        );
+
+        var downtimes = modelImportService.importDowntimes(file);
+
+        assertThat(downtimes).isEmpty();
+    }
+
+    @Test
     void importSetupRulesParsesCsvRowsWithOptionalScope() {
         MockMultipartFile file = new MockMultipartFile(
                 "file",

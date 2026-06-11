@@ -12,6 +12,21 @@ from typing import Any
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_PACKAGE_DIR = ROOT_DIR / "docs" / "sample-packages" / "UAT_v1_sample_package"
+RESOURCE_EXPORT_FIELDS = ["id", "label", "resourceType", "sortOrder"]
+TASK_EXPORT_FIELDS = [
+    "id",
+    "label",
+    "productCode",
+    "durationMinutes",
+    "dueMinutes",
+    "priority",
+    "candidateResourceIds",
+    "pinnedResourceId",
+    "pinnedStartMinutes",
+    "predecessorTaskIds",
+    "setupGroup",
+]
+DOWNTIME_EXPORT_FIELDS = ["id", "resourceId", "startMinutes", "endMinutes", "downtimeType", "source", "description"]
 
 
 @dataclass(frozen=True)
@@ -1060,12 +1075,15 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
-    if not rows:
-        raise ValueError(f"Cannot write empty CSV `{path}`")
-    fieldnames = list(rows[0].keys())
+def write_csv(path: Path, rows: list[dict[str, str]], *, fieldnames: list[str] | None = None) -> None:
+    if rows:
+        resolved_fieldnames = fieldnames or list(rows[0].keys())
+    elif fieldnames:
+        resolved_fieldnames = fieldnames
+    else:
+        raise ValueError(f"Cannot write empty CSV `{path}` without fieldnames")
     with path.open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer = csv.DictWriter(handle, fieldnames=resolved_fieldnames)
         writer.writeheader()
         writer.writerows(rows)
 
@@ -1128,9 +1146,9 @@ def main() -> int:
     write_json(package_dir / "08_generated_schedule_request.json", schedule_request)
     (package_dir / "09_uat_expected_checks.md").write_text(expected_checks + "\n", encoding="utf-8")
     write_json(package_dir / "10_generated_operation_metadata.json", operation_metadata)
-    write_csv(package_dir / "11_import_ready_resources.csv", resources_csv)
-    write_csv(package_dir / "12_import_ready_tasks.csv", tasks_csv)
-    write_csv(package_dir / "13_import_ready_downtimes.csv", downtimes_csv)
+    write_csv(package_dir / "11_import_ready_resources.csv", resources_csv, fieldnames=RESOURCE_EXPORT_FIELDS)
+    write_csv(package_dir / "12_import_ready_tasks.csv", tasks_csv, fieldnames=TASK_EXPORT_FIELDS)
+    write_csv(package_dir / "13_import_ready_downtimes.csv", downtimes_csv, fieldnames=DOWNTIME_EXPORT_FIELDS)
 
     print(
         json.dumps(
