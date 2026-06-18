@@ -228,14 +228,31 @@ start_service \
     180 \
     env SERVER_PORT="$BACKEND_PORT" mvn spring-boot:run
 
-start_service \
-    "frontend" \
-    "$FRONTEND_PID_FILE" \
-    "$FRONTEND_PORT" \
-    "$ROOT_DIR" \
-    "http://127.0.0.1:${FRONTEND_PORT}/" \
-    30 \
-    python3 -m http.server "$FRONTEND_PORT" -d "$ROOT_DIR/backend/src/main/resources/static" --bind 127.0.0.1
+start_frontend() {
+    if [[ -f "$ROOT_DIR/frontend/package.json" ]] && [[ -x "$ROOT_DIR/frontend/node_modules/.bin/vite" ]] && has_command npm; then
+        start_service \
+            "frontend" \
+            "$FRONTEND_PID_FILE" \
+            "$FRONTEND_PORT" \
+            "$ROOT_DIR/frontend" \
+            "http://127.0.0.1:${FRONTEND_PORT}/" \
+            60 \
+            env VITE_APS_API_BASE_URL="http://127.0.0.1:${BACKEND_PORT}" npm run dev -- --host 127.0.0.1 --port "$FRONTEND_PORT"
+        return 0
+    fi
+
+    warn "未检测到 React frontend、npm 或已安装的 Vite 依赖，使用旧版静态前端。"
+    start_service \
+        "frontend" \
+        "$FRONTEND_PID_FILE" \
+        "$FRONTEND_PORT" \
+        "$ROOT_DIR" \
+        "http://127.0.0.1:${FRONTEND_PORT}/" \
+        30 \
+        python3 -m http.server "$FRONTEND_PORT" -d "$ROOT_DIR/backend/src/main/resources/static" --bind 127.0.0.1
+}
+
+start_frontend
 
 cat <<EOF
 
