@@ -68,7 +68,22 @@ if (( RUN_TESTS )); then
         python3 -m unittest discover -s tests -p 'test_*.py'
     )
 
-    log "运行 frontend 静态语法检查 ..."
+    if [[ -f "$ROOT_DIR/frontend/package.json" ]]; then
+        require_command npm
+        log "运行 React frontend 单元测试 ..."
+        (
+            cd "$ROOT_DIR/frontend"
+            npm test -- --run
+        )
+
+        log "运行 React frontend 构建检查 ..."
+        (
+            cd "$ROOT_DIR/frontend"
+            npm run build
+        )
+    fi
+
+    log "运行旧版 frontend 静态语法检查 ..."
     (
         cd "$ROOT_DIR"
         node --check backend/src/main/resources/static/app.js
@@ -92,8 +107,9 @@ if (( RUN_SMOKE )); then
     lsof -nP -iTCP:8000 -sTCP:LISTEN >/dev/null
 
     log "检查 frontend / backend / solver 健康状态 ..."
-    curl -fsS -I http://127.0.0.1:8080/ >/dev/null
-    curl -fsS -I http://127.0.0.1:8080/app.js >/dev/null
+    frontend_root_html="$(curl -fsS http://127.0.0.1:8080/)"
+    grep -Eq '<div id="root"></div>|/src/main\.tsx|APS高级排程工作台|APS Control Deck|/app\.js' <<<"$frontend_root_html"
+    curl -fsS -I http://127.0.0.1:8081/app.js >/dev/null
     curl -fsS http://127.0.0.1:8081/actuator/health >/dev/null
     curl -fsS http://127.0.0.1:8000/health >/dev/null
 

@@ -58,11 +58,11 @@ APSPOC/
 
 This document assumes the following local port layout:
 
-- frontend UI: `http://localhost:8080/`
-- backend API: `http://localhost:8081/`
-- solver API: `http://localhost:8000/`
+- frontend UI: `http://127.0.0.1:8080/`
+- backend API: `http://127.0.0.1:8081/`
+- solver API: `http://127.0.0.1:8000/`
 
-The frontend assets live in `backend/src/main/resources/static`. The browser app now calls the backend API on `8081` directly, so a simple static file server on `8080` is enough for local development.
+The preferred local frontend is the React workbench in `frontend/`. The browser app calls the backend API on `8081` directly. The previous static UI still lives in `backend/src/main/resources/static` and remains recoverable from the Spring Boot backend while the React migration is in progress.
 
 ## Start Infra
 
@@ -111,9 +111,27 @@ python3 -m uvicorn app.main:app --reload --port 8000
 
 ## Start Frontend
 
+The preferred local frontend is the React workbench in `frontend/`:
+
 ```bash
-python3 -m http.server 8080 -d backend/src/main/resources/static
+cd frontend
+npm install
+VITE_APS_API_BASE_URL=http://127.0.0.1:8081 npm run dev -- --host 127.0.0.1 --port 8080
 ```
+
+The React app runs at:
+
+```text
+http://127.0.0.1:8080/
+```
+
+The previous static UI remains recoverable from the Spring Boot backend while the React migration is in progress:
+
+```text
+http://127.0.0.1:8081/
+```
+
+If npm is not available, `./startup.sh` falls back to serving `backend/src/main/resources/static` on port `8080` with Python.
 
 ## Start Backend
 
@@ -125,17 +143,29 @@ SERVER_PORT=8081 mvn spring-boot:run
 After the backend starts, the backend API is available at:
 
 ```text
-http://localhost:8081/
+http://127.0.0.1:8081/
 ```
 
-The frontend should be served separately on:
+The React frontend should be served separately on:
 
 ```text
-http://localhost:8080/
+http://127.0.0.1:8080/
 ```
-Test the service is started or not:
+
+The legacy static UI is also available from the backend root during the React migration.
+
+Check whether the backend is listening:
+
+```bash
 lsof -nP -iTCP:8081 -sTCP:LISTEN
+curl -fsS http://127.0.0.1:8081/actuator/health
+```
+
+Expected health response:
+
+```json
 {"status":"UP"}
+```
 
 ## Login
 
@@ -174,7 +204,7 @@ Notes:
 ## Submit a Sample Job
 
 ```bash
-curl -X POST http://localhost:8081/api/v1/schedule/jobs \
+curl -X POST http://127.0.0.1:8081/api/v1/schedule/jobs \
   -H 'Content-Type: application/json' \
   --data @../docs/sample-job-request.json
 ```
