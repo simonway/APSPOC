@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import {
   AuditOutlined,
   BarChartOutlined,
@@ -9,25 +10,37 @@ import {
   PartitionOutlined,
 } from "@ant-design/icons";
 import { Tooltip } from "antd";
+import { leftRailItems, type WorkspaceNavKey } from "../features/workspace/workspaceNavigation";
 
-const items = [
-  { key: "workspace", icon: <DashboardOutlined />, label: "工作台" },
-  { key: "import", icon: <CloudUploadOutlined />, label: "数据导入" },
-  { key: "scenario", icon: <PartitionOutlined />, label: "场景生成" },
-  { key: "jobs", icon: <DeploymentUnitOutlined />, label: "排程任务" },
-  { key: "gantt", icon: <BarChartOutlined />, label: "Gantt 评审" },
-  { key: "versions", icon: <DatabaseOutlined />, label: "版本管理" },
-  { key: "approval", icon: <CheckCircleOutlined />, label: "审批发布" },
-  { key: "audit", icon: <AuditOutlined />, label: "审计 / 设置" },
-];
+const itemIcons: Record<string, ReactNode> = {
+  workspace: <DashboardOutlined />,
+  import: <CloudUploadOutlined />,
+  scenario: <PartitionOutlined />,
+  jobs: <DeploymentUnitOutlined />,
+  gantt: <BarChartOutlined />,
+  versions: <DatabaseOutlined />,
+  approval: <CheckCircleOutlined />,
+  audit: <AuditOutlined />,
+};
 
-export function LeftNavRail() {
+interface LeftNavRailProps {
+  activeWorkspaceKey: WorkspaceNavKey;
+  onWorkspaceSelect: (key: WorkspaceNavKey) => void;
+}
+
+export function LeftNavRail({ activeWorkspaceKey, onWorkspaceSelect }: LeftNavRailProps) {
   return (
     <aside className="left-nav-rail" aria-label="主模块导航">
-      {items.map((item) => (
+      {leftRailItems.map((item) => (
         <Tooltip key={item.key} title={item.label} placement="right">
-          <button className={`rail-icon-button${item.key === "workspace" ? " active" : ""}`} type="button" aria-label={item.label}>
-            {item.icon}
+          <button
+            className={`rail-icon-button${activeWorkspaceKey === item.key ? " active" : ""}`}
+            type="button"
+            aria-label={item.label}
+            aria-pressed={activeWorkspaceKey === item.key}
+            onClick={() => onWorkspaceSelect(item.key)}
+          >
+            {itemIcons[item.key]}
           </button>
         </Tooltip>
       ))}

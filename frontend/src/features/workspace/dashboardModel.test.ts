@@ -32,6 +32,21 @@ const versions = [
     lateTaskCount: 2,
     averageUtilization: 0.83,
   },
+  {
+    versionId: "v3",
+    versionName: "Release candidate run",
+    status: "READY_FOR_RELEASE",
+    triggerType: "TRIAL_SOLVE",
+    scenarioDescription: "Release candidate",
+    createdAt: "2026-06-12T08:00:00Z",
+    createdBy: "planner",
+    publishedAt: null,
+    releaseNote: "candidate",
+    totalWeightedTardiness: 4,
+    totalMakespan: 500,
+    lateTaskCount: 1,
+    averageUtilization: 0.8,
+  },
 ];
 
 describe("createDashboardSummary", () => {
@@ -44,13 +59,18 @@ describe("createDashboardSummary", () => {
     });
 
     expect(summary.userName).toBe("admin");
-    expect(summary.totalVersions).toBe(2);
+    expect(summary.totalVersions).toBe(3);
     expect(summary.publishedVersions).toBe(1);
     expect(summary.draftVersions).toBe(1);
-    expect(summary.alertVersionCount).toBe(1);
-    expect(summary.totalLateTasks).toBe(2);
-    expect(summary.latestVersionName).toBe("Draft high-util run");
-    expect(summary.averageUtilizationPercent).toBe(77);
+    expect(summary.alertVersionCount).toBe(2);
+    expect(summary.totalLateTasks).toBe(3);
+    expect(summary.latestVersionName).toBe("Release candidate run");
+    expect(summary.averageUtilizationPercent).toBe(78);
+    expect(summary.latestVersionId).toBe("v3");
+    expect(summary.latestPublishedVersionName).toBe("Snow Beer baseline");
+    expect(summary.latestReleaseCandidateName).toBe("Release candidate run");
+    expect(summary.releaseQueueNotice).toBe("1 个版本等待审批或发布。");
+    expect(summary.sampleJobHint).toBe("可运行样例排程生成新的可评审版本。");
   });
 
   it("uses explicit empty states when APIs return no planning data", () => {
@@ -64,5 +84,10 @@ describe("createDashboardSummary", () => {
     expect(summary.userName).toBe("未登录用户");
     expect(summary.latestVersionName).toBe("暂无版本");
     expect(summary.planningNotice).toBe("暂无版本数据，请先运行样例排程或生成场景。");
+    expect(summary.latestVersionId).toBeNull();
+    expect(summary.latestPublishedVersionName).toBe("暂无已发布版本");
+    expect(summary.latestReleaseCandidateName).toBe("暂无待发布版本");
+    expect(summary.releaseQueueNotice).toBe("暂无待发布版本。");
+    expect(summary.sampleJobHint).toBe("先运行样例排程生成第一个版本。");
   });
 });

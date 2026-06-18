@@ -8,16 +8,17 @@ import {
 } from "@ant-design/icons";
 import { Avatar, Badge, Button, Input } from "antd";
 import type { DashboardSummary } from "../features/workspace/dashboardModel";
+import { workspaceNavItems, type WorkspaceNavKey } from "../features/workspace/workspaceNavigation";
 import { resolveLegacyUiUrl } from "../lib/api";
 
 interface TopNavProps {
+  activeWorkspaceKey: WorkspaceNavKey;
   summary: DashboardSummary | null;
   onRefresh: () => void;
+  onWorkspaceSelect: (key: WorkspaceNavKey) => void;
 }
 
-const topMenuItems = ["首页", "计划", "数据", "排程", "版本", "发布"];
-
-export function TopNav({ summary, onRefresh }: TopNavProps) {
+export function TopNav({ activeWorkspaceKey, summary, onRefresh, onWorkspaceSelect }: TopNavProps) {
   const userInitial = summary?.userName?.slice(0, 1).toUpperCase() ?? "A";
 
   return (
@@ -32,8 +33,16 @@ export function TopNav({ summary, onRefresh }: TopNavProps) {
         <strong>APS高级排程</strong>
       </div>
       <nav className="top-menu" aria-label="顶部模块导航">
-        {topMenuItems.map((item) => (
-          <a key={item} href="#workspace-main">{item}</a>
+        {workspaceNavItems.map((item) => (
+          <button
+            key={item.key}
+            className="top-menu-button"
+            type="button"
+            aria-pressed={activeWorkspaceKey === item.key}
+            onClick={() => onWorkspaceSelect(item.key)}
+          >
+            {item.label}
+          </button>
         ))}
       </nav>
       <Input className="global-search" prefix={<SearchOutlined />} aria-label="全局搜索" placeholder="搜索" />

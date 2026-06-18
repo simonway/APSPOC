@@ -1,5 +1,13 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { ApiError, requestJson, resolveApiBaseUrlFromLocation, login } from "./api";
+import {
+  ApiError,
+  fetchScheduleJob,
+  login,
+  requestJson,
+  resolveApiBaseUrlFromLocation,
+  resolveModelImportTemplateUrl,
+  submitSampleSchedule,
+} from "./api";
 
 describe("resolveApiBaseUrlFromLocation", () => {
   it("uses backend port 8081 when the frontend is served from 8080", () => {
@@ -92,5 +100,51 @@ describe("requestJson", () => {
       credentials: "include",
       headers: { Accept: "application/json", "Content-Type": "application/json" },
     });
+  });
+
+  it("submits a sample schedule job with session credentials", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ jobId: "job-1", status: "QUEUED", solverStatus: "QUEUED" }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(submitSampleSchedule("http://api.local")).resolves.toMatchObject({ jobId: "job-1" });
+    expect(fetchMock).toHaveBeenCalledWith("http://api.local/api/v1/schedule/jobs/sample", {
+      method: "POST",
+      credentials: "include",
+      headers: { Accept: "application/json" },
+    });
+  });
+
+  it("fetches a schedule job by id", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ jobId: "job-1", status: "SUCCEEDED", solverStatus: "OPTIMAL" }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(fetchScheduleJob("job-1", "http://api.local")).resolves.toMatchObject({ status: "SUCCEEDED" });
+    expect(fetchMock).toHaveBeenCalledWith("http://api.local/api/v1/schedule/jobs/job-1", {
+      credentials: "include",
+      headers: { Accept: "application/json" },
+    });
+  });
+});
+
+describe("resolveModelImportTemplateUrl", () => {
+  it("points to the backend template endpoint when React is served from 8080", () => {
+    expect(
+      resolveModelImportTemplateUrl({
+        protocol: "http:",
+        hostname: "127.0.0.1",
+        port: "8080",
+        origin: "http://127.0.0.1:8080",
+      }),
+    ).toBe("http://127.0.0.1:8081/api/v1/model-import/template");
   });
 });

@@ -1,17 +1,33 @@
+import { useState } from "react";
 import { Alert, Button, ConfigProvider, Spin } from "antd";
 import zhCN from "antd/locale/zh_CN";
 import { AppShell } from "./components/AppShell";
 import { LoginPanel } from "./features/workspace/LoginPanel";
 import { WorkspaceDashboard } from "./features/workspace/WorkspaceDashboard";
 import { useDashboardData } from "./features/workspace/useDashboardData";
+import { leftRailItems, rightToolItems, workspaceNavItems, type RightToolKey, type WorkspaceNavKey } from "./features/workspace/workspaceNavigation";
 import "./styles.css";
 
 export default function App() {
   const dashboardData = useDashboardData();
+  const [activeWorkspaceKey, setActiveWorkspaceKey] = useState<WorkspaceNavKey>("workspace");
+  const [activeToolKey, setActiveToolKey] = useState<RightToolKey>("release-check");
+  const activeWorkspaceLabel =
+    leftRailItems.find((item) => item.key === activeWorkspaceKey)?.label
+    ?? workspaceNavItems.find((item) => item.key === activeWorkspaceKey)?.label
+    ?? "工作台";
+  const activeToolLabel = rightToolItems.find((item) => item.key === activeToolKey)?.label ?? "发布检查";
 
   return (
     <ConfigProvider locale={zhCN} theme={{ token: { colorPrimary: "#2563EB", borderRadius: 14 } }}>
-      <AppShell summary={dashboardData.summary} onRefresh={dashboardData.reload}>
+      <AppShell
+        activeToolKey={activeToolKey}
+        activeWorkspaceKey={activeWorkspaceKey}
+        summary={dashboardData.summary}
+        onRefresh={dashboardData.reload}
+        onToolSelect={setActiveToolKey}
+        onWorkspaceSelect={setActiveWorkspaceKey}
+      >
         {dashboardData.loading && (
           <div className="workspace-loading" role="status">
             <Spin size="large" />
@@ -37,7 +53,14 @@ export default function App() {
           />
         )}
 
-        {!dashboardData.loading && dashboardData.authenticated && dashboardData.summary && <WorkspaceDashboard summary={dashboardData.summary} />}
+        {!dashboardData.loading && dashboardData.authenticated && dashboardData.summary && (
+          <WorkspaceDashboard
+            activeToolLabel={activeToolLabel}
+            activeWorkspaceLabel={activeWorkspaceLabel}
+            summary={dashboardData.summary}
+            onRefresh={dashboardData.reload}
+          />
+        )}
       </AppShell>
     </ConfigProvider>
   );

@@ -26,6 +26,19 @@ export interface VersionSummaryResponse {
   averageUtilization: number;
 }
 
+export interface ScheduleJobResponse {
+  jobId: string;
+  scenarioName: string | null;
+  actorUsername: string | null;
+  status: string;
+  solverStatus: string | null;
+  versionId: string | null;
+  failureReason: string | null;
+  errorMessage: string | null;
+  createdAt: string | null;
+  completedAt: string | null;
+}
+
 export interface LocationLike {
   protocol: string;
   hostname: string;
@@ -73,6 +86,14 @@ export function resolveLegacyUiUrl(location: LocationLike = window.location) {
   }
 
   return "/";
+}
+
+export function resolveApiUrl(path: string, location: LocationLike = window.location) {
+  return buildUrl(path, resolveApiBaseUrlFromLocation(location));
+}
+
+export function resolveModelImportTemplateUrl(location: LocationLike = window.location) {
+  return resolveApiUrl("/api/v1/model-import/template", location);
 }
 
 function buildUrl(path: string, baseUrl: string) {
@@ -154,6 +175,19 @@ export function login(username: string, password: string, baseUrl?: string) {
   return requestJson<AuthSessionResponse>("/api/v1/auth/login", {
     method: "POST",
     body: JSON.stringify({ username, password }),
+    ...(baseUrl ? { baseUrl } : {}),
+  });
+}
+
+export function submitSampleSchedule(baseUrl?: string) {
+  return requestJson<ScheduleJobResponse>("/api/v1/schedule/jobs/sample", {
+    method: "POST",
+    ...(baseUrl ? { baseUrl } : {}),
+  });
+}
+
+export function fetchScheduleJob(jobId: string, baseUrl?: string) {
+  return requestJson<ScheduleJobResponse>(`/api/v1/schedule/jobs/${encodeURIComponent(jobId)}`, {
     ...(baseUrl ? { baseUrl } : {}),
   });
 }

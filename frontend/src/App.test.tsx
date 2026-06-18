@@ -2,15 +2,26 @@ import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
-import { fetchBackendHealth, fetchSession, fetchVersions, login } from "./lib/api";
+import {
+  fetchBackendHealth,
+  fetchScheduleJob,
+  fetchSession,
+  fetchVersions,
+  login,
+  resolveModelImportTemplateUrl,
+  submitSampleSchedule,
+} from "./lib/api";
 
 vi.mock("./lib/api", async () => {
   return {
     fetchBackendHealth: vi.fn(),
+    fetchScheduleJob: vi.fn(),
     fetchSession: vi.fn(),
     fetchVersions: vi.fn(),
     login: vi.fn(),
     resolveLegacyUiUrl: vi.fn(() => "http://127.0.0.1:8081/"),
+    resolveModelImportTemplateUrl: vi.fn(() => "http://127.0.0.1:8081/api/v1/model-import/template"),
+    submitSampleSchedule: vi.fn(),
   };
 });
 
@@ -18,6 +29,9 @@ const mockedFetchSession = vi.mocked(fetchSession);
 const mockedFetchBackendHealth = vi.mocked(fetchBackendHealth);
 const mockedFetchVersions = vi.mocked(fetchVersions);
 const mockedLogin = vi.mocked(login);
+const mockedSubmitSampleSchedule = vi.mocked(submitSampleSchedule);
+const mockedFetchScheduleJob = vi.mocked(fetchScheduleJob);
+const mockedResolveModelImportTemplateUrl = vi.mocked(resolveModelImportTemplateUrl);
 
 const version = {
   versionId: "v1",
@@ -45,6 +59,30 @@ beforeEach(() => {
   });
   mockedFetchVersions.mockResolvedValue([version]);
   mockedLogin.mockResolvedValue({ authenticated: true, username: "admin", role: "ADMIN" });
+  mockedSubmitSampleSchedule.mockResolvedValue({
+    jobId: "job-1",
+    scenarioName: "plant-scale-control-deck",
+    actorUsername: "planner",
+    status: "QUEUED",
+    solverStatus: "QUEUED",
+    versionId: null,
+    failureReason: null,
+    errorMessage: null,
+    createdAt: "2026-06-18T00:00:00Z",
+    completedAt: null,
+  });
+  mockedFetchScheduleJob.mockResolvedValue({
+    jobId: "job-1",
+    scenarioName: "plant-scale-control-deck",
+    actorUsername: "planner",
+    status: "SUCCEEDED",
+    solverStatus: "OPTIMAL",
+    versionId: "ver-1",
+    failureReason: null,
+    errorMessage: null,
+    createdAt: "2026-06-18T00:00:00Z",
+    completedAt: "2026-06-18T00:01:00Z",
+  });
 });
 
 describe("App", () => {
@@ -66,12 +104,28 @@ describe("App", () => {
     expect(overviewCard).toContainElement(screen.getByText("待排程任务"));
     expect(overviewCard).toContainElement(screen.getByText("排程通知"));
     expect(overviewCard).toContainElement(screen.getByText("预警 / 冲突"));
-    expect(screen.getByRole("link", { name: "导入样本" })).toHaveAttribute("href", "http://127.0.0.1:8081/");
+    expect(screen.getByRole("link", { name: "下载导入模板" })).toHaveAttribute(
+      "href",
+      "http://127.0.0.1:8081/api/v1/model-import/template",
+    );
+    expect(screen.getByRole("button", { name: "运行排程" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "生成场景" })).toHaveAttribute("href", "http://127.0.0.1:8081/");
-    expect(screen.getByRole("link", { name: "运行排程" })).toHaveAttribute("href", "http://127.0.0.1:8081/");
     expect(screen.getByRole("link", { name: "查看 Gantt" })).toHaveAttribute("href", "http://127.0.0.1:8081/");
     expect(screen.getByRole("link", { name: "版本发布" })).toHaveAttribute("href", "http://127.0.0.1:8081/");
+    expect(mockedResolveModelImportTemplateUrl).toHaveBeenCalled();
     expect(screen.getByLabelText("工作台右侧信息栏")).toHaveClass("dashboard-side-column");
+
+    await userEvent.click(screen.getByRole("button", { name: "版本管理" }));
+    expect(screen.getByText("当前模块：版本管理")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "版本管理" })).toHaveAttribute("aria-pressed", "true");
+
+    await userEvent.click(screen.getByRole("button", { name: "计划" }));
+    expect(screen.getByText("当前模块：计划")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "计划" })).toHaveAttribute("aria-pressed", "true");
+
+    await userEvent.click(screen.getByRole("button", { name: "发布检查" }));
+    expect(screen.getByText("当前工具：发布检查")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "发布检查" })).toHaveAttribute("aria-pressed", "true");
 
     await waitFor(() => {
       expect(mockedFetchSession).toHaveBeenCalledTimes(1);
@@ -104,6 +158,16 @@ describe("App", () => {
     expect(mockedLogin).toHaveBeenCalledWith("admin", "admin123");
     expect(await screen.findByRole("heading", { name: "智能排产工作台" })).toBeInTheDocument();
     expect(screen.getByText("Snow Beer dashboard baseline")).toBeInTheDocument();
+  });
+
+  it("runs a native sample schedule quick action and refreshes dashboard data", async () => {
+    render(<App />);
+
+    await screen.findByRole("heading", { name: "智能排产工作台" });
+    await userEvent.click(screen.getByRole("button", { name: "运行排程" }));
+
+    expect(mockedSubmitSampleSchedule).toHaveBeenCalledTimes(1);
+    expect(await screen.findByText("任务 job-1 已受理，状态 QUEUED")).toBeInTheDocument();
   });
 
   it("shows a clear unavailable state when dashboard APIs fail", async () => {

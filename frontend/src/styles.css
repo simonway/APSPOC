@@ -106,15 +106,19 @@ input {
   gap: 26px;
 }
 
-.top-menu a {
-  color: rgba(255, 255, 255, 0.94);
+.top-menu-button {
+  min-height: 44px;
+  border: 0;
+  color: rgba(255, 255, 255, 0.9);
+  background: transparent;
   font-size: 13px;
   font-weight: 650;
-  text-decoration: none;
+  cursor: pointer;
 }
 
-.top-menu a:focus-visible,
-.top-menu a:hover {
+.top-menu-button[aria-pressed="true"],
+.top-menu-button:focus-visible,
+.top-menu-button:hover {
   color: #fff;
 }
 
@@ -238,6 +242,12 @@ input {
 .right-tool-button:focus-visible {
   border-color: var(--color-primary);
   box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.16);
+}
+
+.right-tool-button.active {
+  color: #fff;
+  border-color: var(--color-primary);
+  background: var(--color-primary);
 }
 
 .workspace-loading {
@@ -476,6 +486,30 @@ input {
   min-height: 64px;
   border-radius: 16px;
   font-size: 13px;
+}
+
+.workspace-context-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.sample-job-feedback {
+  margin-top: 12px;
+}
+
+.legacy-inline-link {
+  display: inline-flex;
+  margin-top: 10px;
+  color: var(--color-primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.legacy-inline-link:focus-visible,
+.legacy-inline-link:hover {
+  color: var(--color-primary-strong);
 }
 
 .value-banner-card {
