@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/schedule/jobs")
@@ -47,6 +50,17 @@ public class ScheduleJobController {
     public ScheduleJobResponse submitSample(HttpSession session) {
         AuthService.AuthenticatedUser authenticatedUser = authService.requireAnyRole(session, UserRole.ADMIN, UserRole.PLANNER);
         return ScheduleJobResponse.from(schedulingJobService.submit(sampleScenarioFactory.create(), authenticatedUser.username()));
+    }
+
+    @GetMapping
+    public List<ScheduleJobResponse> listJobs(
+            @RequestParam(name = "limit", defaultValue = "20") int limit,
+            HttpSession session
+    ) {
+        authService.requireAnyRole(session, UserRole.ADMIN, UserRole.PLANNER, UserRole.APPROVER, UserRole.VIEWER);
+        return schedulingJobService.listRecentJobs(limit).stream()
+                .map(ScheduleJobResponse::from)
+                .toList();
     }
 
     @GetMapping("/{jobId}")

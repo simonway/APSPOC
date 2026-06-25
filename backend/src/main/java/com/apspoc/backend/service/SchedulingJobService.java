@@ -42,6 +42,8 @@ import java.util.concurrent.locks.ReentrantLock;
 public class SchedulingJobService {
 
     private static final DateTimeFormatter VERSION_SUFFIX = DateTimeFormatter.ofPattern("yyyyMMddHHmmss").withZone(ZoneOffset.UTC);
+    private static final int DEFAULT_RECENT_JOB_LIMIT = 20;
+    private static final int MAX_RECENT_JOB_LIMIT = 50;
     private static final int SOLVER_TIMEOUT_BUFFER_SECONDS = 60;
     private static final List<JobStatus> RESUMABLE_JOB_STATUSES = List.of(
             JobStatus.CREATED,
@@ -85,6 +87,13 @@ public class SchedulingJobService {
     public ScheduleJob getJob(String jobId) {
         return store.findJob(jobId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Unknown job: " + jobId));
+    }
+
+    public List<ScheduleJob> listRecentJobs(int requestedLimit) {
+        int normalizedLimit = requestedLimit <= 0
+                ? DEFAULT_RECENT_JOB_LIMIT
+                : Math.min(requestedLimit, MAX_RECENT_JOB_LIMIT);
+        return store.listRecentJobs(normalizedLimit);
     }
 
     public ScheduleJob cancel(String jobId, String actorUsername) {
