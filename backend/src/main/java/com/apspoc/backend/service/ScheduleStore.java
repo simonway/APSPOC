@@ -16,6 +16,8 @@ public interface ScheduleStore {
 
     List<ScheduleJob> listJobsByStatuses(List<JobStatus> statuses);
 
+    List<ScheduleJob> listRecentJobs(int limit);
+
     ScheduleVersion saveVersion(ScheduleVersion version);
 
     Optional<ScheduleVersion> findVersion(String versionId);

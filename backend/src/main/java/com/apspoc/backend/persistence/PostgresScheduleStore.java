@@ -13,6 +13,7 @@ import com.apspoc.backend.persistence.repository.ScheduleJobRepository;
 import com.apspoc.backend.persistence.repository.ScheduleVersionRepository;
 import com.apspoc.backend.persistence.repository.VersionAuditEventRepository;
 import com.apspoc.backend.service.ScheduleStore;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +60,14 @@ public class PostgresScheduleStore implements ScheduleStore {
     @Transactional(readOnly = true)
     public List<ScheduleJob> listJobsByStatuses(List<JobStatus> statuses) {
         return jobRepository.findAllByStatusIn(statuses).stream()
+                .map(mapper::toDomain)
+                .toList();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<ScheduleJob> listRecentJobs(int limit) {
+        return jobRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(0, limit)).stream()
                 .map(mapper::toDomain)
                 .toList();
     }

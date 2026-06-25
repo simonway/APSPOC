@@ -1,11 +1,14 @@
 package com.apspoc.backend.persistence;
 
 import com.apspoc.backend.domain.GanttData;
+import com.apspoc.backend.domain.JobStatus;
 import com.apspoc.backend.domain.ResourceType;
+import com.apspoc.backend.domain.ScheduleJob;
 import com.apspoc.backend.domain.ScheduleVersion;
 import com.apspoc.backend.domain.TriggerType;
 import com.apspoc.backend.domain.VersionAuditEventType;
 import com.apspoc.backend.domain.VersionStatus;
+import com.apspoc.backend.persistence.entity.ScheduleJobEntity;
 import com.apspoc.backend.persistence.entity.ScheduleVersionEntity;
 import com.apspoc.backend.persistence.entity.VersionAuditEventEntity;
 import com.apspoc.backend.persistence.repository.ScheduleJobRepository;
@@ -17,6 +20,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
 
 import java.time.Instant;
 import java.util.List;
@@ -177,6 +181,53 @@ class PostgresScheduleStoreTest {
         store.deleteVersions(List.of("ver-draft-1", "ver-draft-2"));
 
         verify(versionRepository).deleteAll(List.of(first, second));
+    }
+
+    @Test
+    void listRecentJobsReturnsJobsByCreatedAtDescending() {
+        ScheduleJobEntity newest = jobEntity("job-new", "scenario-new", JobStatus.SUCCEEDED, "OPTIMAL", "ver-new", "2026-06-18T10:00:00Z");
+        ScheduleJobEntity older = jobEntity("job-old", "scenario-old", JobStatus.FAILED, "FAILED", null, "2026-06-18T09:00:00Z");
+        ScheduleJob newestDomain = domainJob("job-new", "scenario-new", JobStatus.SUCCEEDED, "OPTIMAL", "ver-new", "2026-06-18T10:00:00Z");
+        ScheduleJob olderDomain = domainJob("job-old", "scenario-old", JobStatus.FAILED, "FAILED", null, "2026-06-18T09:00:00Z");
+
+        when(jobRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(0, 2))).thenReturn(List.of(newest, older));
+        when(mapper.toDomain(newest)).thenReturn(newestDomain);
+        when(mapper.toDomain(older)).thenReturn(olderDomain);
+
+        List<ScheduleJob> result = store.listRecentJobs(2);
+
+        assertThat(result).extracting(ScheduleJob::id).containsExactly("job-new", "job-old");
+    }
+
+    private ScheduleJobEntity jobEntity(String id, String scenarioName, JobStatus status, String solverStatus, String versionId, String createdAt) {
+        ScheduleJobEntity entity = new ScheduleJobEntity(id);
+        entity.setScenarioName(scenarioName);
+        entity.setActorUsername("planner-admin");
+        entity.setStatus(status);
+        entity.setSolverStatus(solverStatus);
+        entity.setVersionId(versionId);
+        entity.setFailureReason(null);
+        entity.setErrorMessage(null);
+        entity.setSourceRequestJson("{}");
+        entity.setCreatedAt(Instant.parse(createdAt));
+        entity.setCompletedAt(status.isTerminal() ? Instant.parse(createdAt).plusSeconds(60) : null);
+        return entity;
+    }
+
+    private ScheduleJob domainJob(String id, String scenarioName, JobStatus status, String solverStatus, String versionId, String createdAt) {
+        return new ScheduleJob(
+                id,
+                scenarioName,
+                "planner-admin",
+                "{}",
+                Instant.parse(createdAt),
+                status,
+                solverStatus,
+                versionId,
+                null,
+                null,
+                status.isTerminal() ? Instant.parse(createdAt).plusSeconds(60) : null
+        );
     }
 
     private ScheduleVersionEntity versionEntity(String id, VersionStatus status) {
