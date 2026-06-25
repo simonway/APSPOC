@@ -8,6 +8,7 @@
 .runtime/
 __pycache__/
 tmp/
+.worktrees/
 graphify-out/
 
 backend/target/
