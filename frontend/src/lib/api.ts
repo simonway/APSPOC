@@ -192,6 +192,27 @@ export function fetchScheduleJob(jobId: string, baseUrl?: string) {
   });
 }
 
+export function fetchScheduleJobs(limit = 20, baseUrl?: string) {
+  const normalizedLimit = Number.isFinite(limit) && limit > 0 ? Math.floor(limit) : 20;
+  return requestJson<ScheduleJobResponse[]>(`/api/v1/schedule/jobs?limit=${encodeURIComponent(String(normalizedLimit))}`, {
+    ...(baseUrl ? { baseUrl } : {}),
+  });
+}
+
+export function cancelScheduleJob(jobId: string, baseUrl?: string) {
+  return requestJson<ScheduleJobResponse>(`/api/v1/schedule/jobs/${encodeURIComponent(jobId)}/cancel`, {
+    method: "POST",
+    ...(baseUrl ? { baseUrl } : {}),
+  });
+}
+
+export function retryScheduleJob(jobId: string, baseUrl?: string) {
+  return requestJson<ScheduleJobResponse>(`/api/v1/schedule/jobs/${encodeURIComponent(jobId)}/retry`, {
+    method: "POST",
+    ...(baseUrl ? { baseUrl } : {}),
+  });
+}
+
 export function fetchVersions() {
   return requestJson<VersionSummaryResponse[]>("/api/v1/versions");
 }

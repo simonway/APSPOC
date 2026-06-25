@@ -1,11 +1,14 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   ApiError,
+  cancelScheduleJob,
   fetchScheduleJob,
+  fetchScheduleJobs,
   login,
   requestJson,
   resolveApiBaseUrlFromLocation,
   resolveModelImportTemplateUrl,
+  retryScheduleJob,
   submitSampleSchedule,
 } from "./api";
 
@@ -130,6 +133,56 @@ describe("requestJson", () => {
 
     await expect(fetchScheduleJob("job-1", "http://api.local")).resolves.toMatchObject({ status: "SUCCEEDED" });
     expect(fetchMock).toHaveBeenCalledWith("http://api.local/api/v1/schedule/jobs/job-1", {
+      credentials: "include",
+      headers: { Accept: "application/json" },
+    });
+  });
+
+  it("fetches recent schedule jobs with a limit", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify([{ jobId: "job-1", status: "QUEUED", solverStatus: "QUEUED" }]), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(fetchScheduleJobs(10, "http://api.local")).resolves.toHaveLength(1);
+    expect(fetchMock).toHaveBeenCalledWith("http://api.local/api/v1/schedule/jobs?limit=10", {
+      credentials: "include",
+      headers: { Accept: "application/json" },
+    });
+  });
+
+  it("cancels a schedule job with session credentials", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ jobId: "job-1", status: "CANCELLED", solverStatus: "CANCELLED" }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(cancelScheduleJob("job-1", "http://api.local")).resolves.toMatchObject({ status: "CANCELLED" });
+    expect(fetchMock).toHaveBeenCalledWith("http://api.local/api/v1/schedule/jobs/job-1/cancel", {
+      method: "POST",
+      credentials: "include",
+      headers: { Accept: "application/json" },
+    });
+  });
+
+  it("retries a schedule job with session credentials", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ jobId: "job-2", status: "QUEUED", solverStatus: "QUEUED" }), {
+        status: 202,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(retryScheduleJob("job-1", "http://api.local")).resolves.toMatchObject({ jobId: "job-2" });
+    expect(fetchMock).toHaveBeenCalledWith("http://api.local/api/v1/schedule/jobs/job-1/retry", {
+      method: "POST",
       credentials: "include",
       headers: { Accept: "application/json" },
     });
