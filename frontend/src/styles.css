@@ -531,6 +531,110 @@ input {
   margin-bottom: 8px;
 }
 
+.schedule-jobs-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.jobs-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.jobs-header h1 {
+  margin: 0 0 6px;
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+.jobs-header span {
+  color: var(--color-text-secondary);
+}
+
+.jobs-summary-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.jobs-summary-card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 88px;
+}
+
+.jobs-summary-card strong {
+  color: var(--color-text-primary);
+  font-size: 28px;
+  line-height: 1;
+}
+
+.jobs-summary-card span {
+  color: var(--color-text-secondary);
+}
+
+.jobs-table-card {
+  overflow: hidden;
+}
+
+.jobs-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.jobs-table-head,
+.jobs-table-row {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr 1fr 1.2fr 1fr;
+  gap: 12px;
+  align-items: center;
+}
+
+.jobs-table-head {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 0 0 10px;
+}
+
+.jobs-table-row {
+  border-top: 1px solid var(--color-border);
+  min-height: 76px;
+  padding: 12px 0;
+}
+
+.jobs-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.jobs-cell span,
+.jobs-cell strong {
+  overflow-wrap: anywhere;
+}
+
+.jobs-cell-main strong {
+  color: var(--color-text-primary);
+}
+
+.jobs-cell-main span,
+.jobs-cell span {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+.jobs-actions {
+  align-items: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
 @media (max-width: 1180px) {
   .app-body {
     grid-template-columns: 72px minmax(0, 1fr);
@@ -565,6 +669,23 @@ input {
   .kpi-card-row,
   .quick-action-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .jobs-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .jobs-summary-row {
+    grid-template-columns: 1fr;
+  }
+
+  .jobs-table-head {
+    display: none;
+  }
+
+  .jobs-table-row {
+    grid-template-columns: 1fr;
   }
 }
 

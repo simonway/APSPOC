@@ -3,6 +3,7 @@ import { Alert, Button, ConfigProvider, Spin } from "antd";
 import zhCN from "antd/locale/zh_CN";
 import { AppShell } from "./components/AppShell";
 import { LoginPanel } from "./features/workspace/LoginPanel";
+import { ScheduleJobsPanel } from "./features/workspace/ScheduleJobsPanel";
 import { WorkspaceDashboard } from "./features/workspace/WorkspaceDashboard";
 import { useDashboardData } from "./features/workspace/useDashboardData";
 import { leftRailItems, rightToolItems, workspaceNavItems, type RightToolKey, type WorkspaceNavKey } from "./features/workspace/workspaceNavigation";
@@ -54,12 +55,16 @@ export default function App() {
         )}
 
         {!dashboardData.loading && dashboardData.authenticated && dashboardData.summary && (
-          <WorkspaceDashboard
-            activeToolLabel={activeToolLabel}
-            activeWorkspaceLabel={activeWorkspaceLabel}
-            summary={dashboardData.summary}
-            onRefresh={dashboardData.reload}
-          />
+          activeWorkspaceKey === "jobs" ? (
+            <ScheduleJobsPanel />
+          ) : (
+            <WorkspaceDashboard
+              activeToolLabel={activeToolLabel}
+              activeWorkspaceLabel={activeWorkspaceLabel}
+              summary={dashboardData.summary}
+              onRefresh={dashboardData.reload}
+            />
+          )
         )}
       </AppShell>
     </ConfigProvider>

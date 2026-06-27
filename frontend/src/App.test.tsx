@@ -3,24 +3,30 @@ import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
 import {
+  cancelScheduleJob,
   fetchBackendHealth,
   fetchScheduleJob,
+  fetchScheduleJobs,
   fetchSession,
   fetchVersions,
   login,
   resolveModelImportTemplateUrl,
+  retryScheduleJob,
   submitSampleSchedule,
 } from "./lib/api";
 
 vi.mock("./lib/api", async () => {
   return {
+    cancelScheduleJob: vi.fn(),
     fetchBackendHealth: vi.fn(),
     fetchScheduleJob: vi.fn(),
+    fetchScheduleJobs: vi.fn(),
     fetchSession: vi.fn(),
     fetchVersions: vi.fn(),
     login: vi.fn(),
     resolveLegacyUiUrl: vi.fn(() => "http://127.0.0.1:8081/"),
     resolveModelImportTemplateUrl: vi.fn(() => "http://127.0.0.1:8081/api/v1/model-import/template"),
+    retryScheduleJob: vi.fn(),
     submitSampleSchedule: vi.fn(),
   };
 });
@@ -31,6 +37,9 @@ const mockedFetchVersions = vi.mocked(fetchVersions);
 const mockedLogin = vi.mocked(login);
 const mockedSubmitSampleSchedule = vi.mocked(submitSampleSchedule);
 const mockedFetchScheduleJob = vi.mocked(fetchScheduleJob);
+const mockedFetchScheduleJobs = vi.mocked(fetchScheduleJobs);
+const mockedCancelScheduleJob = vi.mocked(cancelScheduleJob);
+const mockedRetryScheduleJob = vi.mocked(retryScheduleJob);
 const mockedResolveModelImportTemplateUrl = vi.mocked(resolveModelImportTemplateUrl);
 
 const version = {
@@ -82,6 +91,68 @@ beforeEach(() => {
     errorMessage: null,
     createdAt: "2026-06-18T00:00:00Z",
     completedAt: "2026-06-18T00:01:00Z",
+  });
+  mockedFetchScheduleJobs.mockResolvedValue([
+    {
+      jobId: "job-running",
+      scenarioName: "Snow Beer running sample",
+      actorUsername: "planner",
+      status: "RUNNING",
+      solverStatus: "RUNNING",
+      versionId: null,
+      failureReason: null,
+      errorMessage: null,
+      createdAt: "2026-06-18T00:00:00Z",
+      completedAt: null,
+    },
+    {
+      jobId: "job-failed",
+      scenarioName: "Snow Beer failed sample",
+      actorUsername: "planner",
+      status: "FAILED",
+      solverStatus: "FAILED",
+      versionId: null,
+      failureReason: "SOLVER_NO_FEASIBLE_SCHEDULE",
+      errorMessage: "No feasible schedule",
+      createdAt: "2026-06-18T00:10:00Z",
+      completedAt: "2026-06-18T00:11:00Z",
+    },
+    {
+      jobId: "job-succeeded",
+      scenarioName: "Snow Beer released sample",
+      actorUsername: "planner",
+      status: "SUCCEEDED",
+      solverStatus: "OPTIMAL",
+      versionId: "ver-1",
+      failureReason: null,
+      errorMessage: null,
+      createdAt: "2026-06-18T00:20:00Z",
+      completedAt: "2026-06-18T00:21:00Z",
+    },
+  ]);
+  mockedCancelScheduleJob.mockResolvedValue({
+    jobId: "job-running",
+    scenarioName: "Snow Beer running sample",
+    actorUsername: "planner",
+    status: "CANCELLED",
+    solverStatus: "CANCELLED",
+    versionId: null,
+    failureReason: "JOB_CANCELLED",
+    errorMessage: "Cancelled by planner",
+    createdAt: "2026-06-18T00:00:00Z",
+    completedAt: "2026-06-18T00:12:00Z",
+  });
+  mockedRetryScheduleJob.mockResolvedValue({
+    jobId: "job-retry",
+    scenarioName: "Snow Beer failed sample",
+    actorUsername: "planner",
+    status: "QUEUED",
+    solverStatus: "QUEUED",
+    versionId: null,
+    failureReason: null,
+    errorMessage: null,
+    createdAt: "2026-06-18T00:30:00Z",
+    completedAt: null,
   });
 });
 
@@ -168,6 +239,33 @@ describe("App", () => {
 
     expect(mockedSubmitSampleSchedule).toHaveBeenCalledTimes(1);
     expect(await screen.findByText("任务 job-1 已受理，状态 QUEUED")).toBeInTheDocument();
+  });
+
+  it("opens the native schedule jobs center from the left rail", async () => {
+    render(<App />);
+
+    await screen.findByRole("heading", { name: "智能排产工作台" });
+    await userEvent.click(screen.getByRole("button", { name: "排程任务" }));
+
+    expect(await screen.findByRole("heading", { name: "排程任务中心" })).toBeInTheDocument();
+    expect(mockedFetchScheduleJobs).toHaveBeenCalledWith(20);
+    expect(screen.getByText("Snow Beer running sample")).toBeInTheDocument();
+    expect(screen.getByText("Snow Beer failed sample")).toBeInTheDocument();
+    expect(screen.getByText("No feasible schedule")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "查看版本 ver-1" })).toHaveAttribute("href", "http://127.0.0.1:8081/");
+  });
+
+  it("cancels and retries jobs from the native schedule jobs center", async () => {
+    render(<App />);
+
+    await screen.findByRole("heading", { name: "智能排产工作台" });
+    await userEvent.click(screen.getByRole("button", { name: "排程任务" }));
+    await userEvent.click(await screen.findByRole("button", { name: "取消 job-running" }));
+    await userEvent.click(await screen.findByRole("button", { name: "重试 job-failed" }));
+
+    expect(mockedCancelScheduleJob).toHaveBeenCalledWith("job-running");
+    expect(mockedRetryScheduleJob).toHaveBeenCalledWith("job-failed");
+    expect(await screen.findByText("job-retry")).toBeInTheDocument();
   });
 
   it("shows a clear unavailable state when dashboard APIs fail", async () => {
