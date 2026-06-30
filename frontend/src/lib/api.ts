@@ -39,6 +39,83 @@ export interface ScheduleJobResponse {
   completedAt: string | null;
 }
 
+export type ImportBatchKind =
+  | "resources"
+  | "recipes"
+  | "demands"
+  | "inventory-balances"
+  | "downtimes"
+  | "setup-rules";
+
+export interface ImportBatchResponse {
+  importId: string;
+  dataVersion: string;
+  importType: string;
+  sourceFileName: string | null;
+  importedBy: string | null;
+  createdAt: string;
+  status: string;
+  successCount: number;
+  failureCount: number;
+  payload: unknown;
+  errors: unknown;
+  errorsDownloadPath: string | null;
+}
+
+export interface ImportBatchUploadResponse {
+  importBatch: ImportBatchResponse;
+  [key: string]: unknown;
+}
+
+export interface GenerateScenarioFromImportBatchesRequest {
+  scenarioName: string;
+  dataVersion: string;
+  scheduleStartAt: string;
+  horizonMinutes: number;
+  objectiveWeights: {
+    tardiness: number;
+    earliness: number;
+    makespan: number;
+  };
+  solverConfig: {
+    timeLimitSeconds: number;
+    numSearchWorkers: number;
+  };
+}
+
+export interface GeneratedScenarioResponse {
+  scenarioId: string;
+  scenarioName: string;
+  dataVersion: string;
+  createdAt: string;
+  scheduleStartAt: string;
+  horizonMinutes: number;
+  resourceCount: number;
+  demandCount: number;
+  requestedDemandQuantity: number;
+  plannedDemandQuantity: number;
+  inventoryBalanceCount: number;
+  inventoryCoveredQuantity: number;
+  operationCount: number;
+  downtimeCount: number;
+  setupRuleCount: number;
+  precedencePairCount: number;
+  bridgeAdjustmentCount: number;
+  demandCoverages: Array<Record<string, unknown>>;
+  operations: Array<Record<string, unknown>>;
+  precedencePairs: Array<Record<string, unknown>>;
+  setupRules: Array<Record<string, unknown>>;
+  bridgeAdjustments: Array<Record<string, unknown>>;
+  scheduleRequest: Record<string, unknown> | null;
+  sourceImportBatchIds: Record<string, string>;
+}
+
+export interface GeneratedScenarioFromImportBatchesResponse {
+  dataVersion: string;
+  sourceImportBatchIds: Record<string, string>;
+  scenario: GeneratedScenarioResponse;
+}
+
 export interface LocationLike {
   protocol: string;
   hostname: string;
@@ -100,9 +177,13 @@ function buildUrl(path: string, baseUrl: string) {
   return `${baseUrl}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
-function buildHeaders(initHeaders: HeadersInit | undefined, hasBody: boolean): HeadersInit {
+function isFormDataBody(body: BodyInit | null | undefined): body is FormData {
+  return typeof FormData !== "undefined" && body instanceof FormData;
+}
+
+function buildHeaders(initHeaders: HeadersInit | undefined, hasJsonBody: boolean): HeadersInit {
   if (!initHeaders) {
-    if (hasBody) {
+    if (hasJsonBody) {
       return { Accept: "application/json", "Content-Type": "application/json" };
     }
     return { Accept: "application/json" };
@@ -112,7 +193,7 @@ function buildHeaders(initHeaders: HeadersInit | undefined, hasBody: boolean): H
   if (!headers.has("Accept")) {
     headers.set("Accept", "application/json");
   }
-  if (hasBody && !headers.has("Content-Type")) {
+  if (hasJsonBody && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
   }
   return headers;
@@ -148,11 +229,11 @@ function responseMessage(payload: unknown, fallback: string) {
 
 export async function requestJson<T>(path: string, options: RequestJsonOptions = {}): Promise<T> {
   const { baseUrl = resolveApiBaseUrlFromLocation(window.location), headers, ...init } = options;
-  const hasBody = init.body !== undefined;
+  const hasJsonBody = init.body !== undefined && !isFormDataBody(init.body as BodyInit);
   const response = await fetch(buildUrl(path, baseUrl), {
     ...init,
     credentials: "include",
-    headers: buildHeaders(headers, hasBody),
+    headers: buildHeaders(headers, hasJsonBody),
   });
   const payload = await parseResponseBody(response);
 
@@ -184,6 +265,37 @@ export function submitSampleSchedule(baseUrl?: string) {
     method: "POST",
     ...(baseUrl ? { baseUrl } : {}),
   });
+}
+
+export function uploadImportBatch(kind: ImportBatchKind, file: File, dataVersion: string, baseUrl?: string) {
+  const formData = new FormData();
+  formData.append("file", file, file.name);
+  formData.append("dataVersion", dataVersion);
+  return requestJson<ImportBatchUploadResponse>(`/api/v1/model-import/${kind}`, {
+    method: "POST",
+    body: formData,
+    ...(baseUrl ? { baseUrl } : {}),
+  });
+}
+
+export function generateScenarioFromImportBatches(request: GenerateScenarioFromImportBatchesRequest, baseUrl?: string) {
+  return requestJson<GeneratedScenarioFromImportBatchesResponse>("/api/v1/schedule/scenarios/from-import-batches", {
+    method: "POST",
+    body: JSON.stringify(request),
+    ...(baseUrl ? { baseUrl } : {}),
+  });
+}
+
+export function submitScheduleJob(request: Record<string, unknown>, baseUrl?: string) {
+  return requestJson<ScheduleJobResponse>("/api/v1/schedule/jobs", {
+    method: "POST",
+    body: JSON.stringify(request),
+    ...(baseUrl ? { baseUrl } : {}),
+  });
+}
+
+export function resolveImportBatchErrorsUrl(path: string, location: LocationLike = window.location) {
+  return resolveApiUrl(path, location);
 }
 
 export function fetchScheduleJob(jobId: string, baseUrl?: string) {

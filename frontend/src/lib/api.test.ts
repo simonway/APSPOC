@@ -4,12 +4,16 @@ import {
   cancelScheduleJob,
   fetchScheduleJob,
   fetchScheduleJobs,
+  generateScenarioFromImportBatches,
   login,
   requestJson,
+  resolveImportBatchErrorsUrl,
   resolveApiBaseUrlFromLocation,
   resolveModelImportTemplateUrl,
   retryScheduleJob,
+  submitScheduleJob,
   submitSampleSchedule,
+  uploadImportBatch,
 } from "./api";
 
 describe("resolveApiBaseUrlFromLocation", () => {
@@ -199,5 +203,178 @@ describe("resolveModelImportTemplateUrl", () => {
         origin: "http://127.0.0.1:8080",
       }),
     ).toBe("http://127.0.0.1:8081/api/v1/model-import/template");
+  });
+
+  it("uploads a formal import batch as multipart form data", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      text: () => Promise.resolve(JSON.stringify({
+        importBatch: {
+          importId: "imp-1",
+          dataVersion: "dv-20260630",
+          importType: "RESOURCES",
+          sourceFileName: "resources.csv",
+          importedBy: "admin",
+          createdAt: "2026-06-30T00:00:00Z",
+          status: "SUCCEEDED",
+          successCount: 3,
+          failureCount: 0,
+          payload: {},
+          errors: [],
+          errorsDownloadPath: null,
+        },
+      })),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    vi.stubGlobal("window", { location: { protocol: "http:", hostname: "127.0.0.1", port: "8080", origin: "http://127.0.0.1:8080" } });
+    const file = new File(["resourceId,resourceName"], "resources.csv", { type: "text/csv" });
+
+    const result = await uploadImportBatch("resources", file, "dv-20260630");
+
+    expect(result.importBatch.importId).toBe("imp-1");
+    expect(fetchMock).toHaveBeenCalledWith(
+      "http://127.0.0.1:8081/api/v1/model-import/resources",
+      expect.objectContaining({
+        method: "POST",
+        credentials: "include",
+        body: expect.any(FormData),
+      }),
+    );
+    const init = fetchMock.mock.calls[0][1] as RequestInit;
+    expect(new Headers(init.headers).has("Content-Type")).toBe(false);
+  });
+
+  it("preserves backend validation payload when import upload fails", async () => {
+    const payload = {
+      message: "Validation failed",
+      importBatch: {
+        importId: "imp-bad",
+        dataVersion: "dv-20260630",
+        importType: "DEMANDS",
+        sourceFileName: "demands.csv",
+        importedBy: "admin",
+        createdAt: "2026-06-30T00:00:00Z",
+        status: "VALIDATION_FAILED",
+        successCount: 0,
+        failureCount: 2,
+        payload: {},
+        errors: [{ rowNumber: 2, fieldName: "quantity", message: "must be positive" }],
+        errorsDownloadPath: "/api/v1/model-import/batches/imp-bad/errors",
+      },
+    };
+    vi.stubGlobal("fetch", vi.fn().mockResolvedValue({
+      ok: false,
+      status: 400,
+      text: () => Promise.resolve(JSON.stringify(payload)),
+    }));
+    vi.stubGlobal("window", { location: { protocol: "http:", hostname: "127.0.0.1", port: "8080", origin: "http://127.0.0.1:8080" } });
+
+    await expect(uploadImportBatch("demands", new File(["bad"], "demands.csv"), "dv-20260630"))
+      .rejects.toMatchObject({
+        status: 400,
+        message: "Validation failed",
+        payload,
+      });
+  });
+
+  it("generates a scenario from formal import batches", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 200,
+      text: () => Promise.resolve(JSON.stringify({
+        dataVersion: "dv-20260630",
+        sourceImportBatchIds: { resources: "imp-res" },
+        scenario: {
+          scenarioId: "scn-1",
+          scenarioName: "formal-import-dv-20260630",
+          dataVersion: "dv-20260630",
+          createdAt: "2026-06-30T00:00:00Z",
+          scheduleStartAt: "2026-06-30T08:00:00Z",
+          horizonMinutes: 1440,
+          resourceCount: 2,
+          demandCount: 1,
+          requestedDemandQuantity: 10,
+          plannedDemandQuantity: 10,
+          inventoryBalanceCount: 0,
+          inventoryCoveredQuantity: 0,
+          operationCount: 4,
+          downtimeCount: 0,
+          setupRuleCount: 0,
+          precedencePairCount: 3,
+          bridgeAdjustmentCount: 0,
+          demandCoverages: [],
+          operations: [],
+          precedencePairs: [],
+          setupRules: [],
+          bridgeAdjustments: [],
+          scheduleRequest: { scenarioName: "formal-import-dv-20260630", resources: [], tasks: [] },
+          sourceImportBatchIds: { resources: "imp-res" },
+        },
+      })),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    vi.stubGlobal("window", { location: { protocol: "http:", hostname: "127.0.0.1", port: "8080", origin: "http://127.0.0.1:8080" } });
+
+    const result = await generateScenarioFromImportBatches({
+      scenarioName: "formal-import-dv-20260630",
+      dataVersion: "dv-20260630",
+      scheduleStartAt: "2026-06-30T08:00:00.000Z",
+      horizonMinutes: 1440,
+      objectiveWeights: { tardiness: 10, earliness: 1, makespan: 1 },
+      solverConfig: { timeLimitSeconds: 30, numSearchWorkers: 4 },
+    });
+
+    expect(result.scenario.operationCount).toBe(4);
+    expect(fetchMock).toHaveBeenCalledWith(
+      "http://127.0.0.1:8081/api/v1/schedule/scenarios/from-import-batches",
+      expect.objectContaining({
+        method: "POST",
+        credentials: "include",
+        body: expect.stringContaining("\"dataVersion\":\"dv-20260630\""),
+      }),
+    );
+  });
+
+  it("submits a generated schedule request", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      status: 202,
+      text: () => Promise.resolve(JSON.stringify({
+        jobId: "job-1",
+        scenarioName: "formal-import-dv-20260630",
+        actorUsername: "admin",
+        status: "QUEUED",
+        solverStatus: "QUEUED",
+        versionId: null,
+        failureReason: null,
+        errorMessage: null,
+        createdAt: "2026-06-30T00:00:00Z",
+        completedAt: null,
+      })),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    vi.stubGlobal("window", { location: { protocol: "http:", hostname: "127.0.0.1", port: "8080", origin: "http://127.0.0.1:8080" } });
+
+    const result = await submitScheduleJob({ scenarioName: "formal-import-dv-20260630", resources: [], tasks: [] });
+
+    expect(result.jobId).toBe("job-1");
+    expect(fetchMock).toHaveBeenCalledWith(
+      "http://127.0.0.1:8081/api/v1/schedule/jobs",
+      expect.objectContaining({
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify({ scenarioName: "formal-import-dv-20260630", resources: [], tasks: [] }),
+      }),
+    );
+  });
+
+  it("resolves import batch error report URLs through the backend base URL", () => {
+    expect(resolveImportBatchErrorsUrl("/api/v1/model-import/batches/imp-1/errors", {
+      protocol: "http:",
+      hostname: "127.0.0.1",
+      port: "8080",
+      origin: "http://127.0.0.1:8080",
+    })).toBe("http://127.0.0.1:8081/api/v1/model-import/batches/imp-1/errors");
   });
 });
