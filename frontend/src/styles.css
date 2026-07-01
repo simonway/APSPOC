@@ -635,6 +635,181 @@ input {
   flex-wrap: wrap;
 }
 
+.import-scenario-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.import-scenario-header,
+.import-control-panel,
+.scenario-workflow-body,
+.generated-scenario-summary,
+.submitted-job-card {
+  padding: 18px 20px;
+}
+
+.import-scenario-header,
+.import-control-panel,
+.submitted-job-card {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.import-scenario-header h1 {
+  margin: 0 0 6px;
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.import-scenario-header span,
+.import-control-panel span,
+.submitted-job-card {
+  color: var(--color-text-secondary);
+}
+
+.import-control-panel label,
+.scenario-setup-grid label {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  color: #475569;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.import-control-panel label {
+  flex: 1;
+  max-width: 420px;
+}
+
+.import-batch-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.import-batch-card {
+  display: grid;
+  align-content: start;
+  gap: 12px;
+  min-height: 238px;
+  padding: 16px;
+  border: 1px solid #dbe3ef;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 8px 20px rgba(31, 70, 122, 0.08);
+}
+
+.import-batch-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.import-batch-card h3 {
+  margin: 0;
+  color: var(--color-text-primary);
+  font-size: 15px;
+}
+
+.import-batch-card label {
+  color: #475569;
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.import-batch-card input[type="file"] {
+  width: 100%;
+  min-height: 38px;
+  border: 1px dashed #94a3b8;
+  border-radius: 8px;
+  padding: 8px;
+  color: #2563eb;
+  background: #f8fbff;
+  cursor: pointer;
+}
+
+.import-batch-card input[type="file"]:disabled {
+  color: var(--color-text-secondary);
+  background: #eef2f7;
+  cursor: not-allowed;
+}
+
+.import-batch-card > span {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+.import-batch-metadata {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  color: #475569;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.import-batch-metadata div {
+  display: grid;
+  grid-template-columns: 86px minmax(0, 1fr);
+  gap: 8px;
+}
+
+.import-batch-metadata dt,
+.import-batch-metadata dd {
+  min-width: 0;
+}
+
+.import-batch-metadata dt {
+  color: var(--color-text-secondary);
+  font-weight: 700;
+}
+
+.import-batch-metadata dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.scenario-workflow-body,
+.scenario-setup {
+  display: grid;
+  gap: 16px;
+}
+
+.scenario-setup h2,
+.generated-scenario-summary h2 {
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.scenario-setup-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.scenario-setup-grid .ant-input-number {
+  width: 100%;
+}
+
+.generated-scenario-summary {
+  display: grid;
+  gap: 14px;
+}
+
+.submitted-job-card {
+  align-items: center;
+}
+
+.submitted-job-card strong {
+  overflow-wrap: anywhere;
+  color: var(--color-text-primary);
+}
+
 @media (max-width: 1180px) {
   .app-body {
     grid-template-columns: 72px minmax(0, 1fr);
@@ -686,6 +861,43 @@ input {
 
   .jobs-table-row {
     grid-template-columns: 1fr;
+  }
+
+  .import-batch-grid,
+  .scenario-setup-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .top-menu {
+    gap: 14px;
+    overflow-x: auto;
+  }
+
+  .global-search {
+    width: 100%;
+    max-width: none;
+  }
+
+  .workspace-dashboard {
+    padding: 14px 12px 24px;
+  }
+
+  .import-scenario-header,
+  .import-control-panel,
+  .submitted-job-card {
+    flex-direction: column;
+  }
+
+  .import-batch-grid,
+  .scenario-setup-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .import-control-panel label {
+    width: 100%;
+    max-width: none;
   }
 }
 
