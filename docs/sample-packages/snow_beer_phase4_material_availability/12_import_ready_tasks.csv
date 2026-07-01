@@ -1,0 +1,9 @@
+id,label,productCode,durationMinutes,dueMinutes,priority,candidateResourceIds,pinnedResourceId,pinnedStartMinutes,predecessorTaskIds,setupGroup
+dem_a500_material_1224__01_sugarization,dem_a500_material_1224 / 糖化,31015630002000000,120,900,5,"mash_k1,mash_k2",,,,BREW_A500
+dem_a500_material_1224__02_fermentation,dem_a500_material_1224 / 发酵,31015630002000000,240,900,5,"ferm_t1,ferm_t2",,,dem_a500_material_1224__01_sugarization,FERM_A500
+dem_a500_material_1224__03_filtration,dem_a500_material_1224 / 过滤,31015630002000000,90,900,5,"filt_f1,filt_f2",,,dem_a500_material_1224__02_fermentation,FILT_A500
+dem_a500_material_1224__04_packaging,dem_a500_material_1224 / 包装,31015630002000000,150,900,5,"pack_l1,pack_l2",,,dem_a500_material_1224__03_filtration,PKG_500
+dem_b600_material_1225__01_sugarization,dem_b600_material_1225 / 糖化,31015630004000000,140,2880,4,"mash_k1,mash_k2",,,,BREW_B600
+dem_b600_material_1225__02_fermentation,dem_b600_material_1225 / 发酵,31015630004000000,300,2880,4,ferm_t2,,,dem_b600_material_1225__01_sugarization,FERM_B600
+dem_b600_material_1225__03_filtration,dem_b600_material_1225 / 过滤,31015630004000000,120,2880,4,"filt_f1,filt_f2",,,dem_b600_material_1225__02_fermentation,FILT_B600
+dem_b600_material_1225__04_packaging,dem_b600_material_1225 / 包装,31015630004000000,210,2880,4,pack_l2,,,dem_b600_material_1225__03_filtration,PKG_600

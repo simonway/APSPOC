@@ -1,0 +1,9 @@
+recipeId,productCode,operationCode,operationName,sequence,durationMinutes,candidateResourceIds,materialInputs,materialOutputs,setupGroup,remarks
+rcp_a500_material_p4,31015630002000000,SUGARIZATION,糖化,1,120,mash_k1|mash_k2,MALT_A_LOT:1|HOPS_A_LOT:1,WORT_A500_LOT:1,BREW_A500,"Consumes A-family raw materials that become available after schedule start"
+rcp_a500_material_p4,31015630002000000,FERMENTATION,发酵,2,240,ferm_t1|ferm_t2,WORT_A500_LOT:1,FERMENTED_A500_LOT:1,FERM_A500,"Discrete fermentation proxy"
+rcp_a500_material_p4,31015630002000000,FILTRATION,过滤,3,90,filt_f1|filt_f2,FERMENTED_A500_LOT:1,BRIGHT_A500_LOT:1,FILT_A500,"Discrete filtration proxy"
+rcp_a500_material_p4,31015630002000000,PACKAGING,包装,4,150,pack_l1|pack_l2,BRIGHT_A500_LOT:1|CAP_A_LOT:1|CTN_A_LOT:1|LBL_A_LOT:1,31015630002000000:1,PKG_500,"Consumes packaging material with availability timing"
+rcp_b600_material_p4,31015630004000000,SUGARIZATION,糖化,1,140,mash_k1|mash_k2,MALT_B_LOT:1|HOPS_B_LOT:1,WORT_B600_LOT:1,BREW_B600,"Consumes B-family raw materials"
+rcp_b600_material_p4,31015630004000000,FERMENTATION,发酵,2,300,ferm_t2,WORT_B600_LOT:1,FERMENTED_B600_LOT:1,FERM_B600,"Discrete fermentation proxy"
+rcp_b600_material_p4,31015630004000000,FILTRATION,过滤,3,120,filt_f1|filt_f2,FERMENTED_B600_LOT:1,BRIGHT_B600_LOT:1,FILT_B600,"Discrete filtration proxy"
+rcp_b600_material_p4,31015630004000000,PACKAGING,包装,4,210,pack_l2,BRIGHT_B600_LOT:1|CAP_B_LOT:1|CTN_B_LOT:1|LBL_B_LOT:1,31015630004000000:1,PKG_600,"Consumes B-family packaging material with availability timing"

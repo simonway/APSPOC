@@ -1,0 +1,3 @@
+fromSetupGroup,toSetupGroup,resourceType,resourceId,setupMinutes,remarks
+PKG_500,PKG_600,OTHER,,60,"500ml -> 600ml packaging changeover"
+PKG_600,PKG_500,OTHER,,60,"600ml -> 500ml packaging changeover"
