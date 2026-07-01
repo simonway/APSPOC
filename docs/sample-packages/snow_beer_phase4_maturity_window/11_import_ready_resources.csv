@@ -1,0 +1,6 @@
+id,label,resourceType,sortOrder
+mash_k1,糖化1锅,REACTOR,1
+ferm_t1,发酵1罐,TANK,2
+maturity_hold_a,成熟等待A区,OTHER,3
+filt_f1,过滤1线,FILTER,4
+pack_l1,包装1线,OTHER,5

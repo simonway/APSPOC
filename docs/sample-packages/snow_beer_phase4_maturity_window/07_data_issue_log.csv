@@ -1,0 +1,4 @@
+issueId,severity,status,category,description,owner,resolution
+ISSUE-01,WARN,OPEN,ApproximationBoundary,"MATURATION_WAIT is a POC proxy operation and does not implement exact tank residency or non-mixing",Product,"Keep the limitation visible in README and expected checks"
+ISSUE-02,INFO,OPEN,ResourceModel,"maturity_hold_a is not a physical tank; it is an audit-friendly wait proxy",Planner,"Use a future tank rule slice for exact occupation modeling"
+ISSUE-03,INFO,OPEN,PhaseBoundary,"Bright beer tank transfer and freshness windows remain outside this first maturity sample",Product,"Model them in a later Phase 4 sample"

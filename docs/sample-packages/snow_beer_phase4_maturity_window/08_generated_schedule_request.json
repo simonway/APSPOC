@@ -1,0 +1,240 @@
+{
+  "scenarioName": "snow-beer-phase4-maturity-window",
+  "dataVersion": "snow_beer_phase4_maturity_window_2026_07_01",
+  "scheduleStartAt": "2026-12-24T00:00:00Z",
+  "horizonMinutes": 4320,
+  "resources": [
+    {
+      "id": "mash_k1",
+      "label": "糖化1锅",
+      "resourceType": "REACTOR",
+      "sortOrder": 1
+    },
+    {
+      "id": "ferm_t1",
+      "label": "发酵1罐",
+      "resourceType": "TANK",
+      "sortOrder": 2
+    },
+    {
+      "id": "maturity_hold_a",
+      "label": "成熟等待A区",
+      "resourceType": "OTHER",
+      "sortOrder": 3
+    },
+    {
+      "id": "filt_f1",
+      "label": "过滤1线",
+      "resourceType": "FILTER",
+      "sortOrder": 4
+    },
+    {
+      "id": "pack_l1",
+      "label": "包装1线",
+      "resourceType": "OTHER",
+      "sortOrder": 5
+    }
+  ],
+  "tasks": [
+    {
+      "id": "dem_a500_maturity_1224__01_sugarization",
+      "label": "dem_a500_maturity_1224 / 糖化",
+      "productCode": "31015630002000000",
+      "durationMinutes": 120,
+      "dueMinutes": 1440,
+      "priority": 5,
+      "candidateResourceIds": [
+        "mash_k1"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "MALT_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "HOPS_A_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "WORT_A500_LOT",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "BREW_A500"
+    },
+    {
+      "id": "dem_a500_maturity_1224__02_fermentation",
+      "label": "dem_a500_maturity_1224 / 发酵",
+      "productCode": "31015630002000000",
+      "durationMinutes": 240,
+      "dueMinutes": 1440,
+      "priority": 5,
+      "candidateResourceIds": [
+        "ferm_t1"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_maturity_1224__01_sugarization"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "WORT_A500_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "FERMENTED_A500_LOT",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "FERM_A500"
+    },
+    {
+      "id": "dem_a500_maturity_1224__03_maturation_wait",
+      "label": "dem_a500_maturity_1224 / 成熟等待",
+      "productCode": "31015630002000000",
+      "durationMinutes": 360,
+      "dueMinutes": 1440,
+      "priority": 5,
+      "candidateResourceIds": [
+        "maturity_hold_a"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_maturity_1224__02_fermentation"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "FERMENTED_A500_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "MATURED_A500_LOT",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "MATURE_A500"
+    },
+    {
+      "id": "dem_a500_maturity_1224__04_filtration",
+      "label": "dem_a500_maturity_1224 / 过滤",
+      "productCode": "31015630002000000",
+      "durationMinutes": 90,
+      "dueMinutes": 1440,
+      "priority": 5,
+      "candidateResourceIds": [
+        "filt_f1"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_maturity_1224__03_maturation_wait"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "MATURED_A500_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "BRIGHT_A500_LOT",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "FILT_A500"
+    },
+    {
+      "id": "dem_a500_maturity_1224__05_packaging",
+      "label": "dem_a500_maturity_1224 / 包装",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 1440,
+      "priority": 5,
+      "candidateResourceIds": [
+        "pack_l1"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_maturity_1224__04_filtration"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "BRIGHT_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    }
+  ],
+  "downtimes": [],
+  "setupRules": [],
+  "inventoryBalances": [
+    {
+      "itemCode": "MALT_A_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "HOPS_A_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CAP_A_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CTN_A_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "LBL_A_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    }
+  ],
+  "inventoryDemands": [
+    {
+      "demandId": "dem_a500_maturity_1224",
+      "itemCode": "31015630002000000",
+      "quantity": 1,
+      "dueMinutes": 1440
+    }
+  ],
+  "objectiveWeights": {
+    "tardiness": 100,
+    "earliness": 2,
+    "makespan": 1
+  },
+  "solverConfig": {
+    "timeLimitSeconds": 120,
+    "numSearchWorkers": 4
+  }
+}
