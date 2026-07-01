@@ -9,10 +9,13 @@ import {
   fetchScheduleJobs,
   fetchSession,
   fetchVersions,
+  generateScenarioFromImportBatches,
   login,
   resolveModelImportTemplateUrl,
   retryScheduleJob,
+  submitScheduleJob,
   submitSampleSchedule,
+  uploadImportBatch,
 } from "./lib/api";
 
 vi.mock("./lib/api", async () => {
@@ -23,11 +26,15 @@ vi.mock("./lib/api", async () => {
     fetchScheduleJobs: vi.fn(),
     fetchSession: vi.fn(),
     fetchVersions: vi.fn(),
+    generateScenarioFromImportBatches: vi.fn(),
     login: vi.fn(),
     resolveLegacyUiUrl: vi.fn(() => "http://127.0.0.1:8081/"),
+    resolveImportBatchErrorsUrl: vi.fn((path: string) => `http://127.0.0.1:8081${path}`),
     resolveModelImportTemplateUrl: vi.fn(() => "http://127.0.0.1:8081/api/v1/model-import/template"),
     retryScheduleJob: vi.fn(),
+    submitScheduleJob: vi.fn(),
     submitSampleSchedule: vi.fn(),
+    uploadImportBatch: vi.fn(),
   };
 });
 
@@ -41,6 +48,9 @@ const mockedFetchScheduleJobs = vi.mocked(fetchScheduleJobs);
 const mockedCancelScheduleJob = vi.mocked(cancelScheduleJob);
 const mockedRetryScheduleJob = vi.mocked(retryScheduleJob);
 const mockedResolveModelImportTemplateUrl = vi.mocked(resolveModelImportTemplateUrl);
+const mockedUploadImportBatch = vi.mocked(uploadImportBatch);
+const mockedGenerateScenarioFromImportBatches = vi.mocked(generateScenarioFromImportBatches);
+const mockedSubmitScheduleJob = vi.mocked(submitScheduleJob);
 
 const version = {
   versionId: "v1",
@@ -56,6 +66,11 @@ const version = {
   totalMakespan: 480,
   lateTaskCount: 0,
   averageUtilization: 0.7,
+};
+
+const generatedScheduleRequest = {
+  scenarioName: "formal-import-dv-test",
+  tasks: [{ taskId: "task-1", durationMinutes: 30 }],
 };
 
 beforeEach(() => {
@@ -152,6 +167,72 @@ beforeEach(() => {
     failureReason: null,
     errorMessage: null,
     createdAt: "2026-06-18T00:30:00Z",
+    completedAt: null,
+  });
+  mockedUploadImportBatch.mockImplementation(async (kind, file, dataVersion) => ({
+    importBatch: {
+      importId: `imp-${kind}`,
+      dataVersion,
+      importType: kind.toUpperCase(),
+      sourceFileName: file.name,
+      importedBy: "admin",
+      createdAt: "2026-06-30T00:00:00Z",
+      status: "SUCCEEDED",
+      successCount: 1,
+      failureCount: 0,
+      payload: {},
+      errors: [],
+      errorsDownloadPath: null,
+    },
+  }));
+  mockedGenerateScenarioFromImportBatches.mockResolvedValue({
+    dataVersion: "dv-test",
+    sourceImportBatchIds: {
+      resources: "imp-resources",
+      recipes: "imp-recipes",
+      demands: "imp-demands",
+    },
+    scenario: {
+      scenarioId: "scenario-import",
+      scenarioName: "formal-import-dv-test",
+      dataVersion: "dv-test",
+      createdAt: "2026-06-30T00:05:00Z",
+      scheduleStartAt: "2026-06-30T08:00:00Z",
+      horizonMinutes: 1440,
+      resourceCount: 1,
+      demandCount: 1,
+      requestedDemandQuantity: 10,
+      plannedDemandQuantity: 10,
+      inventoryBalanceCount: 0,
+      inventoryCoveredQuantity: 0,
+      operationCount: 4,
+      downtimeCount: 0,
+      setupRuleCount: 0,
+      precedencePairCount: 3,
+      bridgeAdjustmentCount: 0,
+      demandCoverages: [],
+      operations: [],
+      precedencePairs: [],
+      setupRules: [],
+      bridgeAdjustments: [],
+      scheduleRequest: generatedScheduleRequest,
+      sourceImportBatchIds: {
+        resources: "imp-resources",
+        recipes: "imp-recipes",
+        demands: "imp-demands",
+      },
+    },
+  });
+  mockedSubmitScheduleJob.mockResolvedValue({
+    jobId: "job-import",
+    scenarioName: "formal-import-dv-test",
+    actorUsername: "planner",
+    status: "QUEUED",
+    solverStatus: "QUEUED",
+    versionId: null,
+    failureReason: null,
+    errorMessage: null,
+    createdAt: "2026-06-30T00:06:00Z",
     completedAt: null,
   });
 });
@@ -253,6 +334,122 @@ describe("App", () => {
     expect(screen.getByText("Snow Beer failed sample")).toBeInTheDocument();
     expect(screen.getByText("No feasible schedule")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "查看版本 ver-1" })).toHaveAttribute("href", "http://127.0.0.1:8081/");
+  });
+
+  it("opens the native import scenario workflow from data import", async () => {
+    render(<App />);
+
+    await screen.findByRole("heading", { name: "智能排产工作台" });
+    await userEvent.click(screen.getByRole("button", { name: "数据导入" }));
+
+    expect(await screen.findByRole("heading", { name: "数据导入与场景生成" })).toBeInTheDocument();
+    expect(screen.getByText("Resources")).toBeInTheDocument();
+    expect(screen.getByText("Recipes")).toBeInTheDocument();
+    expect(screen.getByText("Demands")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "下载导入模板" })).toHaveAttribute(
+      "href",
+      "http://127.0.0.1:8081/api/v1/model-import/template",
+    );
+  });
+
+  it("uploads required batches, generates a scenario, submits it, and opens jobs center", async () => {
+    render(<App />);
+
+    await screen.findByRole("heading", { name: "智能排产工作台" });
+    await userEvent.click(screen.getByRole("button", { name: "数据导入" }));
+
+    const dataVersion = (screen.getByLabelText("dataVersion") as HTMLInputElement).value;
+    const resourcesFile = new File(["res"], "resources.csv", { type: "text/csv" });
+    const recipesFile = new File(["rec"], "recipes.csv", { type: "text/csv" });
+    const demandsFile = new File(["dem"], "demands.csv", { type: "text/csv" });
+
+    await userEvent.upload(await screen.findByLabelText("上传 Resources"), resourcesFile);
+    await userEvent.upload(screen.getByLabelText("上传 Recipes"), recipesFile);
+    await userEvent.upload(screen.getByLabelText("上传 Demands"), demandsFile);
+
+    expect(await screen.findByText("imp-resources")).toBeInTheDocument();
+    expect(mockedUploadImportBatch).toHaveBeenNthCalledWith(1, "resources", resourcesFile, dataVersion);
+    expect(mockedUploadImportBatch).toHaveBeenNthCalledWith(2, "recipes", recipesFile, dataVersion);
+    expect(mockedUploadImportBatch).toHaveBeenNthCalledWith(3, "demands", demandsFile, dataVersion);
+    expect(screen.getByRole("button", { name: "生成场景" })).toBeEnabled();
+    await userEvent.click(screen.getByRole("button", { name: "生成场景" }));
+
+    expect(await screen.findByText("Operation 4")).toBeInTheDocument();
+    expect(mockedGenerateScenarioFromImportBatches).toHaveBeenCalledWith(
+      expect.objectContaining({
+        dataVersion,
+        horizonMinutes: 1440,
+        scenarioName: `formal-import-${dataVersion}`,
+      }),
+    );
+    expect(screen.getByText("Precedence 3")).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "提交排程任务" }));
+
+    expect(await screen.findByText("job-import")).toBeInTheDocument();
+    expect(mockedSubmitScheduleJob).toHaveBeenCalledWith(generatedScheduleRequest);
+    await userEvent.click(screen.getByRole("button", { name: "查看排程任务" }));
+
+    expect(await screen.findByRole("heading", { name: "排程任务中心" })).toBeInTheDocument();
+    expect(mockedFetchScheduleJobs).toHaveBeenCalledWith(20);
+  });
+
+  it("disables all batch uploads while any import batch upload is pending", async () => {
+    let resolveUpload: () => void = () => {};
+    mockedUploadImportBatch.mockImplementationOnce((kind, file, dataVersion) => new Promise((resolve) => {
+      resolveUpload = () => resolve({
+        importBatch: {
+          importId: `imp-${kind}`,
+          dataVersion,
+          importType: kind.toUpperCase(),
+          sourceFileName: file.name,
+          importedBy: "admin",
+          createdAt: "2026-06-30T00:00:00Z",
+          status: "SUCCEEDED",
+          successCount: 1,
+          failureCount: 0,
+          payload: {},
+          errors: [],
+          errorsDownloadPath: null,
+        },
+      });
+    }));
+
+    render(<App />);
+
+    await screen.findByRole("heading", { name: "智能排产工作台" });
+    await userEvent.click(screen.getByRole("button", { name: "数据导入" }));
+
+    const resourcesInput = await screen.findByLabelText("上传 Resources");
+    const recipesInput = screen.getByLabelText("上传 Recipes");
+    const demandsInput = screen.getByLabelText("上传 Demands");
+    const inventoryInput = screen.getByLabelText("上传 Inventory Balances");
+    const downtimesInput = screen.getByLabelText("上传 Downtimes");
+    const setupRulesInput = screen.getByLabelText("上传 Setup Rules");
+
+    await userEvent.upload(resourcesInput, new File(["res"], "resources.csv", { type: "text/csv" }));
+
+    await waitFor(() => {
+      expect(resourcesInput).toBeDisabled();
+      expect(recipesInput).toBeDisabled();
+      expect(demandsInput).toBeDisabled();
+      expect(inventoryInput).toBeDisabled();
+      expect(downtimesInput).toBeDisabled();
+      expect(setupRulesInput).toBeDisabled();
+    });
+    expect(screen.getAllByText("上传中...")).toHaveLength(1);
+
+    resolveUpload();
+    expect(await screen.findByText("imp-resources")).toBeInTheDocument();
+  });
+
+  it("opens the same workflow from scenario generation", async () => {
+    render(<App />);
+
+    await screen.findByRole("heading", { name: "智能排产工作台" });
+    await userEvent.click(screen.getByRole("button", { name: "场景生成" }));
+
+    expect(await screen.findByRole("heading", { name: "数据导入与场景生成" })).toBeInTheDocument();
+    expect(screen.getByText("场景参数")).toBeInTheDocument();
   });
 
   it("cancels and retries jobs from the native schedule jobs center", async () => {
