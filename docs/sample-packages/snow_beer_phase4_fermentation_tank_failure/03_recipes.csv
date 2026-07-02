@@ -1,0 +1,11 @@
+recipeId,productCode,operationCode,operationName,sequence,durationMinutes,candidateResourceIds,materialInputs,materialOutputs,setupGroup,remarks
+rcp_a500_tank_p4,31015630002000000,SUGARIZATION,糖化,1,120,mash_k1,MALT_A_LOT:1|HOPS_A_LOT:1,WORT_A500_LOT:1,BREW_A500,"A500 tank-rule failure chain"
+rcp_a500_tank_p4,31015630002000000,FERMENTATION,发酵,2,240,ferm_t1,WORT_A500_LOT:1,FERMENTED_A500_LOT:1,FERM_A500,"A500 assigned to fermentation tank 1 in rule contract"
+rcp_a500_tank_p4,31015630002000000,MATURATION_WAIT,成熟等待,3,360,maturity_hold_a,FERMENTED_A500_LOT:1,MATURED_A500_LOT:1,MATURE_A500,"POC maturity-window proxy operation"
+rcp_a500_tank_p4,31015630002000000,FILTRATION,过滤,4,90,filt_f1,MATURED_A500_LOT:1,BRIGHT_A500_LOT:1,FILT_A500,"Filtration consumes matured A500 lot"
+rcp_a500_tank_p4,31015630002000000,PACKAGING,包装,5,150,pack_l1,BRIGHT_A500_LOT:1|CAP_A_LOT:1|CTN_A_LOT:1|LBL_A_LOT:1,31015630002000000:1,PKG_500,"Packaging terminal operation"
+rcp_b600_tank_p4,31015630004000000,SUGARIZATION,糖化,1,140,mash_k1,MALT_B_LOT:1|HOPS_B_LOT:1,WORT_B600_LOT:1,BREW_B600,"B600 tank-rule failure chain"
+rcp_b600_tank_p4,31015630004000000,FERMENTATION,发酵,2,300,ferm_t1,WORT_B600_LOT:1,FERMENTED_B600_LOT:1,FERM_B600,"B600 deliberately assigned to same fermentation tank in rule contract"
+rcp_b600_tank_p4,31015630004000000,MATURATION_WAIT,成熟等待,3,420,maturity_hold_b,FERMENTED_B600_LOT:1,MATURED_B600_LOT:1,MATURE_B600,"POC maturity-window proxy operation"
+rcp_b600_tank_p4,31015630004000000,FILTRATION,过滤,4,120,filt_f1,MATURED_B600_LOT:1,BRIGHT_B600_LOT:1,FILT_B600,"Filtration consumes matured B600 lot"
+rcp_b600_tank_p4,31015630004000000,PACKAGING,包装,5,210,pack_l1,BRIGHT_B600_LOT:1|CAP_B_LOT:1|CTN_B_LOT:1|LBL_B_LOT:1,31015630004000000:1,PKG_600,"Packaging terminal operation"

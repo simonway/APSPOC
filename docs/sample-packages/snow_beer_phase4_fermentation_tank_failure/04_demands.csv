@@ -1,0 +1,3 @@
+demandId,productCode,quantity,dueMinutes,priority,fixedResourceId,fixedStartMinutes,remarks
+dem_a500_tank_fail,31015630002000000,1,1800,5,,,"A500 batch participates in deliberate non-mixing conflict"
+dem_b600_tank_fail,31015630004000000,1,2400,4,,,"B600 batch participates in deliberate non-mixing conflict"

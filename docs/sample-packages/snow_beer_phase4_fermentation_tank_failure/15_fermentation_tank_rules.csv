@@ -1,0 +1,3 @@
+caseId,expectedOutcome,expectedFailureType,tankId,tankCapacityUnits,batchId,demandId,productCode,batchVolumeUnits,mixingFamily,occupationStartMinutes,occupationEndMinutes,remarks
+tank_fail_a500,FAIL,NON_MIXING,ferm_t1,2,batch_a500_fail,dem_a500_tank_fail,31015630002000000,1,A500,120,860,"A500 occupies tank 1 in deliberate non-mixing conflict"
+tank_fail_b600,FAIL,NON_MIXING,ferm_t1,2,batch_b600_fail,dem_b600_tank_fail,31015630004000000,1,B600,120,860,"B600 overlaps the same tank with incompatible mixing family"

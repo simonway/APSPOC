@@ -1,0 +1,4 @@
+issueId,severity,status,category,description,owner,resolution
+ISSUE-01,WARN,OPEN,ContractBoundary,"Expected FAIL is a static tank-rule contract result and does not mean current solver rejects the request",Product,"Keep README and expected checks explicit"
+ISSUE-02,INFO,OPEN,FailureIsolation,"Capacity is set to 2 so the primary expected failure is NON_MIXING",Product,"Keep failure reason isolated"
+ISSUE-03,INFO,OPEN,OccupationWindow,"Occupation windows are explicit sample contract intervals, not solver-derived cross-operation occupancy",Algorithm,"Use as future solver fixture"

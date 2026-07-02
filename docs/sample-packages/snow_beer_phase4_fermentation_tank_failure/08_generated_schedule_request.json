@@ -1,0 +1,437 @@
+{
+  "scenarioName": "snow-beer-phase4-fermentation-tank-failure",
+  "dataVersion": "snow_beer_phase4_fermentation_tank_failure_2026_07_02",
+  "scheduleStartAt": "2026-12-24T00:00:00Z",
+  "horizonMinutes": 4320,
+  "resources": [
+    {
+      "id": "mash_k1",
+      "label": "糖化1锅",
+      "resourceType": "REACTOR",
+      "sortOrder": 1
+    },
+    {
+      "id": "ferm_t1",
+      "label": "发酵1罐",
+      "resourceType": "TANK",
+      "sortOrder": 2
+    },
+    {
+      "id": "ferm_t2",
+      "label": "发酵2罐",
+      "resourceType": "TANK",
+      "sortOrder": 3
+    },
+    {
+      "id": "maturity_hold_a",
+      "label": "成熟等待A区",
+      "resourceType": "OTHER",
+      "sortOrder": 4
+    },
+    {
+      "id": "maturity_hold_b",
+      "label": "成熟等待B区",
+      "resourceType": "OTHER",
+      "sortOrder": 5
+    },
+    {
+      "id": "filt_f1",
+      "label": "过滤1线",
+      "resourceType": "FILTER",
+      "sortOrder": 6
+    },
+    {
+      "id": "pack_l1",
+      "label": "包装1线",
+      "resourceType": "OTHER",
+      "sortOrder": 7
+    }
+  ],
+  "tasks": [
+    {
+      "id": "dem_a500_tank_fail__01_sugarization",
+      "label": "dem_a500_tank_fail / 糖化",
+      "productCode": "31015630002000000",
+      "durationMinutes": 120,
+      "dueMinutes": 1800,
+      "priority": 5,
+      "candidateResourceIds": [
+        "mash_k1"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "MALT_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "HOPS_A_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "WORT_A500_LOT",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "BREW_A500"
+    },
+    {
+      "id": "dem_a500_tank_fail__02_fermentation",
+      "label": "dem_a500_tank_fail / 发酵",
+      "productCode": "31015630002000000",
+      "durationMinutes": 240,
+      "dueMinutes": 1800,
+      "priority": 5,
+      "candidateResourceIds": [
+        "ferm_t1"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_tank_fail__01_sugarization"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "WORT_A500_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "FERMENTED_A500_LOT",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "FERM_A500"
+    },
+    {
+      "id": "dem_a500_tank_fail__03_maturation_wait",
+      "label": "dem_a500_tank_fail / 成熟等待",
+      "productCode": "31015630002000000",
+      "durationMinutes": 360,
+      "dueMinutes": 1800,
+      "priority": 5,
+      "candidateResourceIds": [
+        "maturity_hold_a"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_tank_fail__02_fermentation"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "FERMENTED_A500_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "MATURED_A500_LOT",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "MATURE_A500"
+    },
+    {
+      "id": "dem_a500_tank_fail__04_filtration",
+      "label": "dem_a500_tank_fail / 过滤",
+      "productCode": "31015630002000000",
+      "durationMinutes": 90,
+      "dueMinutes": 1800,
+      "priority": 5,
+      "candidateResourceIds": [
+        "filt_f1"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_tank_fail__03_maturation_wait"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "MATURED_A500_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "BRIGHT_A500_LOT",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "FILT_A500"
+    },
+    {
+      "id": "dem_a500_tank_fail__05_packaging",
+      "label": "dem_a500_tank_fail / 包装",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 1800,
+      "priority": 5,
+      "candidateResourceIds": [
+        "pack_l1"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_tank_fail__04_filtration"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "BRIGHT_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    },
+    {
+      "id": "dem_b600_tank_fail__01_sugarization",
+      "label": "dem_b600_tank_fail / 糖化",
+      "productCode": "31015630004000000",
+      "durationMinutes": 140,
+      "dueMinutes": 2400,
+      "priority": 4,
+      "candidateResourceIds": [
+        "mash_k1"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "MALT_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "HOPS_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "WORT_B600_LOT",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "BREW_B600"
+    },
+    {
+      "id": "dem_b600_tank_fail__02_fermentation",
+      "label": "dem_b600_tank_fail / 发酵",
+      "productCode": "31015630004000000",
+      "durationMinutes": 300,
+      "dueMinutes": 2400,
+      "priority": 4,
+      "candidateResourceIds": [
+        "ferm_t1"
+      ],
+      "predecessorTaskIds": [
+        "dem_b600_tank_fail__01_sugarization"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "WORT_B600_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "FERMENTED_B600_LOT",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "FERM_B600"
+    },
+    {
+      "id": "dem_b600_tank_fail__03_maturation_wait",
+      "label": "dem_b600_tank_fail / 成熟等待",
+      "productCode": "31015630004000000",
+      "durationMinutes": 420,
+      "dueMinutes": 2400,
+      "priority": 4,
+      "candidateResourceIds": [
+        "maturity_hold_b"
+      ],
+      "predecessorTaskIds": [
+        "dem_b600_tank_fail__02_fermentation"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "FERMENTED_B600_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "MATURED_B600_LOT",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "MATURE_B600"
+    },
+    {
+      "id": "dem_b600_tank_fail__04_filtration",
+      "label": "dem_b600_tank_fail / 过滤",
+      "productCode": "31015630004000000",
+      "durationMinutes": 120,
+      "dueMinutes": 2400,
+      "priority": 4,
+      "candidateResourceIds": [
+        "filt_f1"
+      ],
+      "predecessorTaskIds": [
+        "dem_b600_tank_fail__03_maturation_wait"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "MATURED_B600_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "BRIGHT_B600_LOT",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "FILT_B600"
+    },
+    {
+      "id": "dem_b600_tank_fail__05_packaging",
+      "label": "dem_b600_tank_fail / 包装",
+      "productCode": "31015630004000000",
+      "durationMinutes": 210,
+      "dueMinutes": 2400,
+      "priority": 4,
+      "candidateResourceIds": [
+        "pack_l1"
+      ],
+      "predecessorTaskIds": [
+        "dem_b600_tank_fail__04_filtration"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "BRIGHT_B600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630004000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_600"
+    }
+  ],
+  "downtimes": [],
+  "setupRules": [],
+  "inventoryBalances": [
+    {
+      "itemCode": "MALT_A_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "HOPS_A_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CAP_A_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CTN_A_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "LBL_A_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "MALT_B_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "HOPS_B_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CAP_B_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CTN_B_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "LBL_B_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    }
+  ],
+  "inventoryDemands": [
+    {
+      "demandId": "dem_a500_tank_fail",
+      "itemCode": "31015630002000000",
+      "quantity": 1,
+      "dueMinutes": 1800
+    },
+    {
+      "demandId": "dem_b600_tank_fail",
+      "itemCode": "31015630004000000",
+      "quantity": 1,
+      "dueMinutes": 2400
+    }
+  ],
+  "objectiveWeights": {
+    "tardiness": 100,
+    "earliness": 2,
+    "makespan": 1
+  },
+  "solverConfig": {
+    "timeLimitSeconds": 120,
+    "numSearchWorkers": 4
+  }
+}

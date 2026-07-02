@@ -1,0 +1,492 @@
+{
+  "scenarioName": "snow-beer-phase4-material-availability",
+  "dataVersion": "snow_beer_phase4_material_availability_2026_07_01",
+  "scheduleStartAt": "2026-12-24T00:00:00Z",
+  "horizonMinutes": 4320,
+  "requestedDemandQuantity": 2,
+  "plannedDemandQuantity": 2,
+  "inventoryBalanceCount": 10,
+  "inventoryDemandCount": 2,
+  "inventoryCoveredQuantity": 0,
+  "operationCount": 8,
+  "demandCount": 2,
+  "resourceCount": 8,
+  "downtimeCount": 0,
+  "setupRuleCount": 2,
+  "fermentationTankRuleCaseCount": 0,
+  "precedencePairCount": 6,
+  "bridgeAdjustmentCount": 0,
+  "demandCoverages": [
+    {
+      "demandId": "dem_a500_material_1224",
+      "productCode": "31015630002000000",
+      "requestedQuantity": 1,
+      "inventoryCoveredQuantity": 0,
+      "plannedQuantity": 1,
+      "dueMinutes": 900,
+      "priority": 5
+    },
+    {
+      "demandId": "dem_b600_material_1225",
+      "productCode": "31015630004000000",
+      "requestedQuantity": 1,
+      "inventoryCoveredQuantity": 0,
+      "plannedQuantity": 1,
+      "dueMinutes": 2880,
+      "priority": 4
+    }
+  ],
+  "inventoryBalances": [
+    {
+      "itemCode": "MALT_A_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 240,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "HOPS_A_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 240,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CAP_A_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 540,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CTN_A_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 540,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "LBL_A_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 540,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "MALT_B_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "HOPS_B_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CAP_B_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 1200,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CTN_B_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 1200,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "LBL_B_LOT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 1200,
+      "safetyStockQuantity": 0
+    }
+  ],
+  "inventoryDemands": [
+    {
+      "demandId": "dem_a500_material_1224",
+      "itemCode": "31015630002000000",
+      "quantity": 1,
+      "dueMinutes": 900
+    },
+    {
+      "demandId": "dem_b600_material_1225",
+      "itemCode": "31015630004000000",
+      "quantity": 1,
+      "dueMinutes": 2880
+    }
+  ],
+  "operations": [
+    {
+      "operationId": "dem_a500_material_1224__01_sugarization",
+      "demandId": "dem_a500_material_1224",
+      "demandUnitIndex": 1,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_a500_material_p4",
+      "operationCode": "SUGARIZATION",
+      "operationName": "糖化",
+      "sequence": 1,
+      "durationMinutes": 120,
+      "candidateResourceIds": [
+        "mash_k1",
+        "mash_k2"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "BREW_A500",
+      "materialInputs": [
+        {
+          "itemCode": "MALT_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "HOPS_A_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "WORT_A500_LOT",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 900,
+      "priority": 5,
+      "quantity": "1",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_material_1224__02_fermentation",
+      "demandId": "dem_a500_material_1224",
+      "demandUnitIndex": 1,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_a500_material_p4",
+      "operationCode": "FERMENTATION",
+      "operationName": "发酵",
+      "sequence": 2,
+      "durationMinutes": 240,
+      "candidateResourceIds": [
+        "ferm_t1",
+        "ferm_t2"
+      ],
+      "predecessorOperationIds": [
+        "dem_a500_material_1224__01_sugarization"
+      ],
+      "setupGroup": "FERM_A500",
+      "materialInputs": [
+        {
+          "itemCode": "WORT_A500_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "FERMENTED_A500_LOT",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 900,
+      "priority": 5,
+      "quantity": "1",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_material_1224__03_filtration",
+      "demandId": "dem_a500_material_1224",
+      "demandUnitIndex": 1,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_a500_material_p4",
+      "operationCode": "FILTRATION",
+      "operationName": "过滤",
+      "sequence": 3,
+      "durationMinutes": 90,
+      "candidateResourceIds": [
+        "filt_f1",
+        "filt_f2"
+      ],
+      "predecessorOperationIds": [
+        "dem_a500_material_1224__02_fermentation"
+      ],
+      "setupGroup": "FILT_A500",
+      "materialInputs": [
+        {
+          "itemCode": "FERMENTED_A500_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "BRIGHT_A500_LOT",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 900,
+      "priority": 5,
+      "quantity": "1",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_material_1224__04_packaging",
+      "demandId": "dem_a500_material_1224",
+      "demandUnitIndex": 1,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_a500_material_p4",
+      "operationCode": "PACKAGING",
+      "operationName": "包装",
+      "sequence": 4,
+      "durationMinutes": 150,
+      "candidateResourceIds": [
+        "pack_l1",
+        "pack_l2"
+      ],
+      "predecessorOperationIds": [
+        "dem_a500_material_1224__03_filtration"
+      ],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BRIGHT_A500_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 900,
+      "priority": 5,
+      "quantity": "1",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_b600_material_1225__01_sugarization",
+      "demandId": "dem_b600_material_1225",
+      "demandUnitIndex": 1,
+      "productCode": "31015630004000000",
+      "recipeId": "rcp_b600_material_p4",
+      "operationCode": "SUGARIZATION",
+      "operationName": "糖化",
+      "sequence": 1,
+      "durationMinutes": 140,
+      "candidateResourceIds": [
+        "mash_k1",
+        "mash_k2"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "BREW_B600",
+      "materialInputs": [
+        {
+          "itemCode": "MALT_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "HOPS_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "WORT_B600_LOT",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 2880,
+      "priority": 4,
+      "quantity": "1",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_b600_material_1225__02_fermentation",
+      "demandId": "dem_b600_material_1225",
+      "demandUnitIndex": 1,
+      "productCode": "31015630004000000",
+      "recipeId": "rcp_b600_material_p4",
+      "operationCode": "FERMENTATION",
+      "operationName": "发酵",
+      "sequence": 2,
+      "durationMinutes": 300,
+      "candidateResourceIds": [
+        "ferm_t2"
+      ],
+      "predecessorOperationIds": [
+        "dem_b600_material_1225__01_sugarization"
+      ],
+      "setupGroup": "FERM_B600",
+      "materialInputs": [
+        {
+          "itemCode": "WORT_B600_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "FERMENTED_B600_LOT",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 2880,
+      "priority": 4,
+      "quantity": "1",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_b600_material_1225__03_filtration",
+      "demandId": "dem_b600_material_1225",
+      "demandUnitIndex": 1,
+      "productCode": "31015630004000000",
+      "recipeId": "rcp_b600_material_p4",
+      "operationCode": "FILTRATION",
+      "operationName": "过滤",
+      "sequence": 3,
+      "durationMinutes": 120,
+      "candidateResourceIds": [
+        "filt_f1",
+        "filt_f2"
+      ],
+      "predecessorOperationIds": [
+        "dem_b600_material_1225__02_fermentation"
+      ],
+      "setupGroup": "FILT_B600",
+      "materialInputs": [
+        {
+          "itemCode": "FERMENTED_B600_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "BRIGHT_B600_LOT",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 2880,
+      "priority": 4,
+      "quantity": "1",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_b600_material_1225__04_packaging",
+      "demandId": "dem_b600_material_1225",
+      "demandUnitIndex": 1,
+      "productCode": "31015630004000000",
+      "recipeId": "rcp_b600_material_p4",
+      "operationCode": "PACKAGING",
+      "operationName": "包装",
+      "sequence": 4,
+      "durationMinutes": 210,
+      "candidateResourceIds": [
+        "pack_l2"
+      ],
+      "predecessorOperationIds": [
+        "dem_b600_material_1225__03_filtration"
+      ],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BRIGHT_B600_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_B_LOT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_B_LOT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630004000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 2880,
+      "priority": 4,
+      "quantity": "1",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    }
+  ],
+  "precedencePairs": [
+    {
+      "from": "dem_a500_material_1224__01_sugarization",
+      "to": "dem_a500_material_1224__02_fermentation"
+    },
+    {
+      "from": "dem_a500_material_1224__02_fermentation",
+      "to": "dem_a500_material_1224__03_filtration"
+    },
+    {
+      "from": "dem_a500_material_1224__03_filtration",
+      "to": "dem_a500_material_1224__04_packaging"
+    },
+    {
+      "from": "dem_b600_material_1225__01_sugarization",
+      "to": "dem_b600_material_1225__02_fermentation"
+    },
+    {
+      "from": "dem_b600_material_1225__02_fermentation",
+      "to": "dem_b600_material_1225__03_filtration"
+    },
+    {
+      "from": "dem_b600_material_1225__03_filtration",
+      "to": "dem_b600_material_1225__04_packaging"
+    }
+  ],
+  "setupRules": [
+    {
+      "fromSetupGroup": "PKG_500",
+      "toSetupGroup": "PKG_600",
+      "resourceType": "OTHER",
+      "resourceId": null,
+      "setupMinutes": 60
+    },
+    {
+      "fromSetupGroup": "PKG_600",
+      "toSetupGroup": "PKG_500",
+      "resourceType": "OTHER",
+      "resourceId": null,
+      "setupMinutes": 60
+    }
+  ],
+  "fermentationTankRuleSummary": null,
+  "fermentationTankRuleCases": [],
+  "bridgeAdjustments": []
+}

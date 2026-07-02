@@ -1,0 +1,4 @@
+issueId,severity,status,category,description,owner,resolution
+ISSUE-01,INFO,OPEN,PhaseBoundary,"This package validates material availability timing only; maturity windows and tank rules are separate Phase 4 slices",Product,"Keep README scope boundaries explicit"
+ISSUE-02,INFO,OPEN,InventoryEventModel,"InventoryBalance supports one availability checkpoint per item, so multiple partial arrivals are compressed",Algorithm,"Use availableFromMinutes as the current POC event model"
+ISSUE-03,INFO,OPEN,QuantityModel,"All quantities are lot proxy units rather than KL or bottle counts",Planner,"Do not use this package as a mass-balance accounting source"

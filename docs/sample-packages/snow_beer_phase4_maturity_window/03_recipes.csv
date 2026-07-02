@@ -1,0 +1,6 @@
+recipeId,productCode,operationCode,operationName,sequence,durationMinutes,candidateResourceIds,materialInputs,materialOutputs,setupGroup,remarks
+rcp_a500_maturity_p4,31015630002000000,SUGARIZATION,糖化,1,120,mash_k1,MALT_A_LOT:1|HOPS_A_LOT:1,WORT_A500_LOT:1,BREW_A500,"Fixed-duration sugarization proxy"
+rcp_a500_maturity_p4,31015630002000000,FERMENTATION,发酵,2,240,ferm_t1,WORT_A500_LOT:1,FERMENTED_A500_LOT:1,FERM_A500,"Discrete fermentation task; exact tank residency deferred"
+rcp_a500_maturity_p4,31015630002000000,MATURATION_WAIT,成熟等待,3,360,maturity_hold_a,FERMENTED_A500_LOT:1,MATURED_A500_LOT:1,MATURE_A500,"POC maturity-window proxy operation"
+rcp_a500_maturity_p4,31015630002000000,FILTRATION,过滤,4,90,filt_f1,MATURED_A500_LOT:1,BRIGHT_A500_LOT:1,FILT_A500,"Filtration can only start after maturity proxy completes"
+rcp_a500_maturity_p4,31015630002000000,PACKAGING,包装,5,150,pack_l1,BRIGHT_A500_LOT:1|CAP_A_LOT:1|CTN_A_LOT:1|LBL_A_LOT:1,31015630002000000:1,PKG_500,"Final packaging with material kitting"

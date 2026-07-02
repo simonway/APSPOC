@@ -1,0 +1,2 @@
+demandId,productCode,quantity,dueMinutes,priority,fixedResourceId,fixedStartMinutes,remarks
+dem_a500_maturity_1224,31015630002000000,1,1440,5,,,"A500 demand includes explicit maturity wait before filtration"

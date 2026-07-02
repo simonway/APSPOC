@@ -1,0 +1,6 @@
+id,label,resourceType,sortOrder,capacity,remarks
+mash_k1,糖化1锅,REACTOR,1,50KL,"Discrete sugarization proxy resource"
+ferm_t1,发酵1罐,TANK,2,50KL,"Discrete fermentation task resource; exact tank residency is not modeled"
+maturity_hold_a,成熟等待A区,OTHER,3,POC,"POC maturity wait proxy resource, not a physical tank"
+filt_f1,过滤1线,FILTER,4,80KL,"Discrete filtration proxy resource"
+pack_l1,包装1线,OTHER,5,500ml,"Packaging line for A500 family"

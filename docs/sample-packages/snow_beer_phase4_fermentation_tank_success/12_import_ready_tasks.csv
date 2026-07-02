@@ -1,0 +1,11 @@
+id,label,productCode,durationMinutes,dueMinutes,priority,candidateResourceIds,pinnedResourceId,pinnedStartMinutes,predecessorTaskIds,setupGroup
+dem_a500_tank_success__01_sugarization,dem_a500_tank_success / 糖化,31015630002000000,120,1800,5,mash_k1,,,,BREW_A500
+dem_a500_tank_success__02_fermentation,dem_a500_tank_success / 发酵,31015630002000000,240,1800,5,ferm_t1,,,dem_a500_tank_success__01_sugarization,FERM_A500
+dem_a500_tank_success__03_maturation_wait,dem_a500_tank_success / 成熟等待,31015630002000000,360,1800,5,maturity_hold_a,,,dem_a500_tank_success__02_fermentation,MATURE_A500
+dem_a500_tank_success__04_filtration,dem_a500_tank_success / 过滤,31015630002000000,90,1800,5,filt_f1,,,dem_a500_tank_success__03_maturation_wait,FILT_A500
+dem_a500_tank_success__05_packaging,dem_a500_tank_success / 包装,31015630002000000,150,1800,5,pack_l1,,,dem_a500_tank_success__04_filtration,PKG_500
+dem_b600_tank_success__01_sugarization,dem_b600_tank_success / 糖化,31015630004000000,140,2400,4,mash_k1,,,,BREW_B600
+dem_b600_tank_success__02_fermentation,dem_b600_tank_success / 发酵,31015630004000000,300,2400,4,ferm_t2,,,dem_b600_tank_success__01_sugarization,FERM_B600
+dem_b600_tank_success__03_maturation_wait,dem_b600_tank_success / 成熟等待,31015630004000000,420,2400,4,maturity_hold_b,,,dem_b600_tank_success__02_fermentation,MATURE_B600
+dem_b600_tank_success__04_filtration,dem_b600_tank_success / 过滤,31015630004000000,120,2400,4,filt_f1,,,dem_b600_tank_success__03_maturation_wait,FILT_B600
+dem_b600_tank_success__05_packaging,dem_b600_tank_success / 包装,31015630004000000,210,2400,4,pack_l1,,,dem_b600_tank_success__04_filtration,PKG_600

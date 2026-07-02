@@ -1,0 +1,11 @@
+itemCode,availableQuantity,availableFromMinutes,safetyStockQuantity
+MALT_A_LOT,1,0,0
+HOPS_A_LOT,1,0,0
+CAP_A_LOT,1,0,0
+CTN_A_LOT,1,0,0
+LBL_A_LOT,1,0,0
+MALT_B_LOT,1,0,0
+HOPS_B_LOT,1,0,0
+CAP_B_LOT,1,0,0
+CTN_B_LOT,1,0,0
+LBL_B_LOT,1,0,0
