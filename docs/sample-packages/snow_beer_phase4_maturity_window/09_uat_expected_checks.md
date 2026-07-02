@@ -35,7 +35,11 @@
 
 - Each demand expands into a linear operation chain in `10_generated_operation_metadata.json`.
 - Every non-first operation must list exactly one predecessor operation id.
-- Setup rules cover cross-family switches used by the sample setup groups.
+- Generated operation metadata includes the `MATURATION_WAIT` maturity proxy operation.
+- The maturity proxy sits between fermentation and filtration in the operation chain.
+- `MATURATION_WAIT` consumes `FERMENTED_A500_LOT` and outputs `MATURED_A500_LOT`.
+- Filtration consumes `MATURED_A500_LOT`, proving filtration cannot bypass the maturity proxy.
+- This is a POC maturity-window approximation, not exact fermentation tank residency support.
 - Every operation should preserve the recipe-level material inputs and resolved material outputs.
 - Demand-level fixed resource and fixed start are intentionally mapped onto the first operation only.
 

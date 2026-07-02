@@ -34,6 +34,7 @@ IMPORT_SPECS: tuple[tuple[str, str, str], ...] = (
     ("setup-rules", "06_setup_rules.csv", "setupRules"),
     ("inventory-balances", "14_inventory_balances.csv", "inventoryBalances"),
 )
+OPTIONAL_EMPTY_IMPORT_ENDPOINTS = {"downtimes", "setup-rules"}
 
 CSV_ENCODINGS: tuple[str, ...] = ("utf-8-sig", "utf-8", "gb18030", "gbk")
 
@@ -107,6 +108,11 @@ def load_request_context(package_dir: Path) -> dict[str, str]:
     return context
 
 
+def has_csv_data_rows(content: str) -> bool:
+    reader = csv.DictReader(io.StringIO(content))
+    return any(any((value or "").strip() for value in row.values()) for row in reader)
+
+
 def poll_job(
     client: BackendSmokeClient,
     job_id: str,
@@ -148,6 +154,15 @@ def import_package(
     summary: dict[str, Any] = {}
     for endpoint, filename, payload_key in IMPORT_SPECS:
         content = read_text_with_fallback(package_dir / filename)
+        if endpoint in OPTIONAL_EMPTY_IMPORT_ENDPOINTS and not has_csv_data_rows(content):
+            summary[endpoint] = {
+                "importId": None,
+                "status": "SKIPPED_EMPTY_FILE",
+                "successCount": 0,
+                "failureCount": 0,
+                "rows": 0,
+            }
+            continue
         status, payload, _ = client.upload_csv(
             f"/api/v1/model-import/{endpoint}?dataVersion={data_version}",
             filename,

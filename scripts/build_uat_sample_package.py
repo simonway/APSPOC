@@ -671,6 +671,156 @@ def interval_conflicts_with_downtime(
     return True, f"fixed interval [{start_minutes}, {end_minutes}) overlaps downtime {downtime_ranges}"
 
 
+def material_item_codes(materials: Any) -> list[str]:
+    if not isinstance(materials, list):
+        return []
+    codes: list[str] = []
+    for material in materials:
+        if isinstance(material, dict):
+            item_code = str(material.get("itemCode", "")).strip()
+            if item_code:
+                codes.append(item_code)
+    return codes
+
+
+def format_item_codes(item_codes: list[str]) -> str:
+    unique_codes = list(dict.fromkeys(item_codes))
+    return ", ".join(f"`{item_code}`" for item_code in unique_codes)
+
+
+def build_maturity_wait_checks(operations: list[dict[str, Any]]) -> list[str]:
+    operations_by_id = {
+        str(operation.get("operationId", "")): operation
+        for operation in operations
+        if operation.get("operationId")
+    }
+    maturity_operations = [
+        operation
+        for operation in operations
+        if operation.get("operationCode") == "MATURATION_WAIT"
+    ]
+    if not maturity_operations:
+        return []
+
+    checks = ["- Generated operation metadata includes the `MATURATION_WAIT` maturity proxy operation."]
+    for maturity_operation in maturity_operations:
+        maturity_operation_id = str(maturity_operation.get("operationId", ""))
+        predecessor_operations = [
+            operations_by_id[predecessor_id]
+            for predecessor_id in maturity_operation.get("predecessorOperationIds", [])
+            if predecessor_id in operations_by_id
+        ]
+        successor_operations = [
+            operation
+            for operation in operations
+            if maturity_operation_id in operation.get("predecessorOperationIds", [])
+        ]
+        predecessor_codes = {operation.get("operationCode") for operation in predecessor_operations}
+        successor_codes = {operation.get("operationCode") for operation in successor_operations}
+        if "FERMENTATION" in predecessor_codes and "FILTRATION" in successor_codes:
+            checks.append("- The maturity proxy sits between fermentation and filtration in the operation chain.")
+
+        input_codes = material_item_codes(maturity_operation.get("materialInputs"))
+        output_codes = material_item_codes(maturity_operation.get("materialOutputs"))
+        if input_codes and output_codes:
+            checks.append(
+                f"- `MATURATION_WAIT` consumes {format_item_codes(input_codes)} and outputs {format_item_codes(output_codes)}."
+            )
+
+        filtration_input_codes: list[str] = []
+        for successor_operation in successor_operations:
+            if successor_operation.get("operationCode") == "FILTRATION":
+                filtration_input_codes.extend(material_item_codes(successor_operation.get("materialInputs")))
+        matured_codes = [item_code for item_code in output_codes if item_code in filtration_input_codes]
+        if matured_codes:
+            checks.append(
+                f"- Filtration consumes {format_item_codes(matured_codes)}, proving filtration cannot bypass the maturity proxy."
+            )
+
+    checks.append("- This is a POC maturity-window approximation, not exact fermentation tank residency support.")
+    return checks
+
+
+def build_expected_checks(
+    context: dict[str, Any],
+    resources: list[ResourceRow],
+    demands: list[DemandRow],
+    inventory_balances: list[InventoryBalanceRow],
+    downtimes: list[DowntimeRow],
+    setup_rules: list[SetupRuleRow],
+    operations: list[dict[str, Any]],
+    precedence_pairs: list[dict[str, str]],
+    bridge_adjustments: list[BridgeAdjustment],
+    requested_demand_quantity: int,
+    planned_demand_quantity: int,
+    inventory_covered_quantity: int,
+) -> str:
+    fixed_operation_count = sum(1 for demand in demands if demand.fixed_resource_id or demand.fixed_start_minutes is not None)
+    products = sorted({operation["productCode"] for operation in operations})
+
+    semantic_checks = [
+        "- Each demand expands into a linear operation chain in `10_generated_operation_metadata.json`.",
+        "- Every non-first operation must list exactly one predecessor operation id.",
+    ]
+    if setup_rules:
+        semantic_checks.append("- Setup rules cover cross-family switches used by the sample setup groups.")
+    semantic_checks.extend(build_maturity_wait_checks(operations))
+    semantic_checks.extend(
+        [
+            "- Every operation should preserve the recipe-level material inputs and resolved material outputs.",
+            "- Demand-level fixed resource and fixed start are intentionally mapped onto the first operation only.",
+        ]
+    )
+
+    return "\n".join(
+        [
+            "# Sample Package Expected Checks",
+            "",
+            "## Sample Summary",
+            "",
+            f"- dataVersion: `{context['dataVersion']}`",
+            f"- scheduleStartAt: `{context['scheduleStartAt']}`",
+            f"- horizonMinutes: `{context['horizonMinutes']}`",
+            f"- resources: `{len(resources)}`",
+            f"- demands: `{len(demands)}`",
+            f"- requested demand quantity: `{requested_demand_quantity}`",
+            f"- planned demand quantity: `{planned_demand_quantity}`",
+            f"- inventory-covered demand quantity: `{inventory_covered_quantity}`",
+            f"- inventory balances: `{len(inventory_balances)}`",
+            f"- inventory demands: `{len(demands)}`",
+            f"- generated operations/tasks: `{len(operations)}`",
+            f"- downtimes: `{len(downtimes)}`",
+            f"- setup rules: `{len(setup_rules)}`",
+            f"- precedence pairs: `{len(precedence_pairs)}`",
+            f"- fixed first-operation constraints: `{fixed_operation_count}`",
+            f"- baseline bridge adjustments: `{len(bridge_adjustments)}`",
+            f"- product codes: `{', '.join(products)}`",
+            "",
+            "## Baseline Checks",
+            "",
+            "- Canonical `03/04/05/06/14` CSV files should pass the current import-batch endpoints without manual edits.",
+            "- Legacy `11/12/13` CSV exports should still pass the current flat `resources/tasks/downtimes` import endpoints.",
+            "- `08_generated_schedule_request.json` should be directly submittable to `POST /api/v1/schedule/jobs`.",
+            "- All generated task candidate resources must exist in `02_resources.csv`.",
+            "- All generated predecessor ids must point to other generated task ids.",
+            "- All generated task `materialInputs/materialOutputs` must use positive integer quantities.",
+            "- All generated downtimes must stay within the request horizon.",
+            "- Any baseline bridge adjustments should be reviewable in `10_generated_operation_metadata.json` under `bridgeAdjustments`.",
+            "",
+            "## Semantic Checks",
+            "",
+            *semantic_checks,
+            "",
+            "## Known Bridge Limits",
+            "",
+            "- `12_import_ready_tasks.csv` is a legacy flat-task compatibility export and does not carry material IO because the current task import endpoint does not support those columns.",
+            "- If a fixed first-operation interval conflicts with a hard downtime window, the baseline request may relax `pinnedStartMinutes` while retaining the original constraint in metadata.",
+            "- Finished-goods inventory coverage is supported by the generator; interpret the exact inventory emphasis from the package README because some samples focus on raw materials while others also use opening finished-goods stock.",
+            "- Use `10_generated_operation_metadata.json` as the semantic source of truth for future V2/V3 solver and import work.",
+        ]
+    )
+
+
 def build_outputs(
     context: dict[str, Any],
     resources: list[ResourceRow],
@@ -1013,59 +1163,19 @@ def build_outputs(
         for downtime in downtimes
     ]
 
-    fixed_operation_count = sum(1 for demand in demands if demand.fixed_resource_id or demand.fixed_start_minutes is not None)
-    bridge_adjustment_count = len(bridge_adjustments)
-    products = sorted({operation["productCode"] for operation in operations})
-    expected_checks = "\n".join(
-        [
-            "# Sample Package Expected Checks",
-            "",
-            "## Sample Summary",
-            "",
-            f"- dataVersion: `{context['dataVersion']}`",
-            f"- scheduleStartAt: `{context['scheduleStartAt']}`",
-            f"- horizonMinutes: `{context['horizonMinutes']}`",
-            f"- resources: `{len(resources)}`",
-            f"- demands: `{len(demands)}`",
-            f"- requested demand quantity: `{requested_demand_quantity}`",
-            f"- planned demand quantity: `{planned_demand_quantity}`",
-            f"- inventory-covered demand quantity: `{inventory_covered_quantity}`",
-            f"- inventory balances: `{len(inventory_balances)}`",
-            f"- inventory demands: `{len(demands)}`",
-            f"- generated operations/tasks: `{len(operations)}`",
-            f"- downtimes: `{len(downtimes)}`",
-            f"- setup rules: `{len(setup_rules)}`",
-            f"- precedence pairs: `{len(precedence_pairs)}`",
-            f"- fixed first-operation constraints: `{fixed_operation_count}`",
-            f"- baseline bridge adjustments: `{bridge_adjustment_count}`",
-            f"- product codes: `{', '.join(products)}`",
-            "",
-            "## Baseline Checks",
-            "",
-            "- Canonical `03/04/05/06/14` CSV files should pass the current import-batch endpoints without manual edits.",
-            "- Legacy `11/12/13` CSV exports should still pass the current flat `resources/tasks/downtimes` import endpoints.",
-            "- `08_generated_schedule_request.json` should be directly submittable to `POST /api/v1/schedule/jobs`.",
-            "- All generated task candidate resources must exist in `02_resources.csv`.",
-            "- All generated predecessor ids must point to other generated task ids.",
-            "- All generated task `materialInputs/materialOutputs` must use positive integer quantities.",
-            "- All generated downtimes must stay within the request horizon.",
-            "- Any baseline bridge adjustments should be reviewable in `10_generated_operation_metadata.json` under `bridgeAdjustments`.",
-            "",
-            "## Semantic Checks",
-            "",
-            "- Each demand expands into a linear operation chain in `10_generated_operation_metadata.json`.",
-            "- Every non-first operation must list exactly one predecessor operation id.",
-            "- Setup rules cover cross-family switches used by the sample setup groups.",
-            "- Every operation should preserve the recipe-level material inputs and resolved material outputs.",
-            "- Demand-level fixed resource and fixed start are intentionally mapped onto the first operation only.",
-            "",
-            "## Known Bridge Limits",
-            "",
-            "- `12_import_ready_tasks.csv` is a legacy flat-task compatibility export and does not carry material IO because the current task import endpoint does not support those columns.",
-            "- If a fixed first-operation interval conflicts with a hard downtime window, the baseline request may relax `pinnedStartMinutes` while retaining the original constraint in metadata.",
-            "- Finished-goods inventory coverage is supported by the generator; interpret the exact inventory emphasis from the package README because some samples focus on raw materials while others also use opening finished-goods stock.",
-            "- Use `10_generated_operation_metadata.json` as the semantic source of truth for future V2/V3 solver and import work.",
-        ]
+    expected_checks = build_expected_checks(
+        context,
+        resources,
+        demands,
+        inventory_balances,
+        downtimes,
+        setup_rules,
+        operations,
+        precedence_pairs,
+        bridge_adjustments,
+        requested_demand_quantity,
+        planned_demand_quantity,
+        inventory_covered_quantity,
     )
 
     return schedule_request, operation_metadata, resources_csv, tasks_csv, downtimes_csv, expected_checks
