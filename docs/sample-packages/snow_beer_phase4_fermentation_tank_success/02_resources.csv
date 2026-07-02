@@ -1,0 +1,8 @@
+id,label,resourceType,sortOrder,capacity,remarks
+mash_k1,糖化1锅,REACTOR,1,50KL,"Discrete sugarization proxy resource"
+ferm_t1,发酵1罐,TANK,2,1,"Tank-rule contract capacity 1 proxy lot"
+ferm_t2,发酵2罐,TANK,3,1,"Tank-rule contract capacity 1 proxy lot"
+maturity_hold_a,成熟等待A区,OTHER,4,1,"POC maturity wait proxy resource"
+maturity_hold_b,成熟等待B区,OTHER,5,1,"POC maturity wait proxy resource"
+filt_f1,过滤1线,FILTER,6,80KL,"Discrete filtration proxy resource"
+pack_l1,包装1线,OTHER,7,500ml/600ml,"Packaging line proxy"

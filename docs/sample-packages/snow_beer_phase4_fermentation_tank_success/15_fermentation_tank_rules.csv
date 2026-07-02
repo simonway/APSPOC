@@ -1,0 +1,3 @@
+caseId,expectedOutcome,expectedFailureType,tankId,tankCapacityUnits,batchId,demandId,productCode,batchVolumeUnits,mixingFamily,occupationStartMinutes,occupationEndMinutes,remarks
+tank_success_a500,PASS,NONE,ferm_t1,1,batch_a500_success,dem_a500_tank_success,31015630002000000,1,A500,120,720,"A500 occupies tank 1 within capacity"
+tank_success_b600,PASS,NONE,ferm_t2,1,batch_b600_success,dem_b600_tank_success,31015630004000000,1,B600,140,860,"B600 occupies tank 2 within capacity"

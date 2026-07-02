@@ -13,6 +13,7 @@
   "resourceCount": 5,
   "downtimeCount": 0,
   "setupRuleCount": 0,
+  "fermentationTankRuleCaseCount": 0,
   "precedencePairCount": 4,
   "bridgeAdjustmentCount": 0,
   "demandCoverages": [
@@ -286,5 +287,7 @@
     }
   ],
   "setupRules": [],
+  "fermentationTankRuleSummary": null,
+  "fermentationTankRuleCases": [],
   "bridgeAdjustments": []
 }

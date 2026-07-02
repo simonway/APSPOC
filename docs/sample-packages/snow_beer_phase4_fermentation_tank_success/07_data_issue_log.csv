@@ -1,0 +1,4 @@
+issueId,severity,status,category,description,owner,resolution
+ISSUE-01,WARN,OPEN,ContractBoundary,"15_fermentation_tank_rules.csv is a static contract check and does not change current solver behavior",Product,"Keep README and expected checks explicit"
+ISSUE-02,INFO,OPEN,CapacityUnit,"Tank capacity uses proxy lot units rather than KL",Product,"Map proxy units to KL in a later refinement"
+ISSUE-03,INFO,OPEN,OccupationWindow,"Occupation windows are explicit sample contract intervals, not solver-derived cross-operation occupancy",Algorithm,"Use as future solver fixture"

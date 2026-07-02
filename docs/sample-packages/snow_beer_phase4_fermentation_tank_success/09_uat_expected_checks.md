@@ -2,24 +2,24 @@
 
 ## Sample Summary
 
-- dataVersion: `snow_beer_phase4_maturity_window_2026_07_01`
+- dataVersion: `snow_beer_phase4_fermentation_tank_success_2026_07_02`
 - scheduleStartAt: `2026-12-24T00:00:00Z`
 - horizonMinutes: `4320`
-- resources: `5`
-- demands: `1`
-- requested demand quantity: `1`
-- planned demand quantity: `1`
+- resources: `7`
+- demands: `2`
+- requested demand quantity: `2`
+- planned demand quantity: `2`
 - inventory-covered demand quantity: `0`
-- inventory balances: `5`
-- inventory demands: `1`
-- generated operations/tasks: `5`
+- inventory balances: `10`
+- inventory demands: `2`
+- generated operations/tasks: `10`
 - downtimes: `0`
 - setup rules: `0`
-- fermentation tank rule cases: `0`
-- precedence pairs: `4`
+- fermentation tank rule cases: `2`
+- precedence pairs: `8`
 - fixed first-operation constraints: `0`
 - baseline bridge adjustments: `0`
-- product codes: `31015630002000000`
+- product codes: `31015630002000000, 31015630004000000`
 
 ## Baseline Checks
 
@@ -40,7 +40,14 @@
 - The maturity proxy sits between fermentation and filtration in the operation chain.
 - `MATURATION_WAIT` consumes `FERMENTED_A500_LOT` and outputs `MATURED_A500_LOT`.
 - Filtration consumes `MATURED_A500_LOT`, proving filtration cannot bypass the maturity proxy.
+- The maturity proxy sits between fermentation and filtration in the operation chain.
+- `MATURATION_WAIT` consumes `FERMENTED_B600_LOT` and outputs `MATURED_B600_LOT`.
+- Filtration consumes `MATURED_B600_LOT`, proving filtration cannot bypass the maturity proxy.
 - This is a POC maturity-window approximation, not exact fermentation tank residency support.
+- `15_fermentation_tank_rules.csv` is parsed as a static contract check for future tank-rule work.
+- Fermentation tank rule cases: `2` (`2` expected PASS, `0` expected FAIL).
+- Tank-rule PASS/FAIL expectations must match static capacity and non-mixing analysis.
+- Tank-rule contract checks do not change the current schedule request or claim solver enforcement.
 - Every operation should preserve the recipe-level material inputs and resolved material outputs.
 - Demand-level fixed resource and fixed start are intentionally mapped onto the first operation only.
 

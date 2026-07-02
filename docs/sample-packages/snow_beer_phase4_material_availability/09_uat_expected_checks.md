@@ -15,6 +15,7 @@
 - generated operations/tasks: `8`
 - downtimes: `0`
 - setup rules: `2`
+- fermentation tank rule cases: `0`
 - precedence pairs: `6`
 - fixed first-operation constraints: `0`
 - baseline bridge adjustments: `0`
