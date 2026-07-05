@@ -8,11 +8,13 @@ public record SolverResponse(
         long solveTimeMs,
         List<ScheduledTask> scheduledTasks,
         List<Changeover> changeovers,
-        Kpis kpis
+        Kpis kpis,
+        List<FailureReason> failureReasons
 ) {
     public SolverResponse {
         scheduledTasks = scheduledTasks == null ? List.of() : List.copyOf(scheduledTasks);
         changeovers = changeovers == null ? List.of() : List.copyOf(changeovers);
+        failureReasons = failureReasons == null ? List.of() : List.copyOf(failureReasons);
     }
 
     public record ScheduledTask(
@@ -41,6 +43,14 @@ public record SolverResponse(
             int totalMakespan,
             int lateTaskCount,
             double averageUtilization
+    ) {
+    }
+
+    public record FailureReason(
+            String reasonType,
+            String message,
+            String itemCode,
+            String demandId
     ) {
     }
 }

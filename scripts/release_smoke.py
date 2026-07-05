@@ -265,8 +265,11 @@ def run_material_flow_smoke(client: BackendSmokeClient) -> dict[str, Any]:
     infeasible_job = poll_job(client, failed_job_id, "poll infeasible material-flow job")
     if infeasible_job.get("status") != "FAILED":
         raise SmokeError(f"infeasible material-flow job ended unexpectedly: {infeasible_job}")
-    if "INFEASIBLE" not in str(infeasible_job.get("errorMessage")):
+    infeasible_error_message = str(infeasible_job.get("errorMessage"))
+    if "INFEASIBLE" not in infeasible_error_message:
         raise SmokeError(f"infeasible material-flow job did not surface INFEASIBLE: {infeasible_job}")
+    if "MATERIAL_SHORTAGE" not in infeasible_error_message or "RM-100" not in infeasible_error_message:
+        raise SmokeError(f"infeasible material-flow job did not surface material shortage details: {infeasible_job}")
 
     status, payload, _ = client.request_json(
         f"/api/v1/schedule/jobs/{failed_job_id}/retry",
@@ -278,6 +281,9 @@ def run_material_flow_smoke(client: BackendSmokeClient) -> dict[str, Any]:
     retried_job = poll_job(client, payload["jobId"], "poll retried infeasible material-flow job")
     if retried_job.get("status") != "FAILED":
         raise SmokeError(f"retried infeasible material-flow job ended unexpectedly: {retried_job}")
+    retried_error_message = str(retried_job.get("errorMessage"))
+    if "MATERIAL_SHORTAGE" not in retried_error_message or "RM-100" not in retried_error_message:
+        raise SmokeError(f"retried infeasible material-flow job did not surface material shortage details: {retried_job}")
 
     return {
         "runId": run_id,

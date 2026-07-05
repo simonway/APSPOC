@@ -117,6 +117,13 @@ class SolveKpis(BaseModel):
     averageUtilization: float
 
 
+class SolverFailureReason(BaseModel):
+    reasonType: str
+    message: str
+    itemCode: str | None = None
+    demandId: str | None = None
+
+
 class SolveResponse(BaseModel):
     jobId: str
     status: str
@@ -124,3 +131,4 @@ class SolveResponse(BaseModel):
     scheduledTasks: list[ScheduledTask]
     changeovers: list[Changeover]
     kpis: SolveKpis
+    failureReasons: list[SolverFailureReason] = Field(default_factory=list)

@@ -250,6 +250,23 @@ def validate_final_job(final_job: dict[str, Any]) -> None:
         raise SmokeError(f"uat package schedule job returned unexpected solverStatus: {final_job}")
 
 
+def load_package_contract_summary(package_dir: Path) -> dict[str, Any]:
+    metadata_path = package_dir / "10_generated_operation_metadata.json"
+    if not metadata_path.exists():
+        return {}
+    metadata = json.loads(read_text_with_fallback(metadata_path))
+    if not isinstance(metadata, dict):
+        raise SmokeError(f"{metadata_path}: expected JSON object")
+    summary: dict[str, Any] = {}
+    tank_summary = metadata.get("fermentationTankRuleSummary")
+    if isinstance(tank_summary, dict):
+        summary["fermentationTankRuleSummary"] = tank_summary
+    tank_cases = metadata.get("fermentationTankRuleCases")
+    if isinstance(tank_cases, list):
+        summary["fermentationTankRuleCases"] = tank_cases
+    return summary
+
+
 def build_summary(
     client: BackendSmokeClient,
     *,
@@ -298,6 +315,7 @@ def build_summary(
             "inventoryDemandCount": len(schedule_request.get("inventoryDemands", [])),
             "firstTaskMaterialInputs": tasks[0].get("materialInputs"),
             "firstTaskMaterialOutputs": tasks[0].get("materialOutputs"),
+            "contracts": load_package_contract_summary(package_dir),
         },
         "job": {
             "jobId": final_job.get("jobId"),

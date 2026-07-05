@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import json
 import unittest
 from datetime import datetime, timezone
+from pathlib import Path
 
 from app.models import (
     ObjectiveWeights,
@@ -16,6 +18,8 @@ from app.models import (
     SolverTask,
 )
 from app.solver_service import SolverService
+
+ROOT_DIR = Path(__file__).resolve().parents[2]
 
 
 class SolverServiceDowntimeTest(unittest.TestCase):
@@ -467,6 +471,8 @@ class SolverServiceDowntimeTest(unittest.TestCase):
 
         self.assertEqual(response.status, "INFEASIBLE")
         self.assertEqual(response.scheduledTasks, [])
+        self.assertEqual(response.failureReasons[0].reasonType, "MATERIAL_SHORTAGE")
+        self.assertEqual(response.failureReasons[0].itemCode, "RM-100")
 
     def test_intermediate_output_can_feed_downstream_operation(self) -> None:
         request = SolveRequest(
@@ -842,6 +848,51 @@ class SolverServiceDowntimeTest(unittest.TestCase):
 
         with self.assertRaisesRegex(ValueError, "has no candidate resources"):
             self.service.solve(request)
+
+    def test_phase4_maturity_window_sample_preserves_proxy_order(self) -> None:
+        request = _load_sample_request("snow_beer_phase4_maturity_window")
+
+        response = self.service.solve(request)
+
+        self.assertIn(response.status, {"OPTIMAL", "FEASIBLE"})
+        self.assertEqual(response.failureReasons, [])
+        by_id = {task.taskId: task for task in response.scheduledTasks}
+        fermentation = by_id["dem_a500_maturity_1224__02_fermentation"]
+        maturity_wait = by_id["dem_a500_maturity_1224__03_maturation_wait"]
+        filtration = by_id["dem_a500_maturity_1224__04_filtration"]
+        self.assertEqual(maturity_wait.resourceId, "maturity_hold_a")
+        self.assertGreaterEqual(maturity_wait.startMinutes, fermentation.endMinutes)
+        self.assertGreaterEqual(filtration.startMinutes, maturity_wait.endMinutes)
+
+    def test_phase4_material_availability_sample_respects_future_material_times(self) -> None:
+        request = _load_sample_request("snow_beer_phase4_material_availability")
+
+        response = self.service.solve(request)
+
+        self.assertIn(response.status, {"OPTIMAL", "FEASIBLE"})
+        self.assertEqual(response.failureReasons, [])
+        by_id = {task.taskId: task for task in response.scheduledTasks}
+        self.assertGreaterEqual(by_id["dem_a500_material_1224__01_sugarization"].startMinutes, 240)
+        self.assertGreaterEqual(by_id["dem_a500_material_1224__04_packaging"].startMinutes, 540)
+        self.assertGreaterEqual(by_id["dem_b600_material_1225__04_packaging"].startMinutes, 1200)
+
+    def test_phase4_fermentation_tank_success_sample_uses_separate_tanks(self) -> None:
+        request = _load_sample_request("snow_beer_phase4_fermentation_tank_success")
+
+        response = self.service.solve(request)
+
+        self.assertIn(response.status, {"OPTIMAL", "FEASIBLE"})
+        self.assertEqual(response.failureReasons, [])
+        by_id = {task.taskId: task for task in response.scheduledTasks}
+        self.assertEqual(by_id["dem_a500_tank_success__02_fermentation"].resourceId, "ferm_t1")
+        self.assertEqual(by_id["dem_b600_tank_success__02_fermentation"].resourceId, "ferm_t2")
+
+
+def _load_sample_request(package_name: str) -> SolveRequest:
+    path = ROOT_DIR / "docs" / "sample-packages" / package_name / "08_generated_schedule_request.json"
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    payload["jobId"] = f"test-{package_name}"
+    return SolveRequest.model_validate(payload)
 
 
 if __name__ == "__main__":

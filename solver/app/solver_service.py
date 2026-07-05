@@ -10,6 +10,7 @@ from app.models import (
     SolveRequest,
     SolveResponse,
     ScheduledTask,
+    SolverFailureReason,
     SolverResource,
     SolverTask,
 )
@@ -177,6 +178,7 @@ class SolverService:
                     lateTaskCount=0,
                     averageUtilization=0.0,
                 ),
+                failureReasons=self._build_failure_reasons(request),
             )
 
         scheduled_tasks: list[ScheduledTask] = []
@@ -426,6 +428,47 @@ class SolverService:
         item_codes.update(balance.itemCode for balance in request.inventoryBalances)
         item_codes.update(demand.itemCode for demand in request.inventoryDemands)
         return item_codes
+
+    @staticmethod
+    def _build_failure_reasons(request: SolveRequest) -> list[SolverFailureReason]:
+        reasons: list[SolverFailureReason] = []
+        for item_code in sorted(SolverService._collect_item_codes(request)):
+            available_quantity = sum(
+                max(0, balance.availableQuantity - balance.safetyStockQuantity)
+                for balance in request.inventoryBalances
+                if balance.itemCode == item_code
+            )
+            produced_quantity = sum(
+                material.quantity
+                for task in request.tasks
+                for material in task.materialOutputs
+                if material.itemCode == item_code
+            )
+            input_quantity = sum(
+                material.quantity
+                for task in request.tasks
+                for material in task.materialInputs
+                if material.itemCode == item_code
+            )
+            demanded_quantity = sum(
+                demand.quantity
+                for demand in request.inventoryDemands
+                if demand.itemCode == item_code
+            )
+            supply_quantity = available_quantity + produced_quantity
+            required_quantity = input_quantity + demanded_quantity
+            if required_quantity > supply_quantity:
+                reasons.append(
+                    SolverFailureReason(
+                        reasonType="MATERIAL_SHORTAGE",
+                        itemCode=item_code,
+                        message=(
+                            f"Item {item_code} requires {required_quantity} units "
+                            f"but only {supply_quantity} units are available or produced."
+                        ),
+                    )
+                )
+        return reasons
 
     def _add_material_balance_constraints(
         self,

@@ -182,7 +182,7 @@ public class SchedulingJobService {
                 markJobFailure(jobId, scheduledJob -> scheduledJob.markFailed(
                         JobFailureReason.SOLVER_NO_FEASIBLE_SCHEDULE,
                         solverResponse.status(),
-                        "Solver finished without a feasible schedule: " + solverResponse.status()
+                        buildSolverFailureMessage(solverResponse)
                 ));
                 return;
             }
@@ -348,6 +348,36 @@ public class SchedulingJobService {
 
     private boolean isCancelled(String jobId) {
         return getJob(jobId).status() == JobStatus.CANCELLED;
+    }
+
+    private String buildSolverFailureMessage(SolverResponse solverResponse) {
+        String baseMessage = "Solver finished without a feasible schedule: " + solverResponse.status();
+        if (solverResponse.failureReasons().isEmpty()) {
+            return baseMessage;
+        }
+        String details = solverResponse.failureReasons().stream()
+                .map(reason -> {
+                    List<String> parts = new ArrayList<>();
+                    if (reason.reasonType() != null && !reason.reasonType().isBlank()) {
+                        parts.add(reason.reasonType());
+                    }
+                    if (reason.itemCode() != null && !reason.itemCode().isBlank()) {
+                        parts.add("itemCode=" + reason.itemCode());
+                    }
+                    if (reason.demandId() != null && !reason.demandId().isBlank()) {
+                        parts.add("demandId=" + reason.demandId());
+                    }
+                    if (reason.message() != null && !reason.message().isBlank()) {
+                        parts.add(reason.message());
+                    }
+                    return String.join(" | ", parts);
+                })
+                .filter(detail -> !detail.isBlank())
+                .collect(java.util.stream.Collectors.joining("; "));
+        if (details.isBlank()) {
+            return baseMessage;
+        }
+        return baseMessage + ". Failure details: " + details;
     }
 
     private String normalizeActor(String actorUsername) {
