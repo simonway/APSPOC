@@ -1,0 +1,3 @@
+caseId,expectedOutcome,expectedFailureType,tankId,transferId,demandId,productCode,sourceItemCode,brightItemCode,occupationStartMinutes,occupationEndMinutes,allowedStartMinutes,allowedEndMinutes,remarks
+bright_transfer_a500,PASS,NONE,bright_t1,transfer_a500_success,dem_a500_bright_success,31015630002000000,FILTERED_A_BRIGHT,BRIGHT_A_BRIGHT,360,540,300,720,"A500 transfer occupies bright tank inside the allowed window"
+bright_transfer_b600_late,FAIL,OCCUPATION_WINDOW,bright_t2,transfer_b600_late,dem_b600_bright_late,31015630004000000,FILTERED_B_BRIGHT,BRIGHT_B_BRIGHT,780,960,420,900,"B600 transfer exceeds the allowed bright tank window"

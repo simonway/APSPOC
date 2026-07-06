@@ -1,0 +1,9 @@
+id,label,resourceType,sortOrder,capacity,remarks
+mash_k1,Sugarization kettle 1,REACTOR,1,50KL,Discrete sugarization proxy resource
+ferm_t1,Fermentation tank 1,TANK,2,50KL,Discrete fermentation proxy resource
+ferm_t2,Fermentation tank 2,TANK,3,100KL,Discrete fermentation proxy resource
+filt_f1,Filtration line 1,FILTER,4,80KL,Filtration resource
+bright_t1,Bright tank 1,TANK,5,50KL,Bright beer transfer contract resource
+bright_t2,Bright tank 2,TANK,6,50KL,Bright beer transfer contract resource
+pack_l1,Packaging line 1,OTHER,7,500ml,Packaging line for A500
+pack_l2,Packaging line 2,OTHER,8,600ml,Packaging line for B600

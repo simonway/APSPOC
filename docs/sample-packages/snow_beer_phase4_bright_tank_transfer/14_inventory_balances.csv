@@ -1,0 +1,11 @@
+itemCode,availableQuantity,availableFromMinutes,safetyStockQuantity,remarks
+MALT_A_BRIGHT,1,0,0,A-family malt lot
+HOPS_A_BRIGHT,1,0,0,A-family hops lot
+CAP_A_BRIGHT,1,0,0,A-family caps
+CTN_A_BRIGHT,1,0,0,A-family cartons
+LBL_A_BRIGHT,1,0,0,A-family labels
+MALT_B_BRIGHT,1,0,0,B-family malt lot
+HOPS_B_BRIGHT,1,0,0,B-family hops lot
+CAP_B_BRIGHT,1,0,0,B-family caps
+CTN_B_BRIGHT,1,0,0,B-family cartons
+LBL_B_BRIGHT,1,0,0,B-family labels

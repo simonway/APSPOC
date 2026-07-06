@@ -34,6 +34,20 @@ class UatPackageSmokeSummaryTest(unittest.TestCase):
         self.assertEqual(tank_summary["observedFailCount"], 2)
         self.assertEqual(tank_summary["failureTypes"], ["NON_MIXING"])
 
+    def test_loads_bright_tank_transfer_contract_summary_from_package_metadata(self) -> None:
+        summary = load_package_contract_summary(
+            ROOT_DIR / "docs" / "sample-packages" / "snow_beer_phase4_bright_tank_transfer"
+        )
+
+        transfer_summary = summary["brightTankTransferRuleSummary"]
+        self.assertTrue(transfer_summary["contractOnly"])
+        self.assertEqual(transfer_summary["caseCount"], 2)
+        self.assertEqual(transfer_summary["expectedPassCount"], 1)
+        self.assertEqual(transfer_summary["expectedFailCount"], 1)
+        self.assertEqual(transfer_summary["observedPassCount"], 1)
+        self.assertEqual(transfer_summary["observedFailCount"], 1)
+        self.assertEqual(transfer_summary["failureTypes"], ["OCCUPATION_WINDOW"])
+
 
 if __name__ == "__main__":
     unittest.main()

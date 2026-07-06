@@ -1,0 +1,624 @@
+{
+  "scenarioName": "snow-beer-phase4-bright-tank-transfer",
+  "dataVersion": "snow_beer_phase4_bright_tank_transfer_2026_07_06",
+  "scheduleStartAt": "2026-12-26T00:00:00Z",
+  "horizonMinutes": 1440,
+  "requestedDemandQuantity": 2,
+  "plannedDemandQuantity": 2,
+  "inventoryBalanceCount": 10,
+  "inventoryDemandCount": 2,
+  "inventoryCoveredQuantity": 0,
+  "operationCount": 10,
+  "demandCount": 2,
+  "resourceCount": 8,
+  "downtimeCount": 0,
+  "setupRuleCount": 2,
+  "fermentationTankRuleCaseCount": 0,
+  "brightTankTransferRuleCaseCount": 2,
+  "precedencePairCount": 8,
+  "bridgeAdjustmentCount": 0,
+  "demandCoverages": [
+    {
+      "demandId": "dem_a500_bright_success",
+      "productCode": "31015630002000000",
+      "requestedQuantity": 1,
+      "inventoryCoveredQuantity": 0,
+      "plannedQuantity": 1,
+      "dueMinutes": 900,
+      "priority": 5
+    },
+    {
+      "demandId": "dem_b600_bright_late",
+      "productCode": "31015630004000000",
+      "requestedQuantity": 1,
+      "inventoryCoveredQuantity": 0,
+      "plannedQuantity": 1,
+      "dueMinutes": 1320,
+      "priority": 4
+    }
+  ],
+  "inventoryBalances": [
+    {
+      "itemCode": "MALT_A_BRIGHT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "HOPS_A_BRIGHT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CAP_A_BRIGHT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CTN_A_BRIGHT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "LBL_A_BRIGHT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "MALT_B_BRIGHT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "HOPS_B_BRIGHT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CAP_B_BRIGHT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CTN_B_BRIGHT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "LBL_B_BRIGHT",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    }
+  ],
+  "inventoryDemands": [
+    {
+      "demandId": "dem_a500_bright_success",
+      "itemCode": "31015630002000000",
+      "quantity": 1,
+      "dueMinutes": 900
+    },
+    {
+      "demandId": "dem_b600_bright_late",
+      "itemCode": "31015630004000000",
+      "quantity": 1,
+      "dueMinutes": 1320
+    }
+  ],
+  "operations": [
+    {
+      "operationId": "dem_a500_bright_success__01_sugarization",
+      "demandId": "dem_a500_bright_success",
+      "demandUnitIndex": 1,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_a500_bright_p4",
+      "operationCode": "SUGARIZATION",
+      "operationName": "Sugarization",
+      "sequence": 1,
+      "durationMinutes": 120,
+      "candidateResourceIds": [
+        "mash_k1"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "BREW_A500",
+      "materialInputs": [
+        {
+          "itemCode": "MALT_A_BRIGHT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "HOPS_A_BRIGHT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "WORT_A_BRIGHT",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 900,
+      "priority": 5,
+      "quantity": "1",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_bright_success__02_fermentation",
+      "demandId": "dem_a500_bright_success",
+      "demandUnitIndex": 1,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_a500_bright_p4",
+      "operationCode": "FERMENTATION",
+      "operationName": "Fermentation",
+      "sequence": 2,
+      "durationMinutes": 240,
+      "candidateResourceIds": [
+        "ferm_t1"
+      ],
+      "predecessorOperationIds": [
+        "dem_a500_bright_success__01_sugarization"
+      ],
+      "setupGroup": "FERM_A500",
+      "materialInputs": [
+        {
+          "itemCode": "WORT_A_BRIGHT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "FERMENTED_A_BRIGHT",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 900,
+      "priority": 5,
+      "quantity": "1",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_bright_success__03_filtration",
+      "demandId": "dem_a500_bright_success",
+      "demandUnitIndex": 1,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_a500_bright_p4",
+      "operationCode": "FILTRATION",
+      "operationName": "Filtration",
+      "sequence": 3,
+      "durationMinutes": 90,
+      "candidateResourceIds": [
+        "filt_f1"
+      ],
+      "predecessorOperationIds": [
+        "dem_a500_bright_success__02_fermentation"
+      ],
+      "setupGroup": "FILT_A500",
+      "materialInputs": [
+        {
+          "itemCode": "FERMENTED_A_BRIGHT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "FILTERED_A_BRIGHT",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 900,
+      "priority": 5,
+      "quantity": "1",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_bright_success__04_bright_tank_transfer",
+      "demandId": "dem_a500_bright_success",
+      "demandUnitIndex": 1,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_a500_bright_p4",
+      "operationCode": "BRIGHT_TANK_TRANSFER",
+      "operationName": "Bright tank transfer",
+      "sequence": 4,
+      "durationMinutes": 180,
+      "candidateResourceIds": [
+        "bright_t1"
+      ],
+      "predecessorOperationIds": [
+        "dem_a500_bright_success__03_filtration"
+      ],
+      "setupGroup": "BT_A500",
+      "materialInputs": [
+        {
+          "itemCode": "FILTERED_A_BRIGHT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "BRIGHT_A_BRIGHT",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 900,
+      "priority": 5,
+      "quantity": "1",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_a500_bright_success__05_packaging",
+      "demandId": "dem_a500_bright_success",
+      "demandUnitIndex": 1,
+      "productCode": "31015630002000000",
+      "recipeId": "rcp_a500_bright_p4",
+      "operationCode": "PACKAGING",
+      "operationName": "Packaging",
+      "sequence": 5,
+      "durationMinutes": 150,
+      "candidateResourceIds": [
+        "pack_l1"
+      ],
+      "predecessorOperationIds": [
+        "dem_a500_bright_success__04_bright_tank_transfer"
+      ],
+      "setupGroup": "PKG_500",
+      "materialInputs": [
+        {
+          "itemCode": "BRIGHT_A_BRIGHT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_BRIGHT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A_BRIGHT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A_BRIGHT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 900,
+      "priority": 5,
+      "quantity": "1",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_b600_bright_late__01_sugarization",
+      "demandId": "dem_b600_bright_late",
+      "demandUnitIndex": 1,
+      "productCode": "31015630004000000",
+      "recipeId": "rcp_b600_bright_p4",
+      "operationCode": "SUGARIZATION",
+      "operationName": "Sugarization",
+      "sequence": 1,
+      "durationMinutes": 140,
+      "candidateResourceIds": [
+        "mash_k1"
+      ],
+      "predecessorOperationIds": [],
+      "setupGroup": "BREW_B600",
+      "materialInputs": [
+        {
+          "itemCode": "MALT_B_BRIGHT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "HOPS_B_BRIGHT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "WORT_B_BRIGHT",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 1320,
+      "priority": 4,
+      "quantity": "1",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_b600_bright_late__02_fermentation",
+      "demandId": "dem_b600_bright_late",
+      "demandUnitIndex": 1,
+      "productCode": "31015630004000000",
+      "recipeId": "rcp_b600_bright_p4",
+      "operationCode": "FERMENTATION",
+      "operationName": "Fermentation",
+      "sequence": 2,
+      "durationMinutes": 260,
+      "candidateResourceIds": [
+        "ferm_t2"
+      ],
+      "predecessorOperationIds": [
+        "dem_b600_bright_late__01_sugarization"
+      ],
+      "setupGroup": "FERM_B600",
+      "materialInputs": [
+        {
+          "itemCode": "WORT_B_BRIGHT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "FERMENTED_B_BRIGHT",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 1320,
+      "priority": 4,
+      "quantity": "1",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_b600_bright_late__03_filtration",
+      "demandId": "dem_b600_bright_late",
+      "demandUnitIndex": 1,
+      "productCode": "31015630004000000",
+      "recipeId": "rcp_b600_bright_p4",
+      "operationCode": "FILTRATION",
+      "operationName": "Filtration",
+      "sequence": 3,
+      "durationMinutes": 110,
+      "candidateResourceIds": [
+        "filt_f1"
+      ],
+      "predecessorOperationIds": [
+        "dem_b600_bright_late__02_fermentation"
+      ],
+      "setupGroup": "FILT_B600",
+      "materialInputs": [
+        {
+          "itemCode": "FERMENTED_B_BRIGHT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "FILTERED_B_BRIGHT",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 1320,
+      "priority": 4,
+      "quantity": "1",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_b600_bright_late__04_bright_tank_transfer",
+      "demandId": "dem_b600_bright_late",
+      "demandUnitIndex": 1,
+      "productCode": "31015630004000000",
+      "recipeId": "rcp_b600_bright_p4",
+      "operationCode": "BRIGHT_TANK_TRANSFER",
+      "operationName": "Bright tank transfer",
+      "sequence": 4,
+      "durationMinutes": 180,
+      "candidateResourceIds": [
+        "bright_t2"
+      ],
+      "predecessorOperationIds": [
+        "dem_b600_bright_late__03_filtration"
+      ],
+      "setupGroup": "BT_B600",
+      "materialInputs": [
+        {
+          "itemCode": "FILTERED_B_BRIGHT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "BRIGHT_B_BRIGHT",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 1320,
+      "priority": 4,
+      "quantity": "1",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    },
+    {
+      "operationId": "dem_b600_bright_late__05_packaging",
+      "demandId": "dem_b600_bright_late",
+      "demandUnitIndex": 1,
+      "productCode": "31015630004000000",
+      "recipeId": "rcp_b600_bright_p4",
+      "operationCode": "PACKAGING",
+      "operationName": "Packaging",
+      "sequence": 5,
+      "durationMinutes": 210,
+      "candidateResourceIds": [
+        "pack_l2"
+      ],
+      "predecessorOperationIds": [
+        "dem_b600_bright_late__04_bright_tank_transfer"
+      ],
+      "setupGroup": "PKG_600",
+      "materialInputs": [
+        {
+          "itemCode": "BRIGHT_B_BRIGHT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_B_BRIGHT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_B_BRIGHT",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_B_BRIGHT",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630004000000",
+          "quantity": 1
+        }
+      ],
+      "dueMinutes": 1320,
+      "priority": 4,
+      "quantity": "1",
+      "fixedResourceId": null,
+      "fixedStartMinutes": null,
+      "baselinePinnedResourceId": null,
+      "baselinePinnedStartMinutes": null
+    }
+  ],
+  "precedencePairs": [
+    {
+      "from": "dem_a500_bright_success__01_sugarization",
+      "to": "dem_a500_bright_success__02_fermentation"
+    },
+    {
+      "from": "dem_a500_bright_success__02_fermentation",
+      "to": "dem_a500_bright_success__03_filtration"
+    },
+    {
+      "from": "dem_a500_bright_success__03_filtration",
+      "to": "dem_a500_bright_success__04_bright_tank_transfer"
+    },
+    {
+      "from": "dem_a500_bright_success__04_bright_tank_transfer",
+      "to": "dem_a500_bright_success__05_packaging"
+    },
+    {
+      "from": "dem_b600_bright_late__01_sugarization",
+      "to": "dem_b600_bright_late__02_fermentation"
+    },
+    {
+      "from": "dem_b600_bright_late__02_fermentation",
+      "to": "dem_b600_bright_late__03_filtration"
+    },
+    {
+      "from": "dem_b600_bright_late__03_filtration",
+      "to": "dem_b600_bright_late__04_bright_tank_transfer"
+    },
+    {
+      "from": "dem_b600_bright_late__04_bright_tank_transfer",
+      "to": "dem_b600_bright_late__05_packaging"
+    }
+  ],
+  "setupRules": [
+    {
+      "fromSetupGroup": "PKG_500",
+      "toSetupGroup": "PKG_600",
+      "resourceType": "OTHER",
+      "resourceId": null,
+      "setupMinutes": 60
+    },
+    {
+      "fromSetupGroup": "PKG_600",
+      "toSetupGroup": "PKG_500",
+      "resourceType": "OTHER",
+      "resourceId": null,
+      "setupMinutes": 60
+    }
+  ],
+  "fermentationTankRuleSummary": null,
+  "fermentationTankRuleCases": [],
+  "brightTankTransferRuleSummary": {
+    "caseCount": 2,
+    "expectedPassCount": 1,
+    "expectedFailCount": 1,
+    "observedPassCount": 1,
+    "observedFailCount": 1,
+    "expectationMismatchCount": 0,
+    "failureTypes": [
+      "OCCUPATION_WINDOW"
+    ],
+    "contractOnly": true,
+    "contractNote": "Bright tank transfer rows are static contract checks for future solver/backend work; they do not change the current schedule request."
+  },
+  "brightTankTransferRuleCases": [
+    {
+      "caseId": "bright_transfer_a500",
+      "expectedOutcome": "PASS",
+      "expectedFailureType": "NONE",
+      "observedOutcome": "PASS",
+      "observedFailureTypes": [],
+      "expectedMatchesObserved": true,
+      "tankId": "bright_t1",
+      "transferId": "transfer_a500_success",
+      "demandId": "dem_a500_bright_success",
+      "productCode": "31015630002000000",
+      "sourceItemCode": "FILTERED_A_BRIGHT",
+      "brightItemCode": "BRIGHT_A_BRIGHT",
+      "occupationStartMinutes": 360,
+      "occupationEndMinutes": 540,
+      "allowedStartMinutes": 300,
+      "allowedEndMinutes": 720,
+      "remarks": "A500 transfer occupies bright tank inside the allowed window"
+    },
+    {
+      "caseId": "bright_transfer_b600_late",
+      "expectedOutcome": "FAIL",
+      "expectedFailureType": "OCCUPATION_WINDOW",
+      "observedOutcome": "FAIL",
+      "observedFailureTypes": [
+        "OCCUPATION_WINDOW"
+      ],
+      "expectedMatchesObserved": true,
+      "tankId": "bright_t2",
+      "transferId": "transfer_b600_late",
+      "demandId": "dem_b600_bright_late",
+      "productCode": "31015630004000000",
+      "sourceItemCode": "FILTERED_B_BRIGHT",
+      "brightItemCode": "BRIGHT_B_BRIGHT",
+      "occupationStartMinutes": 780,
+      "occupationEndMinutes": 960,
+      "allowedStartMinutes": 420,
+      "allowedEndMinutes": 900,
+      "remarks": "B600 transfer exceeds the allowed bright tank window"
+    }
+  ],
+  "bridgeAdjustments": []
+}

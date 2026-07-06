@@ -1,0 +1,11 @@
+recipeId,productCode,operationCode,operationName,sequence,durationMinutes,candidateResourceIds,materialInputs,materialOutputs,setupGroup,remarks
+rcp_a500_bright_p4,31015630002000000,SUGARIZATION,Sugarization,1,120,mash_k1,MALT_A_BRIGHT:1|HOPS_A_BRIGHT:1,WORT_A_BRIGHT:1,BREW_A500,"Consumes A-family raw materials"
+rcp_a500_bright_p4,31015630002000000,FERMENTATION,Fermentation,2,240,ferm_t1,WORT_A_BRIGHT:1,FERMENTED_A_BRIGHT:1,FERM_A500,"Discrete fermentation proxy"
+rcp_a500_bright_p4,31015630002000000,FILTRATION,Filtration,3,90,filt_f1,FERMENTED_A_BRIGHT:1,FILTERED_A_BRIGHT:1,FILT_A500,"Creates filtered beer intermediate"
+rcp_a500_bright_p4,31015630002000000,BRIGHT_TANK_TRANSFER,Bright tank transfer,4,180,bright_t1,FILTERED_A_BRIGHT:1,BRIGHT_A_BRIGHT:1,BT_A500,"Contract-only bright tank residency step"
+rcp_a500_bright_p4,31015630002000000,PACKAGING,Packaging,5,150,pack_l1,BRIGHT_A_BRIGHT:1|CAP_A_BRIGHT:1|CTN_A_BRIGHT:1|LBL_A_BRIGHT:1,31015630002000000:1,PKG_500,"Consumes bright beer and packaging materials"
+rcp_b600_bright_p4,31015630004000000,SUGARIZATION,Sugarization,1,140,mash_k1,MALT_B_BRIGHT:1|HOPS_B_BRIGHT:1,WORT_B_BRIGHT:1,BREW_B600,"Consumes B-family raw materials"
+rcp_b600_bright_p4,31015630004000000,FERMENTATION,Fermentation,2,260,ferm_t2,WORT_B_BRIGHT:1,FERMENTED_B_BRIGHT:1,FERM_B600,"Discrete fermentation proxy"
+rcp_b600_bright_p4,31015630004000000,FILTRATION,Filtration,3,110,filt_f1,FERMENTED_B_BRIGHT:1,FILTERED_B_BRIGHT:1,FILT_B600,"Creates filtered beer intermediate"
+rcp_b600_bright_p4,31015630004000000,BRIGHT_TANK_TRANSFER,Bright tank transfer,4,180,bright_t2,FILTERED_B_BRIGHT:1,BRIGHT_B_BRIGHT:1,BT_B600,"Expected contract window failure is metadata only"
+rcp_b600_bright_p4,31015630004000000,PACKAGING,Packaging,5,210,pack_l2,BRIGHT_B_BRIGHT:1|CAP_B_BRIGHT:1|CTN_B_BRIGHT:1|LBL_B_BRIGHT:1,31015630004000000:1,PKG_600,"Consumes bright beer and packaging materials"

@@ -1,0 +1,11 @@
+id,label,productCode,durationMinutes,dueMinutes,priority,candidateResourceIds,pinnedResourceId,pinnedStartMinutes,predecessorTaskIds,setupGroup
+dem_a500_bright_success__01_sugarization,dem_a500_bright_success / Sugarization,31015630002000000,120,900,5,mash_k1,,,,BREW_A500
+dem_a500_bright_success__02_fermentation,dem_a500_bright_success / Fermentation,31015630002000000,240,900,5,ferm_t1,,,dem_a500_bright_success__01_sugarization,FERM_A500
+dem_a500_bright_success__03_filtration,dem_a500_bright_success / Filtration,31015630002000000,90,900,5,filt_f1,,,dem_a500_bright_success__02_fermentation,FILT_A500
+dem_a500_bright_success__04_bright_tank_transfer,dem_a500_bright_success / Bright tank transfer,31015630002000000,180,900,5,bright_t1,,,dem_a500_bright_success__03_filtration,BT_A500
+dem_a500_bright_success__05_packaging,dem_a500_bright_success / Packaging,31015630002000000,150,900,5,pack_l1,,,dem_a500_bright_success__04_bright_tank_transfer,PKG_500
+dem_b600_bright_late__01_sugarization,dem_b600_bright_late / Sugarization,31015630004000000,140,1320,4,mash_k1,,,,BREW_B600
+dem_b600_bright_late__02_fermentation,dem_b600_bright_late / Fermentation,31015630004000000,260,1320,4,ferm_t2,,,dem_b600_bright_late__01_sugarization,FERM_B600
+dem_b600_bright_late__03_filtration,dem_b600_bright_late / Filtration,31015630004000000,110,1320,4,filt_f1,,,dem_b600_bright_late__02_fermentation,FILT_B600
+dem_b600_bright_late__04_bright_tank_transfer,dem_b600_bright_late / Bright tank transfer,31015630004000000,180,1320,4,bright_t2,,,dem_b600_bright_late__03_filtration,BT_B600
+dem_b600_bright_late__05_packaging,dem_b600_bright_late / Packaging,31015630004000000,210,1320,4,pack_l2,,,dem_b600_bright_late__04_bright_tank_transfer,PKG_600

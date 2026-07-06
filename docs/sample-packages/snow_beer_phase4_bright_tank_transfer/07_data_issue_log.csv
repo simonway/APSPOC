@@ -1,0 +1,4 @@
+issueId,severity,status,category,description,owner,resolution
+ISSUE-01,INFO,OPEN,PhaseBoundary,"Bright tank transfer rules are contract-only metadata in this sample",Product,"Do not claim current solver enforces bright tank residency"
+ISSUE-02,INFO,OPEN,QuantityModel,"All quantities are lot proxy units rather than KL or bottle counts",Planner,"Do not use this package as a mass-balance accounting source"
+ISSUE-03,INFO,OPEN,WindowModel,"The late B600 transfer is a static contract check, not a solver-produced violation",Algorithm,"Use metadata as the semantic source of truth until residency constraints are implemented"

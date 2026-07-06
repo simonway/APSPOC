@@ -119,6 +119,24 @@ class FermentationTankRuleRow:
 
 
 @dataclass(frozen=True)
+class BrightTankTransferRuleRow:
+    case_id: str
+    expected_outcome: str
+    expected_failure_type: str
+    tank_id: str
+    transfer_id: str
+    demand_id: str
+    product_code: str
+    source_item_code: str
+    bright_item_code: str
+    occupation_start_minutes: int
+    occupation_end_minutes: int
+    allowed_start_minutes: int
+    allowed_end_minutes: int
+    remarks: str
+
+
+@dataclass(frozen=True)
 class DemandCoveragePlan:
     requested_quantity: int
     inventory_covered_quantity: int
@@ -141,6 +159,7 @@ TANK_RULE_PASS = "PASS"
 TANK_RULE_FAIL = "FAIL"
 TANK_RULE_NONE = "NONE"
 TANK_RULE_FAILURE_TYPES = {TANK_RULE_NONE, "CAPACITY", "NON_MIXING", "OCCUPATION_WINDOW"}
+BRIGHT_TANK_FAILURE_TYPES = {TANK_RULE_NONE, "OCCUPATION_WINDOW"}
 
 
 def parse_args() -> argparse.Namespace:
@@ -662,6 +681,119 @@ def load_fermentation_tank_rules(
     return tank_rules
 
 
+def load_bright_tank_transfer_rules(
+    package_dir: Path,
+    resources_by_id: dict[str, ResourceRow],
+    demands_by_id: dict[str, DemandRow],
+    errors: list[str],
+    *,
+    horizon_minutes: int,
+) -> list[BrightTankTransferRuleRow]:
+    path = package_dir / "15_bright_tank_transfer_rules.csv"
+    if not path.exists():
+        return []
+
+    rows = read_csv_rows(path)
+    transfer_rules: list[BrightTankTransferRuleRow] = []
+    seen_case_ids: set[str] = set()
+    for index, row in enumerate(rows, start=2):
+        source = f"15_bright_tank_transfer_rules.csv:{index}"
+        case_id = require_text(row, "caseId", source, errors)
+        if case_id in seen_case_ids:
+            errors.append(f"{source}: duplicate caseId `{case_id}`")
+        seen_case_ids.add(case_id)
+
+        expected_outcome = require_text(row, "expectedOutcome", source, errors).upper()
+        expected_failure_type = (row.get("expectedFailureType", "").strip() or TANK_RULE_NONE).upper()
+        if expected_outcome not in {TANK_RULE_PASS, TANK_RULE_FAIL}:
+            errors.append(f"{source}: expectedOutcome must be PASS or FAIL, got `{expected_outcome}`")
+        if expected_failure_type not in BRIGHT_TANK_FAILURE_TYPES:
+            errors.append(
+                f"{source}: expectedFailureType must be one of {', '.join(sorted(BRIGHT_TANK_FAILURE_TYPES))}, "
+                f"got `{expected_failure_type}`"
+            )
+        if expected_outcome == TANK_RULE_PASS and expected_failure_type != TANK_RULE_NONE:
+            errors.append(f"{source}: PASS cases must use expectedFailureType NONE")
+        if expected_outcome == TANK_RULE_FAIL and expected_failure_type == TANK_RULE_NONE:
+            errors.append(f"{source}: FAIL cases must provide a concrete expectedFailureType")
+
+        tank_id = require_text(row, "tankId", source, errors)
+        tank = resources_by_id.get(tank_id)
+        if tank is None:
+            errors.append(f"{source}: unknown tankId `{tank_id}`")
+        elif tank.resource_type != "TANK":
+            errors.append(f"{source}: tankId `{tank_id}` references resourceType `{tank.resource_type}`, expected TANK")
+
+        demand_id = require_text(row, "demandId", source, errors)
+        demand = demands_by_id.get(demand_id)
+        product_code = require_text(row, "productCode", source, errors)
+        if demand is None:
+            errors.append(f"{source}: unknown demandId `{demand_id}`")
+        elif demand.product_code != product_code:
+            errors.append(
+                f"{source}: productCode `{product_code}` does not match demand `{demand_id}` product `{demand.product_code}`"
+            )
+
+        occupation_start_minutes = parse_int(
+            row.get("occupationStartMinutes", ""),
+            source,
+            "occupationStartMinutes",
+            errors,
+            minimum=0,
+        )
+        occupation_end_minutes = parse_int(
+            row.get("occupationEndMinutes", ""),
+            source,
+            "occupationEndMinutes",
+            errors,
+            minimum=1,
+        )
+        allowed_start_minutes = parse_int(
+            row.get("allowedStartMinutes", ""),
+            source,
+            "allowedStartMinutes",
+            errors,
+            minimum=0,
+        )
+        allowed_end_minutes = parse_int(
+            row.get("allowedEndMinutes", ""),
+            source,
+            "allowedEndMinutes",
+            errors,
+            minimum=1,
+        )
+        if occupation_end_minutes <= occupation_start_minutes:
+            errors.append(f"{source}: occupationEndMinutes must be greater than occupationStartMinutes")
+        if allowed_end_minutes <= allowed_start_minutes:
+            errors.append(f"{source}: allowedEndMinutes must be greater than allowedStartMinutes")
+        if occupation_end_minutes > horizon_minutes:
+            errors.append(f"{source}: occupationEndMinutes {occupation_end_minutes} exceeds horizon {horizon_minutes}")
+        if allowed_end_minutes > horizon_minutes:
+            errors.append(f"{source}: allowedEndMinutes {allowed_end_minutes} exceeds horizon {horizon_minutes}")
+
+        transfer_rules.append(
+            BrightTankTransferRuleRow(
+                case_id=case_id,
+                expected_outcome=expected_outcome,
+                expected_failure_type=expected_failure_type,
+                tank_id=tank_id,
+                transfer_id=require_text(row, "transferId", source, errors),
+                demand_id=demand_id,
+                product_code=product_code,
+                source_item_code=require_text(row, "sourceItemCode", source, errors),
+                bright_item_code=require_text(row, "brightItemCode", source, errors),
+                occupation_start_minutes=occupation_start_minutes,
+                occupation_end_minutes=occupation_end_minutes,
+                allowed_start_minutes=allowed_start_minutes,
+                allowed_end_minutes=allowed_end_minutes,
+                remarks=row.get("remarks", "").strip(),
+            )
+        )
+    if not transfer_rules:
+        errors.append("15_bright_tank_transfer_rules.csv: no data rows found")
+    return transfer_rules
+
+
 def validate_recipe_sequences(recipes: list[RecipeRow], errors: list[str]) -> None:
     recipes_by_product: dict[str, list[RecipeRow]] = defaultdict(list)
     for recipe in recipes:
@@ -865,6 +997,77 @@ def analyze_fermentation_tank_rules(
         "contractOnly": True,
         "contractNote": (
             "Fermentation tank rule rows are static contract checks for future solver/backend work; "
+            "they do not change the current schedule request."
+        ),
+    }
+    return cases, summary
+
+
+def analyze_bright_tank_transfer_rules(
+    transfer_rules: list[BrightTankTransferRuleRow],
+    errors: list[str],
+) -> tuple[list[dict[str, Any]], dict[str, Any] | None]:
+    if not transfer_rules:
+        return [], None
+
+    cases: list[dict[str, Any]] = []
+    mismatches: list[str] = []
+    for rule in transfer_rules:
+        observed_failure_types: list[str] = []
+        if (
+            rule.occupation_start_minutes < rule.allowed_start_minutes
+            or rule.occupation_end_minutes > rule.allowed_end_minutes
+        ):
+            observed_failure_types.append("OCCUPATION_WINDOW")
+
+        observed_outcome = TANK_RULE_FAIL if observed_failure_types else TANK_RULE_PASS
+        expected_matches = observed_outcome == rule.expected_outcome
+        if rule.expected_outcome == TANK_RULE_FAIL:
+            expected_matches = expected_matches and rule.expected_failure_type in observed_failure_types
+        elif rule.expected_failure_type != TANK_RULE_NONE:
+            expected_matches = False
+        if not expected_matches:
+            mismatches.append(
+                f"{rule.case_id}: expected {rule.expected_outcome}/{rule.expected_failure_type}, "
+                f"observed {observed_outcome}/{','.join(observed_failure_types) or TANK_RULE_NONE}"
+            )
+
+        cases.append(
+            {
+                "caseId": rule.case_id,
+                "expectedOutcome": rule.expected_outcome,
+                "expectedFailureType": rule.expected_failure_type,
+                "observedOutcome": observed_outcome,
+                "observedFailureTypes": observed_failure_types,
+                "expectedMatchesObserved": expected_matches,
+                "tankId": rule.tank_id,
+                "transferId": rule.transfer_id,
+                "demandId": rule.demand_id,
+                "productCode": rule.product_code,
+                "sourceItemCode": rule.source_item_code,
+                "brightItemCode": rule.bright_item_code,
+                "occupationStartMinutes": rule.occupation_start_minutes,
+                "occupationEndMinutes": rule.occupation_end_minutes,
+                "allowedStartMinutes": rule.allowed_start_minutes,
+                "allowedEndMinutes": rule.allowed_end_minutes,
+                "remarks": rule.remarks,
+            }
+        )
+
+    if mismatches:
+        errors.append("15_bright_tank_transfer_rules.csv: expectation mismatch: " + "; ".join(mismatches))
+
+    summary = {
+        "caseCount": len(transfer_rules),
+        "expectedPassCount": sum(1 for rule in transfer_rules if rule.expected_outcome == TANK_RULE_PASS),
+        "expectedFailCount": sum(1 for rule in transfer_rules if rule.expected_outcome == TANK_RULE_FAIL),
+        "observedPassCount": sum(1 for case in cases if case["observedOutcome"] == TANK_RULE_PASS),
+        "observedFailCount": sum(1 for case in cases if case["observedOutcome"] == TANK_RULE_FAIL),
+        "expectationMismatchCount": len(mismatches),
+        "failureTypes": sorted({failure_type for case in cases for failure_type in case["observedFailureTypes"]}),
+        "contractOnly": True,
+        "contractNote": (
+            "Bright tank transfer rows are static contract checks for future solver/backend work; "
             "they do not change the current schedule request."
         ),
     }
@@ -1078,6 +1281,7 @@ def build_outputs(
     setup_rules: list[SetupRuleRow],
     inventory_balances: list[InventoryBalanceRow],
     tank_rules: list[FermentationTankRuleRow],
+    bright_tank_transfer_rules: list[BrightTankTransferRuleRow],
     errors: list[str],
 ) -> tuple[dict[str, Any], dict[str, Any], list[dict[str, str]], list[dict[str, str]], list[dict[str, str]], str]:
     recipes_by_product: dict[str, list[RecipeRow]] = defaultdict(list)
@@ -1091,6 +1295,10 @@ def build_outputs(
     inventory_balances_by_item_code = build_inventory_balances_by_item_code(inventory_balances)
     demand_coverage_by_demand_id = plan_demand_coverage(demands, inventory_balances_by_item_code, errors)
     tank_rule_cases, tank_rule_summary = analyze_fermentation_tank_rules(tank_rules, errors)
+    bright_tank_transfer_cases, bright_tank_transfer_summary = analyze_bright_tank_transfer_rules(
+        bright_tank_transfer_rules,
+        errors,
+    )
 
     tasks: list[dict[str, Any]] = []
     operations: list[dict[str, Any]] = []
@@ -1344,6 +1552,9 @@ def build_outputs(
         "downtimeCount": len(downtimes),
         "setupRuleCount": len(setup_rules),
         "fermentationTankRuleCaseCount": tank_rule_summary["caseCount"] if tank_rule_summary else 0,
+        "brightTankTransferRuleCaseCount": (
+            bright_tank_transfer_summary["caseCount"] if bright_tank_transfer_summary else 0
+        ),
         "precedencePairCount": len(precedence_pairs),
         "bridgeAdjustmentCount": len(bridge_adjustments),
         "demandCoverages": demand_coverages,
@@ -1363,6 +1574,8 @@ def build_outputs(
         ],
         "fermentationTankRuleSummary": tank_rule_summary,
         "fermentationTankRuleCases": tank_rule_cases,
+        "brightTankTransferRuleSummary": bright_tank_transfer_summary,
+        "brightTankTransferRuleCases": bright_tank_transfer_cases,
         "bridgeAdjustments": [
             {
                 "operationId": adjustment.operation_id,
@@ -1479,6 +1692,13 @@ def main() -> int:
         errors,
         horizon_minutes=context["horizonMinutes"],
     )
+    bright_tank_transfer_rules = load_bright_tank_transfer_rules(
+        package_dir,
+        resources_by_id,
+        demands_by_id,
+        errors,
+        horizon_minutes=context["horizonMinutes"],
+    )
 
     schedule_request, operation_metadata, resources_csv, tasks_csv, downtimes_csv, expected_checks = build_outputs(
         context,
@@ -1489,6 +1709,7 @@ def main() -> int:
         setup_rules,
         inventory_balances,
         tank_rules,
+        bright_tank_transfer_rules,
         errors,
     )
 
@@ -1512,6 +1733,7 @@ def main() -> int:
                     "downtimes": len(downtimes),
                     "setupRules": len(setup_rules),
                     "fermentationTankRuleCases": operation_metadata["fermentationTankRuleCaseCount"],
+                    "brightTankTransferRuleCases": operation_metadata["brightTankTransferRuleCaseCount"],
                     "bridgeAdjustments": len(operation_metadata["bridgeAdjustments"]),
                 },
                 indent=2,
@@ -1542,6 +1764,7 @@ def main() -> int:
                 "inventoryDemands": len(schedule_request["inventoryDemands"]),
                 "generatedTasks": len(schedule_request["tasks"]),
                 "fermentationTankRuleCases": operation_metadata["fermentationTankRuleCaseCount"],
+                "brightTankTransferRuleCases": operation_metadata["brightTankTransferRuleCaseCount"],
                 "bridgeAdjustments": len(operation_metadata["bridgeAdjustments"]),
             },
             indent=2,

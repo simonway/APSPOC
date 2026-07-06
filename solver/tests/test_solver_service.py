@@ -887,6 +887,27 @@ class SolverServiceDowntimeTest(unittest.TestCase):
         self.assertEqual(by_id["dem_a500_tank_success__02_fermentation"].resourceId, "ferm_t1")
         self.assertEqual(by_id["dem_b600_tank_success__02_fermentation"].resourceId, "ferm_t2")
 
+    def test_phase4_bright_tank_transfer_sample_preserves_transfer_order(self) -> None:
+        request = _load_sample_request("snow_beer_phase4_bright_tank_transfer")
+
+        response = self.service.solve(request)
+
+        self.assertIn(response.status, {"OPTIMAL", "FEASIBLE"})
+        self.assertEqual(response.failureReasons, [])
+        by_id = {task.taskId: task for task in response.scheduledTasks}
+        a_filtration = by_id["dem_a500_bright_success__03_filtration"]
+        a_transfer = by_id["dem_a500_bright_success__04_bright_tank_transfer"]
+        a_packaging = by_id["dem_a500_bright_success__05_packaging"]
+        b_filtration = by_id["dem_b600_bright_late__03_filtration"]
+        b_transfer = by_id["dem_b600_bright_late__04_bright_tank_transfer"]
+        b_packaging = by_id["dem_b600_bright_late__05_packaging"]
+        self.assertEqual(a_transfer.resourceId, "bright_t1")
+        self.assertEqual(b_transfer.resourceId, "bright_t2")
+        self.assertGreaterEqual(a_transfer.startMinutes, a_filtration.endMinutes)
+        self.assertGreaterEqual(a_packaging.startMinutes, a_transfer.endMinutes)
+        self.assertGreaterEqual(b_transfer.startMinutes, b_filtration.endMinutes)
+        self.assertGreaterEqual(b_packaging.startMinutes, b_transfer.endMinutes)
+
 
 def _load_sample_request(package_name: str) -> SolveRequest:
     path = ROOT_DIR / "docs" / "sample-packages" / package_name / "08_generated_schedule_request.json"
