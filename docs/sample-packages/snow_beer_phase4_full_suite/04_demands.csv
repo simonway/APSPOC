@@ -1,0 +1,4 @@
+demandId,productCode,quantity,dueMinutes,priority,fixedResourceId,fixedStartMinutes,remarks
+dem_a500_full_suite,31015630002000000,1,1500,5,,,"A500 exercises maturity window, bright tank transfer, material availability, and tank contract"
+dem_b600_full_suite,31015630004000000,1,1800,4,,,"B600 exercises second tank contract and shared filtration"
+dem_c700_multi_full,31015630006000000,1,2400,3,,,"C700 exercises multi-brew fill POC approximation"

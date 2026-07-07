@@ -1,0 +1,16 @@
+itemCode,availableQuantity,availableFromMinutes,safetyStockQuantity,remarks
+MALT_A_FULL,1,180,0,A-family malt delayed after schedule start
+HOPS_A_FULL,1,180,0,A-family hops delayed after schedule start
+CAP_A_FULL,1,720,0,A-family caps delayed for packaging
+CTN_A_FULL,1,0,0,A-family cartons
+LBL_A_FULL,1,0,0,A-family labels
+MALT_B_FULL,1,0,0,B-family malt
+HOPS_B_FULL,1,0,0,B-family hops
+CAP_B_FULL,1,0,0,B-family caps
+CTN_B_FULL,1,0,0,B-family cartons
+LBL_B_FULL,1,0,0,B-family labels
+MALT_C_FULL,2,0,0,C-family malt for two brew batches
+HOPS_C_FULL,2,0,0,C-family hops for two brew batches
+CAP_C_FULL,1,0,0,C-family caps
+CTN_C_FULL,1,0,0,C-family cartons
+LBL_C_FULL,1,0,0,C-family labels

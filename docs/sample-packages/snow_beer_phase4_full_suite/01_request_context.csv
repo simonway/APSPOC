@@ -1,0 +1,10 @@
+field,value,notes
+scenarioName,snow-beer-phase4-full-suite,Phase 4 combined regression sample
+dataVersion,snow_beer_phase4_full_suite_2026_07_07,Sample version tag
+scheduleStartAt,2026-12-28T00:00:00Z,UTC baseline equals local 2026-12-28 08:00
+horizonMinutes,2880,Two-day horizon for combined Phase 4 regression
+objectiveWeights.tardiness,100,Keep due-date pressure dominant
+objectiveWeights.earliness,2,Pull terminal lots closer to demand due dates
+objectiveWeights.makespan,1,Secondary objective
+solverConfig.timeLimitSeconds,120,Local smoke baseline
+solverConfig.numSearchWorkers,4,Local baseline worker count

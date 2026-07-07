@@ -1,0 +1,4 @@
+issueId,severity,status,category,description,owner,resolution
+ISSUE-01,INFO,OPEN,RegressionScope,"This package is a combined regression umbrella and does not replace individual focused samples",Product,"Keep focused samples as source evidence"
+ISSUE-02,INFO,OPEN,ContractOnly,"Tank, bright transfer, and multi-brew rules remain metadata contracts",Algorithm,"Do not claim hard solver enforcement for these contracts"
+ISSUE-03,INFO,OPEN,QuantityModel,"All quantities and volumes are proxy units rather than KL or bottle counts",Planner,"Use package README as the interpretation source"

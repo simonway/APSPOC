@@ -1,0 +1,2 @@
+caseId,expectedOutcome,expectedFailureType,tankId,fillId,demandId,productCode,brewBatchIds,brewVolumeUnits,targetFillUnits,tankCapacityUnits,aggregateItemCode,fermentedItemCode,remarks
+full_multi_c700,PASS,NONE,ferm_t2,fill_c700_2brews,dem_c700_multi_full,31015630006000000,brew_c700_01|brew_c700_02,1|1,2,2,WORT_C_FULL_AGG,FERMENTED_C_FULL,"Two C700 brew batches aggregate into one full fermentation proxy"

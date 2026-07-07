@@ -1,0 +1,11 @@
+id,label,resourceType,sortOrder,capacity,remarks
+mash_k1,Sugarization kettle 1,REACTOR,1,50KL,Shared brew proxy resource
+mash_k2,Sugarization kettle 2,REACTOR,2,50KL,Second brew proxy resource
+ferm_t1,Fermentation tank 1,TANK,3,50KL,A500 tank contract resource
+ferm_t2,Fermentation tank 2,TANK,4,100KL,B600 and C700 tank contract resource
+maturity_hold_a,Maturity hold A,TANK,5,50KL,Maturity window proxy resource
+filt_f1,Filtration line 1,FILTER,6,80KL,Shared filtration resource
+bright_t1,Bright tank 1,TANK,7,100KL,Bright tank contract resource
+pack_l1,Packaging line 1,OTHER,8,500ml,Packaging line for A500
+pack_l2,Packaging line 2,OTHER,9,600ml,Packaging line for B600
+pack_l3,Packaging line 3,OTHER,10,700ml,Packaging line for C700

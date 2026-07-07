@@ -1,0 +1,16 @@
+id,label,productCode,durationMinutes,dueMinutes,priority,candidateResourceIds,pinnedResourceId,pinnedStartMinutes,predecessorTaskIds,setupGroup
+dem_a500_full_suite__01_sugarization,dem_a500_full_suite / Sugarization,31015630002000000,120,1500,5,mash_k1,,,,BREW_A500
+dem_a500_full_suite__02_fermentation,dem_a500_full_suite / Fermentation,31015630002000000,240,1500,5,ferm_t1,,,dem_a500_full_suite__01_sugarization,FERM_A500
+dem_a500_full_suite__03_maturation_wait,dem_a500_full_suite / Maturation wait,31015630002000000,240,1500,5,maturity_hold_a,,,dem_a500_full_suite__02_fermentation,MAT_A500
+dem_a500_full_suite__04_filtration,dem_a500_full_suite / Filtration,31015630002000000,90,1500,5,filt_f1,,,dem_a500_full_suite__03_maturation_wait,FILT_A500
+dem_a500_full_suite__05_bright_tank_transfer,dem_a500_full_suite / Bright tank transfer,31015630002000000,120,1500,5,bright_t1,,,dem_a500_full_suite__04_filtration,BT_A500
+dem_a500_full_suite__06_packaging,dem_a500_full_suite / Packaging,31015630002000000,150,1500,5,pack_l1,,,dem_a500_full_suite__05_bright_tank_transfer,PKG_500
+dem_b600_full_suite__01_sugarization,dem_b600_full_suite / Sugarization,31015630004000000,140,1800,4,mash_k2,,,,BREW_B600
+dem_b600_full_suite__02_fermentation,dem_b600_full_suite / Fermentation,31015630004000000,260,1800,4,ferm_t2,,,dem_b600_full_suite__01_sugarization,FERM_B600
+dem_b600_full_suite__03_filtration,dem_b600_full_suite / Filtration,31015630004000000,110,1800,4,filt_f1,,,dem_b600_full_suite__02_fermentation,FILT_B600
+dem_b600_full_suite__04_packaging,dem_b600_full_suite / Packaging,31015630004000000,210,1800,4,pack_l2,,,dem_b600_full_suite__03_filtration,PKG_600
+dem_c700_multi_full__01_sugarization_brew_1,dem_c700_multi_full / Sugarization brew 1,31015630006000000,120,2400,3,mash_k1,,,,BREW_C700_1
+dem_c700_multi_full__02_sugarization_brew_2,dem_c700_multi_full / Sugarization brew 2,31015630006000000,120,2400,3,mash_k2,,,dem_c700_multi_full__01_sugarization_brew_1,BREW_C700_2
+dem_c700_multi_full__03_fermentation_fill,dem_c700_multi_full / Fermentation fill proxy,31015630006000000,360,2400,3,ferm_t2,,,dem_c700_multi_full__02_sugarization_brew_2,FERM_C700_FILL
+dem_c700_multi_full__04_filtration,dem_c700_multi_full / Filtration,31015630006000000,90,2400,3,filt_f1,,,dem_c700_multi_full__03_fermentation_fill,FILT_C700
+dem_c700_multi_full__05_packaging,dem_c700_multi_full / Packaging,31015630006000000,180,2400,3,pack_l3,,,dem_c700_multi_full__04_filtration,PKG_700

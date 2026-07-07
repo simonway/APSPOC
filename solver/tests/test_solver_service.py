@@ -929,6 +929,35 @@ class SolverServiceDowntimeTest(unittest.TestCase):
         self.assertGreaterEqual(filtration.startMinutes, fermentation_fill.endMinutes)
         self.assertGreaterEqual(packaging.startMinutes, filtration.endMinutes)
 
+    def test_phase4_full_suite_sample_preserves_combined_regression_order(self) -> None:
+        request = _load_sample_request("snow_beer_phase4_full_suite")
+
+        response = self.service.solve(request)
+
+        self.assertIn(response.status, {"OPTIMAL", "FEASIBLE"})
+        self.assertEqual(response.failureReasons, [])
+        by_id = {task.taskId: task for task in response.scheduledTasks}
+        a_sugarization = by_id["dem_a500_full_suite__01_sugarization"]
+        a_fermentation = by_id["dem_a500_full_suite__02_fermentation"]
+        a_maturity = by_id["dem_a500_full_suite__03_maturation_wait"]
+        a_filtration = by_id["dem_a500_full_suite__04_filtration"]
+        a_transfer = by_id["dem_a500_full_suite__05_bright_tank_transfer"]
+        a_packaging = by_id["dem_a500_full_suite__06_packaging"]
+        c_brew_1 = by_id["dem_c700_multi_full__01_sugarization_brew_1"]
+        c_brew_2 = by_id["dem_c700_multi_full__02_sugarization_brew_2"]
+        c_fill = by_id["dem_c700_multi_full__03_fermentation_fill"]
+        self.assertGreaterEqual(a_sugarization.startMinutes, 180)
+        self.assertGreaterEqual(a_packaging.startMinutes, 720)
+        self.assertGreaterEqual(a_fermentation.startMinutes, a_sugarization.endMinutes)
+        self.assertGreaterEqual(a_maturity.startMinutes, a_fermentation.endMinutes)
+        self.assertGreaterEqual(a_filtration.startMinutes, a_maturity.endMinutes)
+        self.assertGreaterEqual(a_transfer.startMinutes, a_filtration.endMinutes)
+        self.assertGreaterEqual(a_packaging.startMinutes, a_transfer.endMinutes)
+        self.assertEqual(a_transfer.resourceId, "bright_t1")
+        self.assertGreaterEqual(c_fill.startMinutes, c_brew_1.endMinutes)
+        self.assertGreaterEqual(c_fill.startMinutes, c_brew_2.endMinutes)
+        self.assertEqual(c_fill.resourceId, "ferm_t2")
+
 
 def _load_sample_request(package_name: str) -> SolveRequest:
     path = ROOT_DIR / "docs" / "sample-packages" / package_name / "08_generated_schedule_request.json"

@@ -60,6 +60,21 @@ class UatPackageSmokeSummaryTest(unittest.TestCase):
         self.assertEqual(fill_summary["observedPassCount"], 1)
         self.assertEqual(fill_summary["failureTypes"], [])
 
+    def test_loads_phase4_full_suite_contract_summaries_from_package_metadata(self) -> None:
+        summary = load_package_contract_summary(
+            ROOT_DIR / "docs" / "sample-packages" / "snow_beer_phase4_full_suite"
+        )
+
+        tank_summary = summary["fermentationTankRuleSummary"]
+        transfer_summary = summary["brightTankTransferRuleSummary"]
+        fill_summary = summary["multiBrewFillRuleSummary"]
+        self.assertEqual(tank_summary["caseCount"], 2)
+        self.assertEqual(tank_summary["observedPassCount"], 2)
+        self.assertEqual(transfer_summary["caseCount"], 1)
+        self.assertEqual(transfer_summary["observedPassCount"], 1)
+        self.assertEqual(fill_summary["caseCount"], 1)
+        self.assertEqual(fill_summary["observedPassCount"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

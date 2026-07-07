@@ -1,0 +1,2 @@
+caseId,expectedOutcome,expectedFailureType,tankId,transferId,demandId,productCode,sourceItemCode,brightItemCode,occupationStartMinutes,occupationEndMinutes,allowedStartMinutes,allowedEndMinutes,remarks
+full_bright_a500,PASS,NONE,bright_t1,transfer_a500_full,dem_a500_full_suite,31015630002000000,FILTERED_A_FULL,BRIGHT_A_FULL,720,840,600,1200,"A500 bright transfer is inside the allowed regression window"
