@@ -908,6 +908,27 @@ class SolverServiceDowntimeTest(unittest.TestCase):
         self.assertGreaterEqual(b_transfer.startMinutes, b_filtration.endMinutes)
         self.assertGreaterEqual(b_packaging.startMinutes, b_transfer.endMinutes)
 
+    def test_phase4_multi_brew_fill_sample_preserves_aggregate_order(self) -> None:
+        request = _load_sample_request("snow_beer_phase4_multi_brew_fill")
+
+        response = self.service.solve(request)
+
+        self.assertIn(response.status, {"OPTIMAL", "FEASIBLE"})
+        self.assertEqual(response.failureReasons, [])
+        by_id = {task.taskId: task for task in response.scheduledTasks}
+        brew_1 = by_id["dem_a500_multi_brew_fill__01_sugarization_brew_1"]
+        brew_2 = by_id["dem_a500_multi_brew_fill__02_sugarization_brew_2"]
+        fermentation_fill = by_id["dem_a500_multi_brew_fill__03_fermentation_fill"]
+        filtration = by_id["dem_a500_multi_brew_fill__04_filtration"]
+        packaging = by_id["dem_a500_multi_brew_fill__06_packaging"]
+        self.assertEqual(brew_1.resourceId, "mash_k1")
+        self.assertEqual(brew_2.resourceId, "mash_k2")
+        self.assertEqual(fermentation_fill.resourceId, "ferm_t1")
+        self.assertGreaterEqual(fermentation_fill.startMinutes, brew_1.endMinutes)
+        self.assertGreaterEqual(fermentation_fill.startMinutes, brew_2.endMinutes)
+        self.assertGreaterEqual(filtration.startMinutes, fermentation_fill.endMinutes)
+        self.assertGreaterEqual(packaging.startMinutes, filtration.endMinutes)
+
 
 def _load_sample_request(package_name: str) -> SolveRequest:
     path = ROOT_DIR / "docs" / "sample-packages" / package_name / "08_generated_schedule_request.json"

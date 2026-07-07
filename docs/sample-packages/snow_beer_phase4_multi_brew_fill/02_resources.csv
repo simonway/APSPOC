@@ -1,0 +1,7 @@
+id,label,resourceType,sortOrder,capacity,remarks
+mash_k1,Sugarization kettle 1,REACTOR,1,50KL,First brew proxy resource
+mash_k2,Sugarization kettle 2,REACTOR,2,50KL,Second brew proxy resource
+ferm_t1,Fermentation tank 1,TANK,3,100KL,Multi-brew fill proxy tank
+filt_f1,Filtration line 1,FILTER,4,80KL,Filtration resource
+bright_t1,Bright tank 1,TANK,5,100KL,Bright beer transfer proxy resource
+pack_l1,Packaging line 1,OTHER,6,500ml,Packaging line for A500

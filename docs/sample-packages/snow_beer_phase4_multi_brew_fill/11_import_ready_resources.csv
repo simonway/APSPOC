@@ -1,0 +1,7 @@
+id,label,resourceType,sortOrder
+mash_k1,Sugarization kettle 1,REACTOR,1
+mash_k2,Sugarization kettle 2,REACTOR,2
+ferm_t1,Fermentation tank 1,TANK,3
+filt_f1,Filtration line 1,FILTER,4
+bright_t1,Bright tank 1,TANK,5
+pack_l1,Packaging line 1,OTHER,6

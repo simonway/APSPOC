@@ -1,0 +1,2 @@
+caseId,expectedOutcome,expectedFailureType,tankId,fillId,demandId,productCode,brewBatchIds,brewVolumeUnits,targetFillUnits,tankCapacityUnits,aggregateItemCode,fermentedItemCode,remarks
+multi_brew_a500_fill,PASS,NONE,ferm_t1,fill_a500_2brews,dem_a500_multi_brew_fill,31015630002000000,brew_a500_01|brew_a500_02,1|1,2,2,WORT_A_MULTI_AGG,FERMENTED_A_MULTI,"Two brew batches aggregate into one full fermentation proxy"

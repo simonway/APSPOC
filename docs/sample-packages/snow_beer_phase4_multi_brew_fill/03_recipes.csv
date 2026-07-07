@@ -1,0 +1,7 @@
+recipeId,productCode,operationCode,operationName,sequence,durationMinutes,candidateResourceIds,materialInputs,materialOutputs,setupGroup,remarks
+rcp_a500_multi_brew_p4,31015630002000000,SUGARIZATION_BREW_1,Sugarization brew 1,1,120,mash_k1,MALT_A_MULTI:1|HOPS_A_MULTI:1,WORT_A_MULTI_1:1,BREW_A500_1,"First brew batch in the POC aggregate"
+rcp_a500_multi_brew_p4,31015630002000000,SUGARIZATION_BREW_2,Sugarization brew 2,2,120,mash_k2,MALT_A_MULTI:1|HOPS_A_MULTI:1,WORT_A_MULTI_2:1,BREW_A500_2,"Second brew batch in the POC aggregate"
+rcp_a500_multi_brew_p4,31015630002000000,FERMENTATION_FILL,Fermentation fill proxy,3,360,ferm_t1,WORT_A_MULTI_1:1|WORT_A_MULTI_2:1,FERMENTED_A_MULTI:1,FERM_A500_FILL,"Aggregates two brew batches into one fermentation fill proxy"
+rcp_a500_multi_brew_p4,31015630002000000,FILTRATION,Filtration,4,90,filt_f1,FERMENTED_A_MULTI:1,BRIGHT_A_MULTI:1,FILT_A500,"Filters the aggregated fermentation lot"
+rcp_a500_multi_brew_p4,31015630002000000,BRIGHT_TANK_TRANSFER,Bright tank transfer,5,120,bright_t1,BRIGHT_A_MULTI:1,READY_A_MULTI:1,BT_A500,"Keeps chain aligned with Phase 4 bright tank samples"
+rcp_a500_multi_brew_p4,31015630002000000,PACKAGING,Packaging,6,150,pack_l1,READY_A_MULTI:1|CAP_A_MULTI:1|CTN_A_MULTI:1|LBL_A_MULTI:1,31015630002000000:1,PKG_500,"Packages the aggregated lot"

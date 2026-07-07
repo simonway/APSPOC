@@ -137,6 +137,24 @@ class BrightTankTransferRuleRow:
 
 
 @dataclass(frozen=True)
+class MultiBrewFillRuleRow:
+    case_id: str
+    expected_outcome: str
+    expected_failure_type: str
+    tank_id: str
+    fill_id: str
+    demand_id: str
+    product_code: str
+    brew_batch_ids: list[str]
+    brew_volume_units: list[int]
+    target_fill_units: int
+    tank_capacity_units: int
+    aggregate_item_code: str
+    fermented_item_code: str
+    remarks: str
+
+
+@dataclass(frozen=True)
 class DemandCoveragePlan:
     requested_quantity: int
     inventory_covered_quantity: int
@@ -160,6 +178,7 @@ TANK_RULE_FAIL = "FAIL"
 TANK_RULE_NONE = "NONE"
 TANK_RULE_FAILURE_TYPES = {TANK_RULE_NONE, "CAPACITY", "NON_MIXING", "OCCUPATION_WINDOW"}
 BRIGHT_TANK_FAILURE_TYPES = {TANK_RULE_NONE, "OCCUPATION_WINDOW"}
+MULTI_BREW_FAILURE_TYPES = {TANK_RULE_NONE, "VOLUME_MISMATCH", "CAPACITY"}
 
 
 def parse_args() -> argparse.Namespace:
@@ -794,6 +813,99 @@ def load_bright_tank_transfer_rules(
     return transfer_rules
 
 
+def parse_int_list(value: str, source: str, column: str, errors: list[str], *, minimum: int = 0) -> list[int]:
+    values: list[int] = []
+    for index, part in enumerate(split_ids(value), start=1):
+        values.append(parse_int(part, source, f"{column}[{index}]", errors, minimum=minimum))
+    if not values:
+        errors.append(f"{source}: `{column}` must contain at least one value")
+    return values
+
+
+def load_multi_brew_fill_rules(
+    package_dir: Path,
+    resources_by_id: dict[str, ResourceRow],
+    demands_by_id: dict[str, DemandRow],
+    errors: list[str],
+) -> list[MultiBrewFillRuleRow]:
+    path = package_dir / "15_multi_brew_fill_rules.csv"
+    if not path.exists():
+        return []
+
+    rows = read_csv_rows(path)
+    fill_rules: list[MultiBrewFillRuleRow] = []
+    seen_case_ids: set[str] = set()
+    for index, row in enumerate(rows, start=2):
+        source = f"15_multi_brew_fill_rules.csv:{index}"
+        case_id = require_text(row, "caseId", source, errors)
+        if case_id in seen_case_ids:
+            errors.append(f"{source}: duplicate caseId `{case_id}`")
+        seen_case_ids.add(case_id)
+
+        expected_outcome = require_text(row, "expectedOutcome", source, errors).upper()
+        expected_failure_type = (row.get("expectedFailureType", "").strip() or TANK_RULE_NONE).upper()
+        if expected_outcome not in {TANK_RULE_PASS, TANK_RULE_FAIL}:
+            errors.append(f"{source}: expectedOutcome must be PASS or FAIL, got `{expected_outcome}`")
+        if expected_failure_type not in MULTI_BREW_FAILURE_TYPES:
+            errors.append(
+                f"{source}: expectedFailureType must be one of {', '.join(sorted(MULTI_BREW_FAILURE_TYPES))}, "
+                f"got `{expected_failure_type}`"
+            )
+        if expected_outcome == TANK_RULE_PASS and expected_failure_type != TANK_RULE_NONE:
+            errors.append(f"{source}: PASS cases must use expectedFailureType NONE")
+        if expected_outcome == TANK_RULE_FAIL and expected_failure_type == TANK_RULE_NONE:
+            errors.append(f"{source}: FAIL cases must provide a concrete expectedFailureType")
+
+        tank_id = require_text(row, "tankId", source, errors)
+        tank = resources_by_id.get(tank_id)
+        if tank is None:
+            errors.append(f"{source}: unknown tankId `{tank_id}`")
+        elif tank.resource_type != "TANK":
+            errors.append(f"{source}: tankId `{tank_id}` references resourceType `{tank.resource_type}`, expected TANK")
+
+        demand_id = require_text(row, "demandId", source, errors)
+        demand = demands_by_id.get(demand_id)
+        product_code = require_text(row, "productCode", source, errors)
+        if demand is None:
+            errors.append(f"{source}: unknown demandId `{demand_id}`")
+        elif demand.product_code != product_code:
+            errors.append(
+                f"{source}: productCode `{product_code}` does not match demand `{demand_id}` product `{demand.product_code}`"
+            )
+
+        brew_batch_ids = split_ids(row.get("brewBatchIds", ""))
+        brew_volume_units = parse_int_list(row.get("brewVolumeUnits", ""), source, "brewVolumeUnits", errors, minimum=1)
+        if not brew_batch_ids:
+            errors.append(f"{source}: `brewBatchIds` must contain at least one value")
+        if len(brew_batch_ids) != len(brew_volume_units):
+            errors.append(
+                f"{source}: brewBatchIds count {len(brew_batch_ids)} does not match "
+                f"brewVolumeUnits count {len(brew_volume_units)}"
+            )
+
+        fill_rules.append(
+            MultiBrewFillRuleRow(
+                case_id=case_id,
+                expected_outcome=expected_outcome,
+                expected_failure_type=expected_failure_type,
+                tank_id=tank_id,
+                fill_id=require_text(row, "fillId", source, errors),
+                demand_id=demand_id,
+                product_code=product_code,
+                brew_batch_ids=brew_batch_ids,
+                brew_volume_units=brew_volume_units,
+                target_fill_units=parse_int(row.get("targetFillUnits", ""), source, "targetFillUnits", errors, minimum=1),
+                tank_capacity_units=parse_int(row.get("tankCapacityUnits", ""), source, "tankCapacityUnits", errors, minimum=1),
+                aggregate_item_code=require_text(row, "aggregateItemCode", source, errors),
+                fermented_item_code=require_text(row, "fermentedItemCode", source, errors),
+                remarks=row.get("remarks", "").strip(),
+            )
+        )
+    if not fill_rules:
+        errors.append("15_multi_brew_fill_rules.csv: no data rows found")
+    return fill_rules
+
+
 def validate_recipe_sequences(recipes: list[RecipeRow], errors: list[str]) -> None:
     recipes_by_product: dict[str, list[RecipeRow]] = defaultdict(list)
     for recipe in recipes:
@@ -1074,6 +1186,78 @@ def analyze_bright_tank_transfer_rules(
     return cases, summary
 
 
+def analyze_multi_brew_fill_rules(
+    fill_rules: list[MultiBrewFillRuleRow],
+    errors: list[str],
+) -> tuple[list[dict[str, Any]], dict[str, Any] | None]:
+    if not fill_rules:
+        return [], None
+
+    cases: list[dict[str, Any]] = []
+    mismatches: list[str] = []
+    for rule in fill_rules:
+        observed_failure_types: list[str] = []
+        total_brew_volume_units = sum(rule.brew_volume_units)
+        if total_brew_volume_units != rule.target_fill_units:
+            observed_failure_types.append("VOLUME_MISMATCH")
+        if rule.target_fill_units > rule.tank_capacity_units:
+            observed_failure_types.append("CAPACITY")
+
+        observed_outcome = TANK_RULE_FAIL if observed_failure_types else TANK_RULE_PASS
+        expected_matches = observed_outcome == rule.expected_outcome
+        if rule.expected_outcome == TANK_RULE_FAIL:
+            expected_matches = expected_matches and rule.expected_failure_type in observed_failure_types
+        elif rule.expected_failure_type != TANK_RULE_NONE:
+            expected_matches = False
+        if not expected_matches:
+            mismatches.append(
+                f"{rule.case_id}: expected {rule.expected_outcome}/{rule.expected_failure_type}, "
+                f"observed {observed_outcome}/{','.join(observed_failure_types) or TANK_RULE_NONE}"
+            )
+
+        cases.append(
+            {
+                "caseId": rule.case_id,
+                "expectedOutcome": rule.expected_outcome,
+                "expectedFailureType": rule.expected_failure_type,
+                "observedOutcome": observed_outcome,
+                "observedFailureTypes": observed_failure_types,
+                "expectedMatchesObserved": expected_matches,
+                "tankId": rule.tank_id,
+                "fillId": rule.fill_id,
+                "demandId": rule.demand_id,
+                "productCode": rule.product_code,
+                "brewBatchIds": rule.brew_batch_ids,
+                "brewVolumeUnits": rule.brew_volume_units,
+                "totalBrewVolumeUnits": total_brew_volume_units,
+                "targetFillUnits": rule.target_fill_units,
+                "tankCapacityUnits": rule.tank_capacity_units,
+                "aggregateItemCode": rule.aggregate_item_code,
+                "fermentedItemCode": rule.fermented_item_code,
+                "remarks": rule.remarks,
+            }
+        )
+
+    if mismatches:
+        errors.append("15_multi_brew_fill_rules.csv: expectation mismatch: " + "; ".join(mismatches))
+
+    summary = {
+        "caseCount": len(fill_rules),
+        "expectedPassCount": sum(1 for rule in fill_rules if rule.expected_outcome == TANK_RULE_PASS),
+        "expectedFailCount": sum(1 for rule in fill_rules if rule.expected_outcome == TANK_RULE_FAIL),
+        "observedPassCount": sum(1 for case in cases if case["observedOutcome"] == TANK_RULE_PASS),
+        "observedFailCount": sum(1 for case in cases if case["observedOutcome"] == TANK_RULE_FAIL),
+        "expectationMismatchCount": len(mismatches),
+        "failureTypes": sorted({failure_type for case in cases for failure_type in case["observedFailureTypes"]}),
+        "contractOnly": True,
+        "contractNote": (
+            "Multi-brew fill rows are static POC approximation checks for future solver/backend work; "
+            "they do not change the current schedule request."
+        ),
+    }
+    return cases, summary
+
+
 def interval_conflicts_with_downtime(
     resource_id: str,
     start_minutes: int,
@@ -1282,6 +1466,7 @@ def build_outputs(
     inventory_balances: list[InventoryBalanceRow],
     tank_rules: list[FermentationTankRuleRow],
     bright_tank_transfer_rules: list[BrightTankTransferRuleRow],
+    multi_brew_fill_rules: list[MultiBrewFillRuleRow],
     errors: list[str],
 ) -> tuple[dict[str, Any], dict[str, Any], list[dict[str, str]], list[dict[str, str]], list[dict[str, str]], str]:
     recipes_by_product: dict[str, list[RecipeRow]] = defaultdict(list)
@@ -1297,6 +1482,10 @@ def build_outputs(
     tank_rule_cases, tank_rule_summary = analyze_fermentation_tank_rules(tank_rules, errors)
     bright_tank_transfer_cases, bright_tank_transfer_summary = analyze_bright_tank_transfer_rules(
         bright_tank_transfer_rules,
+        errors,
+    )
+    multi_brew_fill_cases, multi_brew_fill_summary = analyze_multi_brew_fill_rules(
+        multi_brew_fill_rules,
         errors,
     )
 
@@ -1555,6 +1744,7 @@ def build_outputs(
         "brightTankTransferRuleCaseCount": (
             bright_tank_transfer_summary["caseCount"] if bright_tank_transfer_summary else 0
         ),
+        "multiBrewFillRuleCaseCount": multi_brew_fill_summary["caseCount"] if multi_brew_fill_summary else 0,
         "precedencePairCount": len(precedence_pairs),
         "bridgeAdjustmentCount": len(bridge_adjustments),
         "demandCoverages": demand_coverages,
@@ -1576,6 +1766,8 @@ def build_outputs(
         "fermentationTankRuleCases": tank_rule_cases,
         "brightTankTransferRuleSummary": bright_tank_transfer_summary,
         "brightTankTransferRuleCases": bright_tank_transfer_cases,
+        "multiBrewFillRuleSummary": multi_brew_fill_summary,
+        "multiBrewFillRuleCases": multi_brew_fill_cases,
         "bridgeAdjustments": [
             {
                 "operationId": adjustment.operation_id,
@@ -1699,6 +1891,12 @@ def main() -> int:
         errors,
         horizon_minutes=context["horizonMinutes"],
     )
+    multi_brew_fill_rules = load_multi_brew_fill_rules(
+        package_dir,
+        resources_by_id,
+        demands_by_id,
+        errors,
+    )
 
     schedule_request, operation_metadata, resources_csv, tasks_csv, downtimes_csv, expected_checks = build_outputs(
         context,
@@ -1710,6 +1908,7 @@ def main() -> int:
         inventory_balances,
         tank_rules,
         bright_tank_transfer_rules,
+        multi_brew_fill_rules,
         errors,
     )
 
@@ -1734,6 +1933,7 @@ def main() -> int:
                     "setupRules": len(setup_rules),
                     "fermentationTankRuleCases": operation_metadata["fermentationTankRuleCaseCount"],
                     "brightTankTransferRuleCases": operation_metadata["brightTankTransferRuleCaseCount"],
+                    "multiBrewFillRuleCases": operation_metadata["multiBrewFillRuleCaseCount"],
                     "bridgeAdjustments": len(operation_metadata["bridgeAdjustments"]),
                 },
                 indent=2,
@@ -1765,6 +1965,7 @@ def main() -> int:
                 "generatedTasks": len(schedule_request["tasks"]),
                 "fermentationTankRuleCases": operation_metadata["fermentationTankRuleCaseCount"],
                 "brightTankTransferRuleCases": operation_metadata["brightTankTransferRuleCaseCount"],
+                "multiBrewFillRuleCases": operation_metadata["multiBrewFillRuleCaseCount"],
                 "bridgeAdjustments": len(operation_metadata["bridgeAdjustments"]),
             },
             indent=2,

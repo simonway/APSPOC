@@ -1,0 +1,6 @@
+itemCode,availableQuantity,availableFromMinutes,safetyStockQuantity,remarks
+MALT_A_MULTI,2,0,0,Malt supply for two brew batches
+HOPS_A_MULTI,2,0,0,Hops supply for two brew batches
+CAP_A_MULTI,1,0,0,A-family caps
+CTN_A_MULTI,1,0,0,A-family cartons
+LBL_A_MULTI,1,0,0,A-family labels

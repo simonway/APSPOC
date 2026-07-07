@@ -1,0 +1,10 @@
+field,value,notes
+scenarioName,snow-beer-phase4-multi-brew-fill,Phase 4 multi-brew fill sample
+dataVersion,snow_beer_phase4_multi_brew_fill_2026_07_07,Sample version tag
+scheduleStartAt,2026-12-27T00:00:00Z,UTC baseline equals local 2026-12-27 08:00
+horizonMinutes,1440,One-day horizon for multi-brew fill contract checks
+objectiveWeights.tardiness,100,Keep due-date pressure dominant
+objectiveWeights.earliness,2,Pull terminal packaging lot closer to demand due date
+objectiveWeights.makespan,1,Secondary objective
+solverConfig.timeLimitSeconds,120,Local smoke baseline
+solverConfig.numSearchWorkers,4,Local baseline worker count

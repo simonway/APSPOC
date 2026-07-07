@@ -1,0 +1,281 @@
+{
+  "scenarioName": "snow-beer-phase4-multi-brew-fill",
+  "dataVersion": "snow_beer_phase4_multi_brew_fill_2026_07_07",
+  "scheduleStartAt": "2026-12-27T00:00:00Z",
+  "horizonMinutes": 1440,
+  "resources": [
+    {
+      "id": "mash_k1",
+      "label": "Sugarization kettle 1",
+      "resourceType": "REACTOR",
+      "sortOrder": 1
+    },
+    {
+      "id": "mash_k2",
+      "label": "Sugarization kettle 2",
+      "resourceType": "REACTOR",
+      "sortOrder": 2
+    },
+    {
+      "id": "ferm_t1",
+      "label": "Fermentation tank 1",
+      "resourceType": "TANK",
+      "sortOrder": 3
+    },
+    {
+      "id": "filt_f1",
+      "label": "Filtration line 1",
+      "resourceType": "FILTER",
+      "sortOrder": 4
+    },
+    {
+      "id": "bright_t1",
+      "label": "Bright tank 1",
+      "resourceType": "TANK",
+      "sortOrder": 5
+    },
+    {
+      "id": "pack_l1",
+      "label": "Packaging line 1",
+      "resourceType": "OTHER",
+      "sortOrder": 6
+    }
+  ],
+  "tasks": [
+    {
+      "id": "dem_a500_multi_brew_fill__01_sugarization_brew_1",
+      "label": "dem_a500_multi_brew_fill / Sugarization brew 1",
+      "productCode": "31015630002000000",
+      "durationMinutes": 120,
+      "dueMinutes": 1320,
+      "priority": 5,
+      "candidateResourceIds": [
+        "mash_k1"
+      ],
+      "predecessorTaskIds": [],
+      "materialInputs": [
+        {
+          "itemCode": "MALT_A_MULTI",
+          "quantity": 1
+        },
+        {
+          "itemCode": "HOPS_A_MULTI",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "WORT_A_MULTI_1",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "BREW_A500_1"
+    },
+    {
+      "id": "dem_a500_multi_brew_fill__02_sugarization_brew_2",
+      "label": "dem_a500_multi_brew_fill / Sugarization brew 2",
+      "productCode": "31015630002000000",
+      "durationMinutes": 120,
+      "dueMinutes": 1320,
+      "priority": 5,
+      "candidateResourceIds": [
+        "mash_k2"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_multi_brew_fill__01_sugarization_brew_1"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "MALT_A_MULTI",
+          "quantity": 1
+        },
+        {
+          "itemCode": "HOPS_A_MULTI",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "WORT_A_MULTI_2",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "BREW_A500_2"
+    },
+    {
+      "id": "dem_a500_multi_brew_fill__03_fermentation_fill",
+      "label": "dem_a500_multi_brew_fill / Fermentation fill proxy",
+      "productCode": "31015630002000000",
+      "durationMinutes": 360,
+      "dueMinutes": 1320,
+      "priority": 5,
+      "candidateResourceIds": [
+        "ferm_t1"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_multi_brew_fill__02_sugarization_brew_2"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "WORT_A_MULTI_1",
+          "quantity": 1
+        },
+        {
+          "itemCode": "WORT_A_MULTI_2",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "FERMENTED_A_MULTI",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "FERM_A500_FILL"
+    },
+    {
+      "id": "dem_a500_multi_brew_fill__04_filtration",
+      "label": "dem_a500_multi_brew_fill / Filtration",
+      "productCode": "31015630002000000",
+      "durationMinutes": 90,
+      "dueMinutes": 1320,
+      "priority": 5,
+      "candidateResourceIds": [
+        "filt_f1"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_multi_brew_fill__03_fermentation_fill"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "FERMENTED_A_MULTI",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "BRIGHT_A_MULTI",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "FILT_A500"
+    },
+    {
+      "id": "dem_a500_multi_brew_fill__05_bright_tank_transfer",
+      "label": "dem_a500_multi_brew_fill / Bright tank transfer",
+      "productCode": "31015630002000000",
+      "durationMinutes": 120,
+      "dueMinutes": 1320,
+      "priority": 5,
+      "candidateResourceIds": [
+        "bright_t1"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_multi_brew_fill__04_filtration"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "BRIGHT_A_MULTI",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "READY_A_MULTI",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "BT_A500"
+    },
+    {
+      "id": "dem_a500_multi_brew_fill__06_packaging",
+      "label": "dem_a500_multi_brew_fill / Packaging",
+      "productCode": "31015630002000000",
+      "durationMinutes": 150,
+      "dueMinutes": 1320,
+      "priority": 5,
+      "candidateResourceIds": [
+        "pack_l1"
+      ],
+      "predecessorTaskIds": [
+        "dem_a500_multi_brew_fill__05_bright_tank_transfer"
+      ],
+      "materialInputs": [
+        {
+          "itemCode": "READY_A_MULTI",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CAP_A_MULTI",
+          "quantity": 1
+        },
+        {
+          "itemCode": "CTN_A_MULTI",
+          "quantity": 1
+        },
+        {
+          "itemCode": "LBL_A_MULTI",
+          "quantity": 1
+        }
+      ],
+      "materialOutputs": [
+        {
+          "itemCode": "31015630002000000",
+          "quantity": 1
+        }
+      ],
+      "setupGroup": "PKG_500"
+    }
+  ],
+  "downtimes": [],
+  "setupRules": [],
+  "inventoryBalances": [
+    {
+      "itemCode": "MALT_A_MULTI",
+      "availableQuantity": 2,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "HOPS_A_MULTI",
+      "availableQuantity": 2,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CAP_A_MULTI",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "CTN_A_MULTI",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    },
+    {
+      "itemCode": "LBL_A_MULTI",
+      "availableQuantity": 1,
+      "availableFromMinutes": 0,
+      "safetyStockQuantity": 0
+    }
+  ],
+  "inventoryDemands": [
+    {
+      "demandId": "dem_a500_multi_brew_fill",
+      "itemCode": "31015630002000000",
+      "quantity": 1,
+      "dueMinutes": 1320
+    }
+  ],
+  "objectiveWeights": {
+    "tardiness": 100,
+    "earliness": 2,
+    "makespan": 1
+  },
+  "solverConfig": {
+    "timeLimitSeconds": 120,
+    "numSearchWorkers": 4
+  }
+}

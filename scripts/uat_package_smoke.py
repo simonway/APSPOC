@@ -270,6 +270,12 @@ def load_package_contract_summary(package_dir: Path) -> dict[str, Any]:
     bright_tank_cases = metadata.get("brightTankTransferRuleCases")
     if isinstance(bright_tank_cases, list):
         summary["brightTankTransferRuleCases"] = bright_tank_cases
+    multi_brew_summary = metadata.get("multiBrewFillRuleSummary")
+    if isinstance(multi_brew_summary, dict):
+        summary["multiBrewFillRuleSummary"] = multi_brew_summary
+    multi_brew_cases = metadata.get("multiBrewFillRuleCases")
+    if isinstance(multi_brew_cases, list):
+        summary["multiBrewFillRuleCases"] = multi_brew_cases
     return summary
 
 

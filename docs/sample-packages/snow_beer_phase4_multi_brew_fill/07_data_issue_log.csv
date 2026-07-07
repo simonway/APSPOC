@@ -1,0 +1,4 @@
+issueId,severity,status,category,description,owner,resolution
+ISSUE-01,INFO,OPEN,PhaseBoundary,"Multi-brew fill is represented as a linear POC proxy in the current schedule request",Product,"Do not claim exact parallel brew-to-tank filling"
+ISSUE-02,INFO,OPEN,QuantityModel,"All volumes are proxy units rather than KL",Planner,"Use 15_multi_brew_fill_rules.csv as contract metadata"
+ISSUE-03,INFO,OPEN,SolverBoundary,"The current solver schedules the aggregate chain but does not enforce fill physics",Algorithm,"Keep exact tank-residency optimization as a later design"
