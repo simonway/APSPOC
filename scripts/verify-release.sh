@@ -68,6 +68,13 @@ if (( RUN_TESTS )); then
         python3 -m unittest discover -s tests -p 'test_*.py'
     )
 
+    log "运行 Snow Beer 第四期组合样本 metadata 回归 ..."
+    (
+        cd "$ROOT_DIR"
+        python3 scripts/uat_package_smoke.py --phase4-suite --check-only \
+            --summary-path .runtime/phase4-suite-check-summary.json
+    )
+
     if [[ -f "$ROOT_DIR/frontend/package.json" ]]; then
         require_command npm
         log "运行 React frontend 单元测试 ..."

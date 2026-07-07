@@ -25,6 +25,14 @@ ROOT_DIR = Path(__file__).resolve().parents[1]
 DEFAULT_PACKAGE_DIR = ROOT_DIR / "docs" / "sample-packages" / "snow_beer_main_chain_phase3"
 DEFAULT_SUMMARY_PATH = ROOT_DIR / ".runtime" / "uat-package-smoke-summary.json"
 DEFAULT_POLL_TIMEOUT_SECONDS = int(os.environ.get("APS_UAT_SMOKE_POLL_TIMEOUT_SECONDS", "180"))
+PHASE4_SUITE_PACKAGE_NAMES: tuple[str, ...] = (
+    "snow_beer_phase4_full_suite",
+    "snow_beer_phase4_maturity_window",
+    "snow_beer_phase4_material_availability",
+    "snow_beer_phase4_fermentation_tank_success",
+    "snow_beer_phase4_bright_tank_transfer",
+    "snow_beer_phase4_multi_brew_fill",
+)
 
 IMPORT_SPECS: tuple[tuple[str, str, str], ...] = (
     ("resources", "02_resources.csv", "resources"),
@@ -69,6 +77,16 @@ def parse_args() -> argparse.Namespace:
         "--num-search-workers",
         type=int,
         help="Override solverConfig.numSearchWorkers from 01_request_context.csv",
+    )
+    parser.add_argument(
+        "--phase4-suite",
+        action="store_true",
+        help="Run the built-in Snow Beer Phase 4 package suite instead of a single package.",
+    )
+    parser.add_argument(
+        "--check-only",
+        action="store_true",
+        help="Validate generated package metadata without connecting to the backend.",
     )
     return parser.parse_args()
 
@@ -279,6 +297,47 @@ def load_package_contract_summary(package_dir: Path) -> dict[str, Any]:
     return summary
 
 
+def load_generated_metadata(package_dir: Path) -> dict[str, Any]:
+    metadata_path = package_dir / "10_generated_operation_metadata.json"
+    if not metadata_path.exists():
+        raise SmokeError(f"{metadata_path}: generated metadata file does not exist")
+    metadata = json.loads(read_text_with_fallback(metadata_path))
+    if not isinstance(metadata, dict):
+        raise SmokeError(f"{metadata_path}: expected JSON object")
+    return metadata
+
+
+def build_phase4_suite_check_summary(sample_packages_dir: Path) -> dict[str, Any]:
+    packages: list[dict[str, Any]] = []
+    for package_name in PHASE4_SUITE_PACKAGE_NAMES:
+        package_dir = sample_packages_dir / package_name
+        metadata = load_generated_metadata(package_dir)
+        packages.append(
+            {
+                "packageName": package_name,
+                "packageDir": str(package_dir),
+                "scenarioName": metadata.get("scenarioName"),
+                "dataVersion": metadata.get("dataVersion"),
+                "generatedTaskCount": metadata.get("operationCount"),
+                "demandCount": metadata.get("demandCount"),
+                "resourceCount": metadata.get("resourceCount"),
+                "contractCounts": {
+                    "fermentationTankRuleCases": metadata.get("fermentationTankRuleCaseCount", 0),
+                    "brightTankTransferRuleCases": metadata.get("brightTankTransferRuleCaseCount", 0),
+                    "multiBrewFillRuleCases": metadata.get("multiBrewFillRuleCaseCount", 0),
+                },
+                "contracts": load_package_contract_summary(package_dir),
+            }
+        )
+    return {
+        "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "suiteName": "snow-beer-phase4",
+        "mode": "check-only",
+        "packageCount": len(packages),
+        "packages": packages,
+    }
+
+
 def build_summary(
     client: BackendSmokeClient,
     *,
@@ -343,6 +402,17 @@ def main() -> int:
     args = parse_args()
     package_dir = Path(args.package_dir).resolve()
     summary_path = Path(args.summary_path).resolve()
+    if args.phase4_suite:
+        if not args.check_only:
+            raise SmokeError("--phase4-suite currently requires --check-only")
+        sample_packages_dir = ROOT_DIR / "docs" / "sample-packages"
+        summary = build_phase4_suite_check_summary(sample_packages_dir)
+        summary_path.parent.mkdir(parents=True, exist_ok=True)
+        summary_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(json.dumps(summary, ensure_ascii=False, indent=2))
+        return 0
+    if args.check_only:
+        raise SmokeError("--check-only is only supported with --phase4-suite")
     context = load_request_context(package_dir)
 
     run_id = uuid.uuid4().hex[:8]

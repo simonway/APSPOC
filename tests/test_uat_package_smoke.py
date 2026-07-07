@@ -6,10 +6,38 @@ import sys
 ROOT_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT_DIR / "scripts"))
 
+from uat_package_smoke import PHASE4_SUITE_PACKAGE_NAMES
+from uat_package_smoke import build_phase4_suite_check_summary
 from uat_package_smoke import load_package_contract_summary
 
 
 class UatPackageSmokeSummaryTest(unittest.TestCase):
+    def test_phase4_suite_package_names_include_full_suite_and_focused_samples(self) -> None:
+        self.assertEqual(
+            PHASE4_SUITE_PACKAGE_NAMES,
+            (
+                "snow_beer_phase4_full_suite",
+                "snow_beer_phase4_maturity_window",
+                "snow_beer_phase4_material_availability",
+                "snow_beer_phase4_fermentation_tank_success",
+                "snow_beer_phase4_bright_tank_transfer",
+                "snow_beer_phase4_multi_brew_fill",
+            ),
+        )
+
+    def test_builds_phase4_suite_check_summary_from_generated_metadata(self) -> None:
+        summary = build_phase4_suite_check_summary(ROOT_DIR / "docs" / "sample-packages")
+
+        self.assertEqual(summary["suiteName"], "snow-beer-phase4")
+        self.assertEqual(summary["packageCount"], 6)
+        packages = {package["packageName"]: package for package in summary["packages"]}
+        full_suite = packages["snow_beer_phase4_full_suite"]
+        self.assertEqual(full_suite["scenarioName"], "snow-beer-phase4-full-suite")
+        self.assertEqual(full_suite["generatedTaskCount"], 15)
+        self.assertEqual(full_suite["contractCounts"]["fermentationTankRuleCases"], 2)
+        self.assertEqual(full_suite["contractCounts"]["brightTankTransferRuleCases"], 1)
+        self.assertEqual(full_suite["contractCounts"]["multiBrewFillRuleCases"], 1)
+
     def test_loads_fermentation_tank_success_contract_summary_from_package_metadata(self) -> None:
         summary = load_package_contract_summary(
             ROOT_DIR / "docs" / "sample-packages" / "snow_beer_phase4_fermentation_tank_success"
