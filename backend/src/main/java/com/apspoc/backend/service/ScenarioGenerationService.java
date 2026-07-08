@@ -85,6 +85,7 @@ public class ScenarioGenerationService {
 
             for (int unitIndex = 1; unitIndex <= demandCoveragePlan.plannedQuantity(); unitIndex++) {
                 String previousOperationId = null;
+                Map<String, String> operationIdByOutputItemCode = new LinkedHashMap<>();
                 for (GenerateScenarioRequest.RecipeInput recipe : productRecipes) {
                     String operationId = buildOperationId(
                             demand.demandId(),
@@ -98,9 +99,13 @@ public class ScenarioGenerationService {
                     Integer operationFixedStartMinutes = recipe.sequence() == 1 ? fixedStartMinutes : null;
                     String baselinePinnedResourceId = operationFixedResourceId;
                     Integer baselinePinnedStartMinutes = operationFixedStartMinutes;
-                    List<String> predecessorOperationIds = previousOperationId == null ? List.of() : List.of(previousOperationId);
                     List<CreateScheduleJobRequest.MaterialQuantityInput> materialInputs = recipe.materialInputs();
                     List<CreateScheduleJobRequest.MaterialQuantityInput> materialOutputs = resolveOperationMaterialOutputs(productRecipes, recipe);
+                    List<String> predecessorOperationIds = buildPredecessorOperationIds(
+                            previousOperationId,
+                            materialInputs,
+                            operationIdByOutputItemCode
+                    );
 
                     if (baselinePinnedStartMinutes != null) {
                         if (baselinePinnedResourceId != null) {
@@ -164,8 +169,8 @@ public class ScenarioGenerationService {
                             materialOutputs
                     ));
 
-                    if (previousOperationId != null) {
-                        precedencePairs.add(new GeneratedScenarioResponse.PrecedencePairResponse(previousOperationId, operationId));
+                    for (String predecessorOperationId : predecessorOperationIds) {
+                        precedencePairs.add(new GeneratedScenarioResponse.PrecedencePairResponse(predecessorOperationId, operationId));
                     }
 
                     operations.add(new GeneratedScenarioResponse.OperationResponse(
@@ -191,6 +196,9 @@ public class ScenarioGenerationService {
                             baselinePinnedResourceId,
                             baselinePinnedStartMinutes
                     ));
+                    for (CreateScheduleJobRequest.MaterialQuantityInput materialOutput : materialOutputs) {
+                        operationIdByOutputItemCode.put(materialOutput.itemCode(), operationId);
+                    }
                     previousOperationId = operationId;
                 }
             }
@@ -362,6 +370,24 @@ public class ScenarioGenerationService {
                 throw badRequest("Setup rule references unknown resourceId `%s`".formatted(setupRule.resourceId()));
             }
         }
+    }
+
+    private List<String> buildPredecessorOperationIds(
+            String previousOperationId,
+            List<CreateScheduleJobRequest.MaterialQuantityInput> materialInputs,
+            Map<String, String> operationIdByOutputItemCode
+    ) {
+        LinkedHashSet<String> predecessorOperationIds = new LinkedHashSet<>();
+        for (CreateScheduleJobRequest.MaterialQuantityInput materialInput : materialInputs) {
+            String producerOperationId = operationIdByOutputItemCode.get(materialInput.itemCode());
+            if (producerOperationId != null) {
+                predecessorOperationIds.add(producerOperationId);
+            }
+        }
+        if (previousOperationId != null) {
+            predecessorOperationIds.add(previousOperationId);
+        }
+        return List.copyOf(predecessorOperationIds);
     }
 
     private Map<String, List<GenerateScenarioRequest.RecipeInput>> buildRecipesByProduct(List<GenerateScenarioRequest.RecipeInput> recipes) {

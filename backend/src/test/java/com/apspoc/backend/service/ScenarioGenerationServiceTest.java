@@ -357,6 +357,252 @@ class ScenarioGenerationServiceTest {
         );
     }
 
+    @Test
+    void generateExpandsPhase4FullSuiteStyleScenarioWithMaterialsInventoryAndSetupRules() {
+        GenerateScenarioRequest request = new GenerateScenarioRequest(
+                "snow-beer-phase4-full-suite",
+                "dv-snow-p4-full-suite",
+                Instant.parse("2026-12-24T00:00:00Z"),
+                5_760,
+                List.of(
+                        new CreateScheduleJobRequest.ResourceInput("mash_k1", "糖化1锅", ResourceType.REACTOR, 1),
+                        new CreateScheduleJobRequest.ResourceInput("mash_k2", "糖化2锅", ResourceType.REACTOR, 2),
+                        new CreateScheduleJobRequest.ResourceInput("ferm_t1", "发酵1罐", ResourceType.TANK, 3),
+                        new CreateScheduleJobRequest.ResourceInput("ferm_t2", "发酵2罐", ResourceType.TANK, 4),
+                        new CreateScheduleJobRequest.ResourceInput("mature_t1", "成熟1罐", ResourceType.TANK, 5),
+                        new CreateScheduleJobRequest.ResourceInput("filt_f1", "过滤1线", ResourceType.FILTER, 6),
+                        new CreateScheduleJobRequest.ResourceInput("bright_t1", "清酒1罐", ResourceType.TANK, 7),
+                        new CreateScheduleJobRequest.ResourceInput("pack_l1", "包装1线", ResourceType.OTHER, 8)
+                ),
+                List.of(
+                        new GenerateScenarioRequest.RecipeInput(
+                                "rcp_a500_phase4",
+                                "31015630002000000",
+                                "SUGARIZATION",
+                                "糖化",
+                                1,
+                                120,
+                                List.of("mash_k1", "mash_k2"),
+                                List.of(
+                                        new CreateScheduleJobRequest.MaterialQuantityInput("MALT_A_LOT", 1),
+                                        new CreateScheduleJobRequest.MaterialQuantityInput("HOPS_A_LOT", 1)
+                                ),
+                                List.of(new CreateScheduleJobRequest.MaterialQuantityInput("WORT_A500_LOT", 1)),
+                                "BREW_A500"
+                        ),
+                        new GenerateScenarioRequest.RecipeInput(
+                                "rcp_a500_phase4",
+                                "31015630002000000",
+                                "FERMENTATION",
+                                "发酵",
+                                2,
+                                480,
+                                List.of("ferm_t1"),
+                                List.of(new CreateScheduleJobRequest.MaterialQuantityInput("WORT_A500_LOT", 1)),
+                                List.of(new CreateScheduleJobRequest.MaterialQuantityInput("FERMENTED_A500_LOT", 1)),
+                                "FERM_A500"
+                        ),
+                        new GenerateScenarioRequest.RecipeInput(
+                                "rcp_a500_phase4",
+                                "31015630002000000",
+                                "MATURATION_WAIT",
+                                "成熟等待",
+                                3,
+                                720,
+                                List.of("mature_t1"),
+                                List.of(new CreateScheduleJobRequest.MaterialQuantityInput("FERMENTED_A500_LOT", 1)),
+                                List.of(new CreateScheduleJobRequest.MaterialQuantityInput("MATURE_A500_LOT", 1)),
+                                "MATURE_A500"
+                        ),
+                        new GenerateScenarioRequest.RecipeInput(
+                                "rcp_a500_phase4",
+                                "31015630002000000",
+                                "FILTRATION",
+                                "过滤",
+                                4,
+                                90,
+                                List.of("filt_f1"),
+                                List.of(new CreateScheduleJobRequest.MaterialQuantityInput("MATURE_A500_LOT", 1)),
+                                List.of(new CreateScheduleJobRequest.MaterialQuantityInput("FILTERED_A500_LOT", 1)),
+                                "FILT_A500"
+                        ),
+                        new GenerateScenarioRequest.RecipeInput(
+                                "rcp_a500_phase4",
+                                "31015630002000000",
+                                "BRIGHT_TRANSFER",
+                                "清酒罐中转",
+                                5,
+                                60,
+                                List.of("bright_t1"),
+                                List.of(new CreateScheduleJobRequest.MaterialQuantityInput("FILTERED_A500_LOT", 1)),
+                                List.of(new CreateScheduleJobRequest.MaterialQuantityInput("BRIGHT_A500_LOT", 1)),
+                                "BRIGHT_A500"
+                        ),
+                        new GenerateScenarioRequest.RecipeInput(
+                                "rcp_a500_phase4",
+                                "31015630002000000",
+                                "PACKAGING",
+                                "包装",
+                                6,
+                                150,
+                                List.of("pack_l1"),
+                                List.of(
+                                        new CreateScheduleJobRequest.MaterialQuantityInput("BRIGHT_A500_LOT", 1),
+                                        new CreateScheduleJobRequest.MaterialQuantityInput("CAP_A_LOT", 1),
+                                        new CreateScheduleJobRequest.MaterialQuantityInput("CTN_A_LOT", 1),
+                                        new CreateScheduleJobRequest.MaterialQuantityInput("LBL_A_LOT", 1)
+                                ),
+                                List.of(new CreateScheduleJobRequest.MaterialQuantityInput("31015630002000000", 1)),
+                                "PKG_500"
+                        ),
+                        new GenerateScenarioRequest.RecipeInput(
+                                "rcp_c700_phase4",
+                                "31015670002000000",
+                                "BREW_1",
+                                "糖化第1锅",
+                                1,
+                                110,
+                                List.of("mash_k1"),
+                                List.of(new CreateScheduleJobRequest.MaterialQuantityInput("MALT_C_LOT", 1)),
+                                List.of(new CreateScheduleJobRequest.MaterialQuantityInput("WORT_C700_BREW_1", 1)),
+                                "BREW_C700"
+                        ),
+                        new GenerateScenarioRequest.RecipeInput(
+                                "rcp_c700_phase4",
+                                "31015670002000000",
+                                "BREW_2",
+                                "糖化第2锅",
+                                2,
+                                110,
+                                List.of("mash_k2"),
+                                List.of(new CreateScheduleJobRequest.MaterialQuantityInput("MALT_C_LOT", 1)),
+                                List.of(new CreateScheduleJobRequest.MaterialQuantityInput("WORT_C700_BREW_2", 1)),
+                                "BREW_C700"
+                        ),
+                        new GenerateScenarioRequest.RecipeInput(
+                                "rcp_c700_phase4",
+                                "31015670002000000",
+                                "FERMENTATION_FILL",
+                                "满罐发酵",
+                                3,
+                                540,
+                                List.of("ferm_t2"),
+                                List.of(
+                                        new CreateScheduleJobRequest.MaterialQuantityInput("WORT_C700_BREW_1", 1),
+                                        new CreateScheduleJobRequest.MaterialQuantityInput("WORT_C700_BREW_2", 1)
+                                ),
+                                List.of(new CreateScheduleJobRequest.MaterialQuantityInput("FERMENTED_C700_LOT", 1)),
+                                "FERM_C700"
+                        ),
+                        new GenerateScenarioRequest.RecipeInput(
+                                "rcp_c700_phase4",
+                                "31015670002000000",
+                                "PACKAGING",
+                                "包装",
+                                4,
+                                180,
+                                List.of("pack_l1"),
+                                List.of(
+                                        new CreateScheduleJobRequest.MaterialQuantityInput("FERMENTED_C700_LOT", 1),
+                                        new CreateScheduleJobRequest.MaterialQuantityInput("CAP_C_LOT", 1)
+                                ),
+                                List.of(new CreateScheduleJobRequest.MaterialQuantityInput("31015670002000000", 1)),
+                                "PKG_700"
+                        )
+                ),
+                List.of(
+                        new GenerateScenarioRequest.DemandInput(
+                                "dem_a500_phase4_full",
+                                "31015630002000000",
+                                "1",
+                                2_880,
+                                6,
+                                null,
+                                null
+                        ),
+                        new GenerateScenarioRequest.DemandInput(
+                                "dem_c700_phase4_full",
+                                "31015670002000000",
+                                "1",
+                                3_600,
+                                4,
+                                null,
+                                null
+                        )
+                ),
+                List.of(),
+                List.of(
+                        new GenerateScenarioRequest.SetupRuleInput("PKG_500", "PKG_700", ResourceType.OTHER, "pack_l1", 45),
+                        new GenerateScenarioRequest.SetupRuleInput("BREW_A500", "BREW_C700", ResourceType.REACTOR, null, 30)
+                ),
+                new CreateScheduleJobRequest.ObjectiveWeights(100, 2, 1),
+                new CreateScheduleJobRequest.SolverConfig(120, 4),
+                List.of(
+                        new CreateScheduleJobRequest.InventoryBalanceInput("MALT_A_LOT", 1, 0, 0),
+                        new CreateScheduleJobRequest.InventoryBalanceInput("HOPS_A_LOT", 1, 0, 0),
+                        new CreateScheduleJobRequest.InventoryBalanceInput("MALT_C_LOT", 2, 240, 0),
+                        new CreateScheduleJobRequest.InventoryBalanceInput("CAP_A_LOT", 1, 0, 0),
+                        new CreateScheduleJobRequest.InventoryBalanceInput("CAP_C_LOT", 1, 600, 0),
+                        new CreateScheduleJobRequest.InventoryBalanceInput("CTN_A_LOT", 1, 0, 0),
+                        new CreateScheduleJobRequest.InventoryBalanceInput("LBL_A_LOT", 1, 0, 0)
+                )
+        );
+
+        var response = scenarioGenerationService.generate(request);
+
+        assertThat(response.operationCount()).isEqualTo(10);
+        assertThat(response.precedencePairCount()).isEqualTo(9);
+        assertThat(response.setupRuleCount()).isEqualTo(2);
+        assertThat(response.inventoryBalanceCount()).isEqualTo(7);
+        assertThat(response.scheduleRequest().tasks()).hasSize(10);
+        assertThat(response.scheduleRequest().setupRules()).containsExactly(
+                new CreateScheduleJobRequest.SetupRuleInput("PKG_500", "PKG_700", ResourceType.OTHER, "pack_l1", 45),
+                new CreateScheduleJobRequest.SetupRuleInput("BREW_A500", "BREW_C700", ResourceType.REACTOR, null, 30)
+        );
+        assertThat(response.scheduleRequest().inventoryBalances()).contains(
+                new CreateScheduleJobRequest.InventoryBalanceInput("MALT_C_LOT", 2, 240, 0),
+                new CreateScheduleJobRequest.InventoryBalanceInput("CAP_C_LOT", 1, 600, 0)
+        );
+        assertThat(response.scheduleRequest().inventoryDemands()).containsExactly(
+                new CreateScheduleJobRequest.InventoryDemandInput("dem_a500_phase4_full", "31015630002000000", 1, 2_880, 6),
+                new CreateScheduleJobRequest.InventoryDemandInput("dem_c700_phase4_full", "31015670002000000", 1, 3_600, 4)
+        );
+        assertThat(response.operations()).extracting(operation -> operation.operationCode()).containsExactly(
+                "SUGARIZATION",
+                "FERMENTATION",
+                "MATURATION_WAIT",
+                "FILTRATION",
+                "BRIGHT_TRANSFER",
+                "PACKAGING",
+                "BREW_1",
+                "BREW_2",
+                "FERMENTATION_FILL",
+                "PACKAGING"
+        );
+        assertThat(response.operations().get(4).predecessorOperationIds())
+                .containsExactly("dem_a500_phase4_full__04_filtration");
+        assertThat(response.operations().get(5).predecessorOperationIds())
+                .containsExactly("dem_a500_phase4_full__05_bright_transfer");
+        assertThat(response.operations().get(8).predecessorOperationIds())
+                .containsExactly("dem_c700_phase4_full__01_brew_1", "dem_c700_phase4_full__02_brew_2");
+        assertThat(response.operations().get(9).predecessorOperationIds())
+                .containsExactly("dem_c700_phase4_full__03_fermentation_fill");
+        assertThat(response.scheduleRequest().tasks().get(4).materialInputs()).containsExactly(
+                new CreateScheduleJobRequest.MaterialQuantityInput("FILTERED_A500_LOT", 1)
+        );
+        assertThat(response.scheduleRequest().tasks().get(4).materialOutputs()).containsExactly(
+                new CreateScheduleJobRequest.MaterialQuantityInput("BRIGHT_A500_LOT", 1)
+        );
+        assertThat(response.scheduleRequest().tasks().get(8).materialInputs()).containsExactly(
+                new CreateScheduleJobRequest.MaterialQuantityInput("WORT_C700_BREW_1", 1),
+                new CreateScheduleJobRequest.MaterialQuantityInput("WORT_C700_BREW_2", 1)
+        );
+        assertThat(response.scheduleRequest().tasks().get(9).materialInputs()).contains(
+                new CreateScheduleJobRequest.MaterialQuantityInput("FERMENTED_C700_LOT", 1),
+                new CreateScheduleJobRequest.MaterialQuantityInput("CAP_C_LOT", 1)
+        );
+    }
+
     private GenerateScenarioRequest baseRequest() {
         return new GenerateScenarioRequest(
                 "uat-v1-chemical-plant-mvp",
