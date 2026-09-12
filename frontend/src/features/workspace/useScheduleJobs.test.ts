@@ -69,6 +69,29 @@ describe("useScheduleJobs", () => {
     expect(result.current.loading).toBe(false);
   });
 
+  it("polls active jobs every five seconds by default", async () => {
+    mockedFetchScheduleJobs.mockResolvedValueOnce([queuedJob]);
+    mockedFetchScheduleJob.mockResolvedValue({ ...queuedJob, status: "RUNNING" });
+    const { result } = renderHook(() => useScheduleJobs());
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(result.current.jobs).toHaveLength(1);
+    expect(mockedFetchScheduleJob).not.toHaveBeenCalled();
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(4999);
+    });
+    expect(mockedFetchScheduleJob).not.toHaveBeenCalled();
+
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(1);
+      await Promise.resolve();
+    });
+    expect(mockedFetchScheduleJob).toHaveBeenCalledWith("job-1");
+  });
+
   it("submits a sample job and updates the list when polling succeeds", async () => {
     mockedSubmitSampleSchedule.mockResolvedValue(queuedJob);
     mockedFetchScheduleJob.mockResolvedValue({

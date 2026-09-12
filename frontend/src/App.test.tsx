@@ -8,6 +8,7 @@ import {
   fetchScheduleJob,
   fetchScheduleJobs,
   fetchSession,
+  fetchVersion,
   fetchVersions,
   generateScenarioFromImportBatches,
   login,
@@ -25,6 +26,7 @@ vi.mock("./lib/api", async () => {
     fetchScheduleJob: vi.fn(),
     fetchScheduleJobs: vi.fn(),
     fetchSession: vi.fn(),
+    fetchVersion: vi.fn(),
     fetchVersions: vi.fn(),
     generateScenarioFromImportBatches: vi.fn(),
     login: vi.fn(),
@@ -45,6 +47,7 @@ const mockedLogin = vi.mocked(login);
 const mockedSubmitSampleSchedule = vi.mocked(submitSampleSchedule);
 const mockedFetchScheduleJob = vi.mocked(fetchScheduleJob);
 const mockedFetchScheduleJobs = vi.mocked(fetchScheduleJobs);
+const mockedFetchVersion = vi.mocked(fetchVersion);
 const mockedCancelScheduleJob = vi.mocked(cancelScheduleJob);
 const mockedRetryScheduleJob = vi.mocked(retryScheduleJob);
 const mockedResolveModelImportTemplateUrl = vi.mocked(resolveModelImportTemplateUrl);
@@ -68,6 +71,16 @@ const version = {
   averageUtilization: 0.7,
 };
 
+const jobVersion = {
+  ...version,
+  versionId: "ver-1",
+  versionName: "Snow Beer v18",
+  scenarioDescription: "Snow Beer released sample",
+  createdAt: "2026-06-18T00:20:00Z",
+  createdBy: "planner",
+  totalMakespan: 480,
+};
+
 const generatedScheduleRequest = {
   scenarioName: "formal-import-dv-test",
   tasks: [{ taskId: "task-1", durationMinutes: 30 }],
@@ -82,6 +95,7 @@ beforeEach(() => {
     timestamp: "2026-06-12T00:00:00Z",
   });
   mockedFetchVersions.mockResolvedValue([version]);
+  mockedFetchVersion.mockResolvedValue(jobVersion);
   mockedLogin.mockResolvedValue({ authenticated: true, username: "admin", role: "ADMIN" });
   mockedSubmitSampleSchedule.mockResolvedValue({
     jobId: "job-1",
@@ -333,7 +347,34 @@ describe("App", () => {
     expect(screen.getByText("Snow Beer running sample")).toBeInTheDocument();
     expect(screen.getByText("Snow Beer failed sample")).toBeInTheDocument();
     expect(screen.getByText("No feasible schedule")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "查看版本 ver-1" })).toHaveAttribute("href", "http://127.0.0.1:8081/");
+    expect(screen.getByRole("button", { name: "查看版本 ver-1" })).toBeInTheDocument();
+  });
+
+  it("expands a successful job into an in-page version review", async () => {
+    render(<App />);
+    await screen.findByRole("heading", { name: "智能排产工作台" });
+    await userEvent.click(screen.getByRole("button", { name: "排程任务" }));
+    await userEvent.click(await screen.findByRole("button", { name: "查看版本 ver-1" }));
+
+    expect(mockedFetchVersion).toHaveBeenCalledWith("ver-1");
+    expect(await screen.findByText("版本状态：RELEASED")).toBeInTheDocument();
+    expect(screen.getByText("总加权延期：0")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "进入旧版控制台 / Gantt" })).toHaveAttribute(
+      "href",
+      "http://127.0.0.1:8081/",
+    );
+  });
+
+  it("hides schedule mutations from read-only roles", async () => {
+    mockedFetchSession.mockResolvedValueOnce({ authenticated: true, username: "approver", role: "APPROVER" });
+    render(<App />);
+    await screen.findByRole("heading", { name: "智能排产工作台" });
+    await userEvent.click(screen.getByRole("button", { name: "排程任务" }));
+
+    expect(await screen.findByRole("heading", { name: "排程任务中心" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "取消 job-running" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "重试 job-failed" })).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "查看版本 ver-1" })).toBeInTheDocument();
   });
 
   it("opens the native import scenario workflow from data import", async () => {
