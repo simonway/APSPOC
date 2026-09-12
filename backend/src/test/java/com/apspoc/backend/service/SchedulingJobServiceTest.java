@@ -14,6 +14,7 @@ import java.time.Instant;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,15 +37,30 @@ class SchedulingJobServiceTest {
     }
 
     @Test
-    void listRecentJobsClampsRequestedLimitToSupportedRange() {
-        ScheduleJob job = job("job-1");
-        when(store.listRecentJobs(20)).thenReturn(List.of(job));
-        when(store.listRecentJobs(50)).thenReturn(List.of(job));
-        when(store.listRecentJobs(1)).thenReturn(List.of(job));
+    void listRecentJobsUsesDefaultLimitForZero() {
+        when(store.listRecentJobs(20)).thenReturn(List.of(job("job-1")));
 
-        assertThat(service.listRecentJobs(0)).containsExactly(job);
-        assertThat(service.listRecentJobs(100)).containsExactly(job);
-        assertThat(service.listRecentJobs(1)).containsExactly(job);
+        service.listRecentJobs(0);
+
+        verify(store).listRecentJobs(20);
+    }
+
+    @Test
+    void listRecentJobsCapsLimitAtFifty() {
+        when(store.listRecentJobs(50)).thenReturn(List.of(job("job-1")));
+
+        service.listRecentJobs(51);
+
+        verify(store).listRecentJobs(50);
+    }
+
+    @Test
+    void listRecentJobsPreservesPositiveLimitWithinSupportedRange() {
+        when(store.listRecentJobs(17)).thenReturn(List.of(job("job-1")));
+
+        service.listRecentJobs(17);
+
+        verify(store).listRecentJobs(17);
     }
 
     private ScheduleJob job(String id) {

@@ -1,6 +1,7 @@
 package com.apspoc.backend.api;
 
 import com.apspoc.backend.api.dto.ScheduleJobResponse;
+import com.apspoc.backend.domain.JobFailureReason;
 import com.apspoc.backend.domain.JobStatus;
 import com.apspoc.backend.domain.ScheduleJob;
 import com.apspoc.backend.domain.UserRole;
@@ -45,29 +46,49 @@ class ScheduleJobControllerTest {
 
     @Test
     void listJobsAllowsReadRolesAndMapsResponses() {
+        Instant createdAt = Instant.parse("2026-06-18T10:00:00Z");
+        Instant completedAt = Instant.parse("2026-06-18T10:01:00Z");
         ScheduleJob job = new ScheduleJob(
                 "job-1",
                 "snow-beer-sample",
                 "planner-admin",
                 "{}",
-                Instant.parse("2026-06-18T10:00:00Z"),
+                createdAt,
+                JobStatus.FAILED,
+                "FAILED",
+                null,
+                JobFailureReason.SOLVER_UNREACHABLE,
+                "Solver connection refused",
+                completedAt
+        );
+        ScheduleJob succeededJob = new ScheduleJob(
+                "job-2",
+                "snow-beer-success",
+                "planner-admin",
+                "{}",
+                createdAt.plusSeconds(120),
                 JobStatus.SUCCEEDED,
                 "OPTIMAL",
                 "ver-1",
                 null,
                 null,
-                Instant.parse("2026-06-18T10:01:00Z")
+                completedAt.plusSeconds(120)
         );
-        when(schedulingJobService.listRecentJobs(20)).thenReturn(List.of(job));
+        when(schedulingJobService.listRecentJobs(20)).thenReturn(List.of(job, succeededJob));
 
         List<ScheduleJobResponse> result = controller.listJobs(20, session);
 
         verify(authService).requireAnyRole(session, UserRole.ADMIN, UserRole.PLANNER, UserRole.APPROVER, UserRole.VIEWER);
-        assertThat(result).hasSize(1);
+        assertThat(result).hasSize(2);
         assertThat(result.getFirst().jobId()).isEqualTo("job-1");
         assertThat(result.getFirst().scenarioName()).isEqualTo("snow-beer-sample");
-        assertThat(result.getFirst().status()).isEqualTo("SUCCEEDED");
-        assertThat(result.getFirst().solverStatus()).isEqualTo("OPTIMAL");
-        assertThat(result.getFirst().versionId()).isEqualTo("ver-1");
+        assertThat(result.getFirst().actorUsername()).isEqualTo("planner-admin");
+        assertThat(result.getFirst().status()).isEqualTo("FAILED");
+        assertThat(result.getFirst().solverStatus()).isEqualTo("FAILED");
+        assertThat(result.getFirst().failureReason()).isEqualTo("SOLVER_UNREACHABLE");
+        assertThat(result.getFirst().errorMessage()).isEqualTo("Solver connection refused");
+        assertThat(result.getFirst().createdAt()).isEqualTo(createdAt);
+        assertThat(result.getFirst().completedAt()).isEqualTo(completedAt);
+        assertThat(result.get(1).versionId()).isEqualTo("ver-1");
     }
 }
