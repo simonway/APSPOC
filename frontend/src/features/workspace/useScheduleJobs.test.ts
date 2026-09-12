@@ -92,6 +92,86 @@ describe("useScheduleJobs", () => {
     expect(mockedFetchScheduleJob).toHaveBeenCalledWith("job-1");
   });
 
+  it("clears timers for jobs no longer active and schedules refreshed active jobs", async () => {
+    const refreshedActiveJob = { ...queuedJob, jobId: "job-active", status: "RUNNING", solverStatus: "RUNNING" };
+    mockedFetchScheduleJobs.mockResolvedValueOnce([queuedJob]).mockResolvedValueOnce([failedJob, refreshedActiveJob]);
+    const { result } = renderHook(() => useScheduleJobs({ pollIntervalMs: 10 }));
+    mockedFetchScheduleJob.mockResolvedValue(refreshedActiveJob);
+
+    await act(async () => {
+      await Promise.resolve();
+      await result.current.reload();
+    });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(10);
+    });
+
+    expect(mockedFetchScheduleJob).toHaveBeenCalledWith("job-active");
+    expect(mockedFetchScheduleJob).not.toHaveBeenCalledWith("job-1");
+  });
+
+  it("cleans up polling timers when unmounted", async () => {
+    mockedFetchScheduleJobs.mockResolvedValueOnce([queuedJob]);
+    const clearTimeoutSpy = vi.spyOn(window, "clearTimeout");
+    const { unmount } = renderHook(() => useScheduleJobs({ pollIntervalMs: 10 }));
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+    unmount();
+
+    expect(clearTimeoutSpy).toHaveBeenCalled();
+    clearTimeoutSpy.mockRestore();
+  });
+
+  it("stops polling after a terminal status", async () => {
+    mockedFetchScheduleJobs.mockResolvedValueOnce([queuedJob]);
+    mockedFetchScheduleJob.mockResolvedValueOnce({ ...queuedJob, status: "SUCCEEDED" });
+    const { result } = renderHook(() => useScheduleJobs({ pollIntervalMs: 10 }));
+
+    await act(async () => {
+      await Promise.resolve();
+      await vi.advanceTimersByTimeAsync(10);
+    });
+    await act(async () => {
+      await vi.advanceTimersByTimeAsync(10);
+    });
+
+    expect(result.current.jobs[0].status).toBe("SUCCEEDED");
+    expect(mockedFetchScheduleJob).toHaveBeenCalledTimes(1);
+  });
+
+  it("retains the existing row and exposes a warning when polling fails", async () => {
+    mockedFetchScheduleJobs.mockResolvedValueOnce([queuedJob]);
+    mockedFetchScheduleJob.mockRejectedValueOnce(new Error("Polling failed"));
+    const { result } = renderHook(() => useScheduleJobs({ pollIntervalMs: 10 }));
+
+    await act(async () => {
+      await Promise.resolve();
+      await vi.advanceTimersByTimeAsync(10);
+    });
+
+    expect(result.current.jobs).toEqual([queuedJob]);
+    expect(result.current.actionError).toBe("Polling failed");
+  });
+
+  it("retains existing rows when a reload fails", async () => {
+    const { result } = renderHook(() => useScheduleJobs({ pollIntervalMs: 10 }));
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+    mockedFetchScheduleJobs.mockRejectedValueOnce(new Error("Refresh failed"));
+
+    await act(async () => {
+      await result.current.reload();
+    });
+
+    expect(result.current.jobs).toEqual([queuedJob, failedJob]);
+    expect(result.current.error).toBe("Refresh failed");
+    expect(result.current.loading).toBe(false);
+  });
+
   it("submits a sample job and updates the list when polling succeeds", async () => {
     mockedSubmitSampleSchedule.mockResolvedValue(queuedJob);
     mockedFetchScheduleJob.mockResolvedValue({

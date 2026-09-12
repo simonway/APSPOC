@@ -42,7 +42,7 @@ function upsertJob(jobs: ScheduleJobResponse[], nextJob: ScheduleJobResponse) {
   return jobs.map((job) => job.jobId === nextJob.jobId ? nextJob : job);
 }
 
-export function useScheduleJobs({ limit = 20, pollIntervalMs = 1500 }: UseScheduleJobsOptions = {}): ScheduleJobsState {
+export function useScheduleJobs({ limit = 20, pollIntervalMs = 5000 }: UseScheduleJobsOptions = {}): ScheduleJobsState {
   const [jobs, setJobs] = useState<ScheduleJobResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionPendingKey, setActionPendingKey] = useState<string | null>(null);
@@ -62,6 +62,7 @@ export function useScheduleJobs({ limit = 20, pollIntervalMs = 1500 }: UseSchedu
   const pollJob = useCallback((jobId: string) => {
     clearTimer(jobId);
     const timer = window.setTimeout(async () => {
+      timersRef.current.delete(jobId);
       try {
         const nextJob = await fetchScheduleJob(jobId);
         if (!mountedRef.current) {
@@ -88,8 +89,14 @@ export function useScheduleJobs({ limit = 20, pollIntervalMs = 1500 }: UseSchedu
       if (!mountedRef.current) {
         return;
       }
+      const activeJobIds = new Set(nextJobs.filter((job) => !terminalStatuses.has(job.status)).map((job) => job.jobId));
+      timersRef.current.forEach((_, jobId) => {
+        if (!activeJobIds.has(jobId)) {
+          clearTimer(jobId);
+        }
+      });
       setJobs(nextJobs);
-      nextJobs.filter((job) => !terminalStatuses.has(job.status)).forEach((job) => pollJob(job.jobId));
+      nextJobs.filter((job) => activeJobIds.has(job.jobId)).forEach((job) => pollJob(job.jobId));
     } catch (loadError) {
       if (mountedRef.current) {
         setError(errorMessage(loadError, "无法加载排程任务"));
