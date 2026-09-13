@@ -360,6 +360,10 @@ describe("App", () => {
     expect(screen.getByText("Snow Beer failed sample")).toBeInTheDocument();
     expect(screen.getByText("No feasible schedule")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "查看版本 ver-1" })).toBeInTheDocument();
+    const table = screen.getByRole("table", { name: "最近排程任务" });
+    expect(table).toContainElement(screen.getByRole("rowgroup"));
+    expect(screen.getAllByRole("columnheader")).toHaveLength(5);
+    expect(screen.getAllByRole("cell").length).toBeGreaterThan(0);
   });
 
   it("expands a successful job into an in-page version review", async () => {

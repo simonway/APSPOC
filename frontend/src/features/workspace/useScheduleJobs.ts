@@ -23,6 +23,7 @@ export interface ScheduleJobsState {
   error: string | null;
   actionError: string | null;
   pollingError: string | null;
+  pollingErrors: Record<string, string>;
   activeJobCount: number;
   failedJobCount: number;
   succeededJobCount: number;
@@ -52,7 +53,7 @@ export function useScheduleJobs({ limit = 20, pollIntervalMs = 5000 }: UseSchedu
   const reloadGenerationRef = useRef(0);
   const [error, setError] = useState<string | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
-  const [pollingError, setPollingError] = useState<string | null>(null);
+  const [pollingErrors, setPollingErrors] = useState<Record<string, string>>({});
   const timersRef = useRef<Map<string, number>>(new Map());
   const generationsRef = useRef<Map<string, number>>(new Map());
   const mountedRef = useRef(true);
@@ -92,14 +93,19 @@ export function useScheduleJobs({ limit = 20, pollIntervalMs = 5000 }: UseSchedu
         if (!mountedRef.current || generationsRef.current.get(jobId) !== generation) {
           return;
         }
-        setPollingError(null);
+        setPollingErrors((current) => {
+          if (!(jobId in current)) return current;
+          const next = { ...current };
+          delete next[jobId];
+          return next;
+        });
         setJobs((current) => upsertJob(current, nextJob));
         if (!terminalStatuses.has(nextJob.status)) {
           pollJob(jobId);
         }
       } catch (pollError) {
         if (mountedRef.current && generationsRef.current.get(jobId) === generation) {
-          setPollingError(errorMessage(pollError, "无法刷新排程任务状态"));
+          setPollingErrors((current) => ({ ...current, [jobId]: errorMessage(pollError, "无法刷新排程任务状态") }));
           pollJob(jobId);
         }
       }
@@ -123,7 +129,7 @@ export function useScheduleJobs({ limit = 20, pollIntervalMs = 5000 }: UseSchedu
         invalidateJob(jobId);
         if (!activeJobIds.has(jobId)) clearTimer(jobId);
       });
-      setPollingError(null);
+      setPollingErrors({});
       setJobs(nextJobs);
       nextJobs.filter((job) => activeJobIds.has(job.jobId)).forEach((job) => pollJob(job.jobId));
     } catch (loadError) {
@@ -142,6 +148,7 @@ export function useScheduleJobs({ limit = 20, pollIntervalMs = 5000 }: UseSchedu
     if (!beginAction(actionKey)) return;
     reloadGenerationRef.current += 1;
     setLoading(false);
+    setError(null);
     setActionError(null);
     try {
       const submittedJob = await submitSampleSchedule();
@@ -164,6 +171,7 @@ export function useScheduleJobs({ limit = 20, pollIntervalMs = 5000 }: UseSchedu
     if (!beginAction(actionKey)) return;
     reloadGenerationRef.current += 1;
     setLoading(false);
+    setError(null);
     setActionError(null);
     try {
       const cancelledJob = await cancelScheduleJob(jobId);
@@ -187,6 +195,7 @@ export function useScheduleJobs({ limit = 20, pollIntervalMs = 5000 }: UseSchedu
     if (!beginAction(actionKey)) return;
     reloadGenerationRef.current += 1;
     setLoading(false);
+    setError(null);
     setActionError(null);
     try {
       const retriedJob = await retryScheduleJob(jobId);
@@ -228,7 +237,8 @@ export function useScheduleJobs({ limit = 20, pollIntervalMs = 5000 }: UseSchedu
     actionPendingKeys,
     error,
     actionError,
-    pollingError,
+    pollingError: Object.values(pollingErrors)[0] ?? null,
+    pollingErrors,
     ...counts,
     reload,
     runSample,

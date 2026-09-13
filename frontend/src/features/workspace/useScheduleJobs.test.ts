@@ -337,6 +337,34 @@ describe("useScheduleJobs", () => {
     expect(result.current.actionPendingKeys).toEqual([]);
   });
 
+  it("keeps polling warnings isolated per job", async () => {
+    const secondJob = { ...queuedJob, jobId: "job-2", scenarioName: "sample-2" };
+    mockedFetchScheduleJobs.mockResolvedValueOnce([queuedJob, secondJob]);
+    mockedFetchScheduleJob.mockImplementation((jobId) => jobId === "job-1"
+      ? Promise.reject(new Error("Job 1 polling failed"))
+      : Promise.resolve({ ...secondJob, status: "RUNNING" }));
+    const { result } = renderHook(() => useScheduleJobs({ pollIntervalMs: 10 }));
+
+    await act(async () => {
+      await Promise.resolve();
+      await vi.advanceTimersByTimeAsync(10);
+    });
+
+    expect(result.current.pollingErrors).toEqual({ "job-1": "Job 1 polling failed" });
+  });
+
+  it("clears a stale list error when running a sample job succeeds", async () => {
+    mockedFetchScheduleJobs.mockRejectedValueOnce(new Error("List unavailable"));
+    mockedSubmitSampleSchedule.mockResolvedValueOnce(queuedJob);
+    const { result } = renderHook(() => useScheduleJobs({ pollIntervalMs: 10 }));
+
+    await act(async () => { await Promise.resolve(); });
+    expect(result.current.error).toBe("List unavailable");
+
+    await act(async () => { await result.current.runSample(); });
+    expect(result.current.error).toBeNull();
+  });
+
   it("retains existing rows when a reload fails", async () => {
     const { result } = renderHook(() => useScheduleJobs({ pollIntervalMs: 10 }));
 
