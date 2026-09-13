@@ -158,7 +158,9 @@ describe("useScheduleJobs", () => {
 
   it("retries polling after a transient failure", async () => {
     mockedFetchScheduleJobs.mockResolvedValueOnce([queuedJob]);
-    mockedFetchScheduleJob.mockRejectedValueOnce(new Error("Polling failed")).mockResolvedValueOnce({ ...queuedJob, status: "SUCCEEDED" });
+    mockedFetchScheduleJob
+      .mockRejectedValueOnce(new Error("Polling failed"))
+      .mockResolvedValueOnce({ ...queuedJob, status: "SUCCEEDED" });
     const { result } = renderHook(() => useScheduleJobs({ pollIntervalMs: 10 }));
 
     await act(async () => {
