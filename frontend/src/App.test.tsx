@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { act, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
@@ -157,6 +157,18 @@ beforeEach(() => {
       errorMessage: null,
       createdAt: "2026-06-18T00:20:00Z",
       completedAt: "2026-06-18T00:21:00Z",
+    },
+    {
+      jobId: "job-succeeded-2",
+      scenarioName: "Snow Beer released sample 2",
+      actorUsername: "planner",
+      status: "SUCCEEDED",
+      solverStatus: "OPTIMAL",
+      versionId: "ver-2",
+      failureReason: null,
+      errorMessage: null,
+      createdAt: "2026-06-18T00:22:00Z",
+      completedAt: "2026-06-18T00:23:00Z",
     },
   ]);
   mockedCancelScheduleJob.mockResolvedValue({
@@ -375,6 +387,45 @@ describe("App", () => {
     expect(screen.queryByRole("button", { name: "取消 job-running" })).not.toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "重试 job-failed" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "查看版本 ver-1" })).toBeInTheDocument();
+  });
+
+  it("keeps the latest selected version detail when requests resolve out of order", async () => {
+    let resolveFirst: (value: typeof jobVersion) => void = () => {};
+    let resolveSecond: (value: typeof jobVersion) => void = () => {};
+    mockedFetchVersion.mockImplementation((versionId) => new Promise((resolve) => {
+      if (versionId === "ver-1") resolveFirst = resolve;
+      else resolveSecond = resolve;
+    }));
+    render(<App />);
+    await screen.findByRole("heading", { name: "智能排产工作台" });
+    await userEvent.click(screen.getByRole("button", { name: "排程任务" }));
+    await userEvent.click(await screen.findByRole("button", { name: "查看版本 ver-1" }));
+    await userEvent.click(screen.getByRole("button", { name: "查看版本 ver-2" }));
+    resolveFirst({ ...jobVersion, versionId: "ver-1" });
+    resolveSecond({ ...jobVersion, versionId: "ver-2", versionName: "Snow Beer v19" });
+    expect(await screen.findByRole("heading", { name: "Snow Beer v19" })).toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "Snow Beer v18" })).not.toBeInTheDocument();
+  });
+
+  it("offers a reload action for polling warnings", async () => {
+    mockedFetchScheduleJob.mockRejectedValueOnce(new Error("Polling failed"));
+    render(<App />);
+    await screen.findByRole("heading", { name: "智能排产工作台" });
+    await userEvent.click(screen.getByRole("button", { name: "排程任务" }));
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 5200));
+    });
+    expect(screen.getByText("Polling failed")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "刷新任务状态" })).toBeInTheDocument();
+  }, 10000);
+
+  it("does not show the empty state when the initial jobs request fails", async () => {
+    mockedFetchScheduleJobs.mockRejectedValueOnce(new Error("Jobs unavailable"));
+    render(<App />);
+    await screen.findByRole("heading", { name: "智能排产工作台" });
+    await userEvent.click(screen.getByRole("button", { name: "排程任务" }));
+    expect(await screen.findByText("Jobs unavailable")).toBeInTheDocument();
+    expect(screen.queryByText("暂无排程任务")).not.toBeInTheDocument();
   });
 
   it("opens the native import scenario workflow from data import", async () => {
