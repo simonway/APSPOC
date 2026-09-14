@@ -4,6 +4,7 @@ import {
   cancelScheduleJob,
   fetchScheduleJob,
   fetchScheduleJobs,
+  fetchVersion,
   generateScenarioFromImportBatches,
   login,
   requestJson,
@@ -153,6 +154,37 @@ describe("requestJson", () => {
 
     await expect(fetchScheduleJobs(10, "http://api.local")).resolves.toHaveLength(1);
     expect(fetchMock).toHaveBeenCalledWith("http://api.local/api/v1/schedule/jobs?limit=10", {
+      credentials: "include",
+      headers: { Accept: "application/json" },
+    });
+  });
+
+  it("fetches a version by id and preserves the encoded path and credentials", async () => {
+    const version = {
+      versionId: "version/1",
+      versionName: "Version 1",
+      status: "PUBLISHED",
+      triggerType: "MANUAL",
+      scenarioDescription: null,
+      createdAt: "2026-06-30T00:00:00Z",
+      createdBy: "admin",
+      publishedAt: "2026-06-30T01:00:00Z",
+      releaseNote: null,
+      totalWeightedTardiness: 0,
+      totalMakespan: 10,
+      lateTaskCount: 0,
+      averageUtilization: 0.5,
+    };
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify(version), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(fetchVersion("version/1", "http://api.local")).resolves.toEqual(version);
+    expect(fetchMock).toHaveBeenCalledWith("http://api.local/api/v1/versions/version%2F1", {
       credentials: "include",
       headers: { Accept: "application/json" },
     });

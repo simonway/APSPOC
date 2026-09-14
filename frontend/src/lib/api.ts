@@ -328,3 +328,9 @@ export function retryScheduleJob(jobId: string, baseUrl?: string) {
 export function fetchVersions() {
   return requestJson<VersionSummaryResponse[]>("/api/v1/versions");
 }
+
+export function fetchVersion(versionId: string, baseUrl?: string) {
+  return requestJson<VersionSummaryResponse>(`/api/v1/versions/${encodeURIComponent(versionId)}`, {
+    ...(baseUrl ? { baseUrl } : {}),
+  });
+}

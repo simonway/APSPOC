@@ -20,7 +20,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.time.Instant;
 import java.util.List;
@@ -190,12 +191,17 @@ class PostgresScheduleStoreTest {
         ScheduleJob newestDomain = domainJob("job-new", "scenario-new", JobStatus.SUCCEEDED, "OPTIMAL", "ver-new", "2026-06-18T10:00:00Z");
         ScheduleJob olderDomain = domainJob("job-old", "scenario-old", JobStatus.FAILED, "FAILED", null, "2026-06-18T09:00:00Z");
 
-        when(jobRepository.findAllByOrderByCreatedAtDesc(PageRequest.of(0, 2))).thenReturn(List.of(newest, older));
+        when(jobRepository.findAllByOrderByCreatedAtDesc(any(Pageable.class))).thenReturn(List.of(newest, older));
         when(mapper.toDomain(newest)).thenReturn(newestDomain);
         when(mapper.toDomain(older)).thenReturn(olderDomain);
 
         List<ScheduleJob> result = store.listRecentJobs(2);
 
+        ArgumentCaptor<Pageable> pageRequest = ArgumentCaptor.forClass(Pageable.class);
+        verify(jobRepository).findAllByOrderByCreatedAtDesc(pageRequest.capture());
+        assertThat(pageRequest.getValue().getPageNumber()).isZero();
+        assertThat(pageRequest.getValue().getPageSize()).isEqualTo(2);
+        assertThat(pageRequest.getValue().getSort()).isEqualTo(Sort.unsorted());
         assertThat(result).extracting(ScheduleJob::id).containsExactly("job-new", "job-old");
     }
 

@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -51,6 +52,33 @@ class SchedulingJobServiceTest {
         assertThat(service.listRecentJobs(0)).containsExactly(job);
         assertThat(service.listRecentJobs(100)).containsExactly(job);
         assertThat(service.listRecentJobs(1)).containsExactly(job);
+    }
+
+    @Test
+    void listRecentJobsUsesDefaultLimitForZero() {
+        when(store.listRecentJobs(20)).thenReturn(List.of(job("job-1")));
+
+        service.listRecentJobs(0);
+
+        verify(store).listRecentJobs(20);
+    }
+
+    @Test
+    void listRecentJobsCapsLimitAtFifty() {
+        when(store.listRecentJobs(50)).thenReturn(List.of(job("job-1")));
+
+        service.listRecentJobs(51);
+
+        verify(store).listRecentJobs(50);
+    }
+
+    @Test
+    void listRecentJobsPreservesPositiveLimitWithinSupportedRange() {
+        when(store.listRecentJobs(17)).thenReturn(List.of(job("job-1")));
+
+        service.listRecentJobs(17);
+
+        verify(store).listRecentJobs(17);
     }
 
     @Test

@@ -57,7 +57,7 @@ export default function App() {
 
         {!dashboardData.loading && dashboardData.authenticated && dashboardData.summary && (
           activeWorkspaceKey === "jobs" ? (
-            <ScheduleJobsPanel />
+            <ScheduleJobsPanel role={dashboardData.summary.userRole} />
           ) : activeWorkspaceKey === "import" || activeWorkspaceKey === "scenario" ? (
             <ImportScenarioPanel onOpenJobs={() => setActiveWorkspaceKey("jobs")} />
           ) : (
