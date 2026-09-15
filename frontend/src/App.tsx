@@ -8,6 +8,7 @@ import { ScheduleJobsPanel } from "./features/workspace/ScheduleJobsPanel";
 import { WorkspaceDashboard } from "./features/workspace/WorkspaceDashboard";
 import { useDashboardData } from "./features/workspace/useDashboardData";
 import { leftRailItems, rightToolItems, workspaceNavItems, type RightToolKey, type WorkspaceNavKey } from "./features/workspace/workspaceNavigation";
+import { appTheme } from "./theme";
 import "./styles.css";
 
 export default function App() {
@@ -21,7 +22,10 @@ export default function App() {
   const activeToolLabel = rightToolItems.find((item) => item.key === activeToolKey)?.label ?? "发布检查";
 
   return (
-    <ConfigProvider locale={zhCN} theme={{ token: { colorPrimary: "#E14C46", borderRadius: 14 } }}>
+    <ConfigProvider
+      locale={zhCN}
+      theme={appTheme}
+    >
       <AppShell
         activeToolKey={activeToolKey}
         activeWorkspaceKey={activeWorkspaceKey}

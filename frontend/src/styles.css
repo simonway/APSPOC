@@ -2,6 +2,10 @@
   --color-primary: #e14c46;
   --color-primary-strong: #cb3a34;
   --color-primary-soft: #fff2f1;
+  --color-primary-text: #a82f2b;
+  --color-primary-text-strong: #7f1d1d;
+  --color-primary-hover: #ffe4e2;
+  --color-primary-focus-ring: rgba(225, 76, 70, 0.16);
   --color-background: #f3f5f8;
   --color-background-soft: #f7f9fc;
   --color-surface: #ffffff;
@@ -15,12 +19,20 @@
   --color-border-strong: #d7dde6;
   --color-success: #00a870;
   --color-success-soft: #ecfbf4;
+  --color-success-text: #006b49;
+  --color-success-text-strong: #00553a;
   --color-warning: #ff7d00;
   --color-warning-soft: #fff7e8;
+  --color-warning-text: #914600;
+  --color-warning-text-strong: #753800;
   --color-danger: #d9363e;
   --color-danger-soft: #fff2f0;
+  --color-danger-text: #a4262c;
+  --color-danger-text-strong: #861f24;
   --color-info: #3478f6;
   --color-info-soft: #eef3ff;
+  --color-info-text: #1e56b3;
+  --color-info-text-strong: #17458f;
   --shadow-panel: 0 8px 22px rgba(15, 23, 42, 0.04);
   --shadow-float: 0 18px 42px rgba(15, 23, 42, 0.09);
   color: var(--color-text-primary);
@@ -133,7 +145,7 @@ input {
 .top-menu-button[aria-pressed="true"],
 .top-menu-button:focus-visible,
 .top-menu-button:hover {
-  color: var(--color-primary);
+  color: var(--color-primary-text);
 }
 
 .global-search {
@@ -160,15 +172,15 @@ input {
   align-items: center;
   border-radius: 999px;
   padding: 0 14px;
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   background: var(--color-primary-soft);
   text-decoration: none;
 }
 
 .legacy-link:focus-visible,
 .legacy-link:hover {
-  color: var(--color-primary-strong);
-  background: #ffe4e2;
+  color: var(--color-primary-text-strong);
+  background: var(--color-primary-hover);
 }
 
 .user-chip {
@@ -247,7 +259,7 @@ input {
   place-items: center;
   border: 1px solid var(--color-border);
   border-radius: 14px;
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   background: var(--color-surface);
   cursor: pointer;
 }
@@ -255,7 +267,7 @@ input {
 .right-tool-button:hover,
 .right-tool-button:focus-visible {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 3px rgba(225, 76, 70, 0.16);
+  box-shadow: 0 0 0 3px var(--color-primary-focus-ring);
 }
 
 .right-tool-button.active {
@@ -294,7 +306,7 @@ input {
 .home-tab {
   width: 128px;
   border: 0;
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   background: rgba(255, 255, 255, 0.72);
   font-size: 13px;
   font-weight: 700;
@@ -392,7 +404,7 @@ input {
 
 .eyebrow {
   margin: 0 0 8px;
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   font-weight: 700;
 }
 
@@ -417,7 +429,7 @@ input {
   margin-top: 10px;
   border-radius: 999px;
   padding: 5px 10px;
-  color: var(--color-success);
+  color: var(--color-success-text-strong);
   background: var(--color-success-soft);
   font-weight: 700;
 }
@@ -473,30 +485,39 @@ input {
 }
 
 .kpi-card-blue {
-  color: var(--color-info);
+  color: var(--color-info-text);
   background: var(--color-info-soft);
 }
 
 .kpi-card-amber {
-  color: var(--color-warning);
+  color: var(--color-warning-text);
   background: var(--color-warning-soft);
 }
 
 .kpi-card-red {
-  color: var(--color-danger);
+  color: var(--color-danger-text);
   background: var(--color-danger-soft);
 }
 
 .kpi-card-blue span,
 .kpi-card-blue p,
-.kpi-card-blue strong,
 .kpi-card-amber span,
 .kpi-card-amber p,
-.kpi-card-amber strong,
 .kpi-card-red span,
-.kpi-card-red p,
-.kpi-card-red strong {
+.kpi-card-red p {
   color: inherit;
+}
+
+.kpi-card-blue strong {
+  color: var(--color-info-text-strong);
+}
+
+.kpi-card-amber strong {
+  color: var(--color-warning-text-strong);
+}
+
+.kpi-card-red strong {
+  color: var(--color-danger-text-strong);
 }
 
 .quick-app-card,
@@ -531,14 +552,14 @@ input {
 .legacy-inline-link {
   display: inline-flex;
   margin-top: 10px;
-  color: var(--color-primary);
+  color: var(--color-primary-text);
   font-weight: 700;
   text-decoration: none;
 }
 
 .legacy-inline-link:focus-visible,
 .legacy-inline-link:hover {
-  color: var(--color-primary-strong);
+  color: var(--color-primary-text-strong);
 }
 
 .value-banner-card {
@@ -547,7 +568,7 @@ input {
 
 .value-banner-card p {
   margin: 0 0 8px;
-  color: var(--color-primary);
+  color: var(--color-info-text);
   font-weight: 700;
 }
 
@@ -675,7 +696,7 @@ input {
 
 .jobs-release-note {
   margin: 0;
-  color: var(--color-warning);
+  color: var(--color-warning-text);
   font-size: 12px;
 }
 
@@ -820,7 +841,7 @@ input {
   border: 1px dashed var(--color-border-strong);
   border-radius: 8px;
   padding: 8px;
-  color: var(--color-info);
+  color: var(--color-info-text);
   background: var(--color-info-soft);
   cursor: pointer;
 }
