@@ -29,4 +29,12 @@ describe("React workbench visual tokens", () => {
   it("does not use the previous blue primary as the root brand token", () => {
     expect(styles).not.toContain("--color-primary: #1677ff;");
   });
+
+  it("uses semantic tokens for primary workbench surfaces", () => {
+    expect(styles).toContain("background: var(--color-primary-soft);");
+    expect(styles).toContain("background: var(--color-success-soft);");
+    expect(styles).toContain("background: var(--color-warning-soft);");
+    expect(styles).toContain("background: var(--color-danger-soft);");
+    expect(styles).toContain("border: 1px solid var(--color-border);");
+  });
 });

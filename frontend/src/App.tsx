@@ -21,7 +21,7 @@ export default function App() {
   const activeToolLabel = rightToolItems.find((item) => item.key === activeToolKey)?.label ?? "发布检查";
 
   return (
-    <ConfigProvider locale={zhCN} theme={{ token: { colorPrimary: "#2563EB", borderRadius: 14 } }}>
+    <ConfigProvider locale={zhCN} theme={{ token: { colorPrimary: "#E14C46", borderRadius: 14 } }}>
       <AppShell
         activeToolKey={activeToolKey}
         activeWorkspaceKey={activeWorkspaceKey}

@@ -294,7 +294,7 @@ input {
 .home-tab {
   width: 128px;
   border: 0;
-  color: #087be8;
+  color: var(--color-primary);
   background: rgba(255, 255, 255, 0.72);
   font-size: 13px;
   font-weight: 700;
@@ -375,7 +375,7 @@ input {
   grid-template-columns: 66px 1fr;
   gap: 14px;
   align-items: center;
-  border-right: 1px solid #edf2fb;
+  border-right: 1px solid var(--color-border);
 }
 
 .profile-avatar {
@@ -417,8 +417,8 @@ input {
   margin-top: 10px;
   border-radius: 999px;
   padding: 5px 10px;
-  color: #064e3b;
-  background: #d1fae5;
+  color: var(--color-success);
+  background: var(--color-success-soft);
   font-weight: 700;
 }
 
@@ -473,15 +473,30 @@ input {
 }
 
 .kpi-card-blue {
-  background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%);
+  color: var(--color-info);
+  background: var(--color-info-soft);
 }
 
 .kpi-card-amber {
-  background: linear-gradient(135deg, #92400e 0%, #b45309 100%);
+  color: var(--color-warning);
+  background: var(--color-warning-soft);
 }
 
 .kpi-card-red {
-  background: linear-gradient(135deg, #b91c1c 0%, #e11d48 100%);
+  color: var(--color-danger);
+  background: var(--color-danger-soft);
+}
+
+.kpi-card-blue span,
+.kpi-card-blue p,
+.kpi-card-blue strong,
+.kpi-card-amber span,
+.kpi-card-amber p,
+.kpi-card-amber strong,
+.kpi-card-red span,
+.kpi-card-red p,
+.kpi-card-red strong {
+  color: inherit;
 }
 
 .quick-app-card,
@@ -527,7 +542,7 @@ input {
 }
 
 .value-banner-card {
-  background: linear-gradient(135deg, #eff6ff 0%, #fff7ed 100%);
+  background: var(--color-info-soft);
 }
 
 .value-banner-card p {
@@ -609,7 +624,7 @@ input {
   border-top: 1px solid var(--color-border);
   border-left: 3px solid var(--color-primary);
   padding: 16px;
-  background: #f8fbff;
+  background: var(--color-surface-soft);
 }
 
 .jobs-detail-loading {
@@ -752,7 +767,7 @@ input {
   display: grid;
   gap: 6px;
   min-width: 0;
-  color: #475569;
+  color: var(--color-text-secondary);
   font-size: 12px;
   font-weight: 650;
 }
@@ -774,10 +789,10 @@ input {
   gap: 12px;
   min-height: 238px;
   padding: 16px;
-  border: 1px solid #dbe3ef;
+  border: 1px solid var(--color-border);
   border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 8px 20px rgba(31, 70, 122, 0.08);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-panel);
 }
 
 .import-batch-card-header {
@@ -794,7 +809,7 @@ input {
 }
 
 .import-batch-card label {
-  color: #475569;
+  color: var(--color-text-secondary);
   font-size: 12px;
   font-weight: 650;
 }
@@ -802,17 +817,17 @@ input {
 .import-batch-card input[type="file"] {
   width: 100%;
   min-height: 38px;
-  border: 1px dashed #94a3b8;
+  border: 1px dashed var(--color-border-strong);
   border-radius: 8px;
   padding: 8px;
-  color: #2563eb;
-  background: #f8fbff;
+  color: var(--color-info);
+  background: var(--color-info-soft);
   cursor: pointer;
 }
 
 .import-batch-card input[type="file"]:disabled {
   color: var(--color-text-secondary);
-  background: #eef2f7;
+  background: var(--color-background-soft);
   cursor: not-allowed;
 }
 
@@ -825,7 +840,7 @@ input {
   display: grid;
   gap: 7px;
   margin: 0;
-  color: #475569;
+  color: var(--color-text-secondary);
   font-size: 12px;
   line-height: 1.4;
 }
@@ -914,7 +929,7 @@ input {
 
   .profile-block {
     border-right: 0;
-    border-bottom: 1px solid #edf2fb;
+    border-bottom: 1px solid var(--color-border);
     padding-bottom: 16px;
   }
 
