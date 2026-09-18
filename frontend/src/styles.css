@@ -168,12 +168,18 @@ input {
 
 .legacy-link {
   display: inline-flex;
+  flex: 0 1 104px;
+  max-width: 104px;
   min-height: 44px;
   align-items: center;
+  justify-content: center;
   border-radius: 999px;
-  padding: 0 14px;
+  padding: 6px 10px;
   color: var(--color-primary-text);
   background: var(--color-primary-soft);
+  font-size: 12px;
+  line-height: 1.25;
+  text-align: center;
   text-decoration: none;
 }
 
@@ -700,9 +706,17 @@ input {
 }
 
 .quick-action-button {
+  height: auto;
   min-height: 64px;
   border-radius: 16px;
   font-size: 13px;
+  line-height: 1.35;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.quick-action-button .ant-btn-icon {
+  flex: 0 0 auto;
 }
 
 .workspace-context-row {
