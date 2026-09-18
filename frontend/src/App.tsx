@@ -70,6 +70,9 @@ export default function App() {
               activeWorkspaceLabel={activeWorkspaceLabel}
               summary={dashboardData.summary}
               onRefresh={dashboardData.reload}
+              onOpenImport={() => setActiveWorkspaceKey("import")}
+              onOpenScenario={() => setActiveWorkspaceKey("scenario")}
+              onOpenJobs={() => setActiveWorkspaceKey("jobs")}
             />
           )
         )}

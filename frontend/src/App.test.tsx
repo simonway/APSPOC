@@ -275,21 +275,19 @@ describe("App", () => {
     expect(screen.getByRole("navigation", { name: "顶部模块导航" })).toBeInTheDocument();
     expect(screen.getByRole("tab", { name: "首页" })).toBeInTheDocument();
     expect(screen.getByLabelText("主模块导航")).toHaveClass("left-nav-rail");
-    const overviewCard = screen.getByLabelText("用户消息和计划概览");
-    expect(overviewCard).toBeInTheDocument();
-    expect(overviewCard).toHaveClass("message-card-compact");
-    expect(screen.getByRole("heading", { name: "智能排产工作台" })).toHaveClass("workspace-title-compact");
-    expect(overviewCard).toContainElement(screen.getByText("待排程任务"));
-    expect(overviewCard).toContainElement(screen.getByText("排程通知"));
-    expect(overviewCard).toContainElement(screen.getByText("预警 / 冲突"));
+    expect(screen.getByLabelText("工作台页面标题")).toBeInTheDocument();
+    expect(screen.getByText("统一查看排程版本、业务状态和下一步计划动作。")).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: "运行排程" })).toHaveLength(1);
+    expect(screen.getByLabelText("核心指标")).toContainElement(screen.getByText("排程版本"));
+    expect(screen.getByLabelText("业务状态")).toContainElement(screen.getByText("待排程任务"));
     expect(screen.getByRole("link", { name: "下载导入模板" })).toHaveAttribute(
       "href",
       "http://127.0.0.1:8081/api/v1/model-import/template",
     );
     expect(screen.getByRole("button", { name: "运行排程" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "生成场景" })).toHaveAttribute("href", "http://127.0.0.1:8081/");
-    expect(screen.getByRole("link", { name: "查看 Gantt" })).toHaveAttribute("href", "http://127.0.0.1:8081/");
-    expect(screen.getByRole("link", { name: "版本发布" })).toHaveAttribute("href", "http://127.0.0.1:8081/");
+    expect(screen.getAllByRole("button", { name: "场景生成" })).toHaveLength(2);
+    expect(screen.getAllByRole("button", { name: "查看排程任务" })).toHaveLength(2);
+    expect(screen.getByRole("link", { name: "版本发布（旧版控制台）" })).toHaveAttribute("href", "http://127.0.0.1:8081/");
     expect(mockedResolveModelImportTemplateUrl).toHaveBeenCalled();
     expect(screen.getByLabelText("工作台右侧信息栏")).toHaveClass("dashboard-side-column");
 
@@ -436,7 +434,7 @@ describe("App", () => {
     render(<App />);
 
     await screen.findByRole("heading", { name: "智能排产工作台" });
-    await userEvent.click(screen.getByRole("button", { name: "数据导入" }));
+    await userEvent.click(screen.getAllByRole("button", { name: "数据导入" }).at(-1)!);
 
     expect(await screen.findByRole("heading", { name: "数据导入与场景生成" })).toBeInTheDocument();
     expect(screen.getByText("Resources")).toBeInTheDocument();
@@ -452,7 +450,7 @@ describe("App", () => {
     render(<App />);
 
     await screen.findByRole("heading", { name: "智能排产工作台" });
-    await userEvent.click(screen.getByRole("button", { name: "数据导入" }));
+    await userEvent.click(screen.getAllByRole("button", { name: "数据导入" }).at(-1)!);
 
     const dataVersion = (screen.getByLabelText("dataVersion") as HTMLInputElement).value;
     const resourcesFile = new File(["res"], "resources.csv", { type: "text/csv" });
@@ -513,7 +511,7 @@ describe("App", () => {
     render(<App />);
 
     await screen.findByRole("heading", { name: "智能排产工作台" });
-    await userEvent.click(screen.getByRole("button", { name: "数据导入" }));
+    await userEvent.click(screen.getAllByRole("button", { name: "数据导入" }).at(-1)!);
 
     const resourcesInput = await screen.findByLabelText("上传 Resources");
     const recipesInput = screen.getByLabelText("上传 Recipes");
@@ -542,7 +540,7 @@ describe("App", () => {
     render(<App />);
 
     await screen.findByRole("heading", { name: "智能排产工作台" });
-    await userEvent.click(screen.getByRole("button", { name: "场景生成" }));
+    await userEvent.click(screen.getAllByRole("button", { name: "场景生成" }).at(-1)!);
 
     expect(await screen.findByRole("heading", { name: "数据导入与场景生成" })).toBeInTheDocument();
     expect(screen.getByText("场景参数")).toBeInTheDocument();

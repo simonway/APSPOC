@@ -368,6 +368,101 @@ input {
   font-size: 14px;
 }
 
+.workspace-page-header {
+  padding: 18px 20px 22px;
+}
+
+.workspace-page-header-content,
+.section-heading-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.workspace-page-header h1 {
+  margin: 0 0 8px;
+  font-size: 26px;
+  line-height: 1.2;
+}
+
+.workspace-page-description {
+  margin: 0 0 8px;
+  color: var(--color-text-secondary);
+}
+
+.workspace-page-meta,
+.side-summary-hint {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.workspace-page-actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 10px;
+  align-items: center;
+}
+
+.dashboard-section {
+  padding: 18px 20px;
+}
+
+.dashboard-section h2 {
+  margin-bottom: 16px;
+}
+
+.section-heading-row h2 {
+  margin-bottom: 0;
+}
+
+.status-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.status-overview-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.status-overview-card > svg {
+  margin-top: 3px;
+  font-size: 18px;
+}
+
+.status-overview-card span,
+.status-overview-card strong,
+.status-overview-card p {
+  display: block;
+}
+
+.status-overview-card span,
+.status-overview-card p {
+  color: var(--color-text-secondary);
+  font-size: 12px;
+}
+
+.status-overview-card strong {
+  margin: 6px 0 4px;
+  color: var(--color-text-primary);
+  font-size: 24px;
+  line-height: 1;
+}
+
+.status-overview-card p {
+  margin: 0;
+}
+
+.status-info { background: var(--color-info-soft); color: var(--color-info-text-strong); }
+.status-warning { background: var(--color-warning-soft); color: var(--color-warning-text-strong); }
+.status-danger { background: var(--color-danger-soft); color: var(--color-danger-text-strong); }
+
 .message-card {
   display: flex;
   flex-direction: column;
@@ -574,6 +669,11 @@ input {
 
 .value-banner-card h2 {
   margin: 0 0 14px;
+}
+
+.value-banner-card .side-summary-hint {
+  display: block;
+  margin-top: 14px;
 }
 
 .compact-info-card strong {
@@ -948,6 +1048,22 @@ input {
     grid-template-columns: 1fr;
   }
 
+  .workspace-page-header-content {
+    flex-direction: column;
+  }
+
+  .workspace-page-actions {
+    width: 100%;
+  }
+
+  .workspace-page-actions .ant-btn {
+    flex: 1;
+  }
+
+  .status-overview-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .profile-block {
     border-right: 0;
     border-bottom: 1px solid var(--color-border);
@@ -1004,6 +1120,10 @@ input {
 
   .workspace-dashboard {
     padding: 14px 12px 24px;
+  }
+
+  .status-overview-grid {
+    grid-template-columns: 1fr;
   }
 
   .import-scenario-header,
