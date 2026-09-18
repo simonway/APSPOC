@@ -20,12 +20,16 @@ export default function App() {
     ?? workspaceNavItems.find((item) => item.key === activeWorkspaceKey)?.label
     ?? "工作台";
   const activeToolLabel = rightToolItems.find((item) => item.key === activeToolKey)?.label ?? "发布检查";
+  const showLoginPage = !dashboardData.loading && !dashboardData.authenticated && !dashboardData.error;
 
   return (
     <ConfigProvider
       locale={zhCN}
       theme={appTheme}
     >
+      {showLoginPage ? (
+        <LoginPanel pending={dashboardData.loginPending} error={dashboardData.loginError} onLogin={dashboardData.login} />
+      ) : (
       <AppShell
         activeToolKey={activeToolKey}
         activeWorkspaceKey={activeWorkspaceKey}
@@ -39,10 +43,6 @@ export default function App() {
             <Spin size="large" />
             <span>正在连接 APS 后端...</span>
           </div>
-        )}
-
-        {!dashboardData.loading && !dashboardData.authenticated && !dashboardData.error && (
-          <LoginPanel pending={dashboardData.loginPending} error={dashboardData.loginError} onLogin={dashboardData.login} />
         )}
 
         {!dashboardData.loading && dashboardData.error && (
@@ -77,6 +77,7 @@ export default function App() {
           )
         )}
       </AppShell>
+      )}
     </ConfigProvider>
   );
 }
