@@ -4,6 +4,7 @@ import {
   cancelScheduleJob,
   fetchScheduleJob,
   fetchScheduleJobs,
+  fetchGanttData,
   fetchVersion,
   generateScenarioFromImportBatches,
   login,
@@ -185,6 +186,22 @@ describe("requestJson", () => {
 
     await expect(fetchVersion("version/1", "http://api.local")).resolves.toEqual(version);
     expect(fetchMock).toHaveBeenCalledWith("http://api.local/api/v1/versions/version%2F1", {
+      credentials: "include",
+      headers: { Accept: "application/json" },
+    });
+  });
+
+  it("fetches Gantt data for an encoded version id", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ versionId: "version/1", rows: [], bars: [], downtimes: [], changeovers: [] }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(fetchGanttData("version/1", "http://api.local")).resolves.toMatchObject({ versionId: "version/1" });
+    expect(fetchMock).toHaveBeenCalledWith("http://api.local/api/v1/versions/version%2F1/gantt-data", {
       credentials: "include",
       headers: { Accept: "application/json" },
     });

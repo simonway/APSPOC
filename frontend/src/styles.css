@@ -762,6 +762,76 @@ input {
   margin-top: 14px;
 }
 
+.gantt-review-panel {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  padding: 18px 20px 28px;
+}
+
+.gantt-review-header,
+.gantt-board-heading,
+.gantt-task-detail {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.gantt-review-header { padding: 18px 20px; }
+.gantt-review-header h1 { margin: 0 0 6px; font-size: 24px; }
+.gantt-review-header span { color: var(--color-text-secondary); }
+.gantt-review-controls { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+.gantt-review-controls .ant-select { width: min(320px, 42vw); }
+.gantt-loading, .gantt-empty { min-height: 240px; display: flex; align-items: center; justify-content: center; gap: 12px; }
+
+.gantt-kpi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.gantt-kpi-grid article { padding: 16px 18px; }
+.gantt-kpi-grid span { display: block; color: var(--color-text-secondary); font-size: 12px; }
+.gantt-kpi-grid strong { display: block; margin-top: 6px; color: var(--color-text-primary); font-size: 24px; }
+
+.gantt-board-card { min-width: 0; overflow: hidden; padding: 18px 0 0; }
+.gantt-board-heading { padding: 0 20px 16px; }
+.gantt-board-heading h2 { margin: 0 0 4px; font-size: 16px; }
+.gantt-board-heading span { color: var(--color-text-secondary); font-size: 12px; }
+.gantt-legend { display: flex; flex-wrap: wrap; gap: 10px 14px; justify-content: flex-end; }
+.gantt-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.gantt-legend i { width: 18px; height: 8px; border-radius: 3px; }
+.legend-task { background: var(--color-info); }
+.legend-late { background: var(--color-danger); }
+.legend-pinned { background: var(--color-primary); box-shadow: inset 0 0 0 2px #fff; }
+.legend-downtime { background: repeating-linear-gradient(135deg, var(--color-text-muted) 0 3px, var(--color-border) 3px 6px); }
+.legend-changeover { background: var(--color-warning); }
+
+.react-gantt-scroll { max-width: 100%; overflow: auto; border-top: 1px solid var(--color-border); }
+.react-gantt-board { min-width: 1180px; background: var(--color-surface); }
+.react-gantt-header, .react-gantt-row { display: flex; min-height: 66px; }
+.react-gantt-header { position: sticky; top: 0; z-index: 5; min-height: 58px; background: var(--color-background-soft); border-bottom: 1px solid var(--color-border-strong); }
+.react-gantt-row { border-bottom: 1px solid var(--color-border); }
+.react-gantt-row:nth-child(odd) { background: var(--color-surface-soft); }
+.react-gantt-label-column { position: sticky; left: 0; z-index: 4; width: 220px; min-width: 220px; padding: 12px 14px; background: inherit; border-right: 1px solid var(--color-border-strong); }
+.react-gantt-header .react-gantt-label-column { z-index: 7; display: flex; align-items: center; color: var(--color-text-secondary); font-weight: 700; }
+.react-gantt-label-column strong, .react-gantt-label-column span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.react-gantt-label-column span { margin-top: 3px; color: var(--color-text-muted); font-size: 11px; }
+.react-gantt-track { position: relative; flex: 0 0 auto; min-height: inherit; }
+.react-gantt-tick, .react-gantt-gridline { position: absolute; top: 0; bottom: 0; border-left: 1px solid var(--color-border); }
+.react-gantt-tick span { position: absolute; top: 17px; left: 6px; width: 112px; color: var(--color-text-secondary); font-size: 11px; white-space: nowrap; }
+.react-gantt-gridline { opacity: .75; pointer-events: none; }
+.react-gantt-bar, .react-gantt-downtime, .react-gantt-changeover { position: absolute; box-sizing: border-box; }
+.react-gantt-bar { top: 15px; z-index: 3; height: 34px; overflow: hidden; border: 0; border-radius: 6px; padding: 0 8px; color: #fff; background: var(--color-info); box-shadow: 0 3px 8px rgba(15, 23, 42, .14); cursor: pointer; text-align: left; }
+.react-gantt-bar span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
+.react-gantt-bar.is-late { background: var(--color-danger); }
+.react-gantt-bar.is-pinned { box-shadow: inset 0 0 0 2px #fff, 0 0 0 2px var(--color-primary); }
+.react-gantt-bar.is-selected { outline: 3px solid var(--color-primary-focus-ring); outline-offset: 2px; }
+.react-gantt-downtime { inset-block: 7px; z-index: 1; border: 1px solid var(--color-text-muted); border-radius: 4px; background: repeating-linear-gradient(135deg, rgba(95,107,122,.42) 0 4px, rgba(231,235,240,.72) 4px 8px); }
+.react-gantt-changeover { top: 8px; z-index: 2; height: 7px; border-radius: 999px; background: var(--color-warning); }
+
+.gantt-task-detail { padding: 18px 20px; }
+.gantt-task-detail h2 { margin: 0; font-size: 18px; }
+.gantt-task-detail dl { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px 20px; flex: 1; margin: 0; }
+.gantt-task-detail dt { color: var(--color-text-secondary); font-size: 11px; }
+.gantt-task-detail dd { margin: 3px 0 0; color: var(--color-text-primary); font-size: 12px; }
+
 .compact-info-card strong {
   display: block;
   margin-bottom: 8px;
@@ -1171,6 +1241,12 @@ input {
     grid-template-columns: 1fr;
   }
 
+  .gantt-review-header, .gantt-board-heading, .gantt-task-detail { flex-direction: column; }
+  .gantt-review-controls { width: 100%; justify-content: flex-start; }
+  .gantt-review-controls .ant-select { flex: 1; width: auto; min-width: 240px; }
+  .gantt-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .gantt-task-detail dl { width: 100%; }
+
   .jobs-table {
     min-width: 0;
   }
@@ -1207,6 +1283,10 @@ input {
   .workspace-dashboard {
     padding: 14px 12px 24px;
   }
+
+  .gantt-review-panel { padding: 14px 12px 24px; }
+  .gantt-kpi-grid { grid-template-columns: 1fr; }
+  .gantt-task-detail dl { grid-template-columns: 1fr 1fr; }
 
   .login-panel { min-height: 0; padding: 18px 12px 28px; }
 

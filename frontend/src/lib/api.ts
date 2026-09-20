@@ -26,6 +26,62 @@ export interface VersionSummaryResponse {
   averageUtilization: number;
 }
 
+export interface GanttDataResponse {
+  versionId: string;
+  versionName: string;
+  status: string;
+  createdBy: string | null;
+  releaseNote: string | null;
+  kpis: {
+    totalWeightedTardiness: number;
+    totalMakespan: number;
+    lateTaskCount: number;
+    averageUtilization: number;
+  };
+  rows: Array<{ id: string; label: string; resourceType: string; sortOrder: number }>;
+  bars: Array<{
+    id: string;
+    rowId: string;
+    startMs: number;
+    endMs: number;
+    label: string;
+    productCode: string;
+    priority: number;
+    dueDateMs: number;
+    late: boolean;
+    tardinessMinutes: number;
+    pinned: boolean;
+  }>;
+  downtimes: Array<{
+    id: string;
+    rowId: string;
+    startMs: number;
+    endMs: number;
+    downtimeType: string;
+    source: string;
+    description: string;
+  }>;
+  changeovers: Array<{
+    id: string;
+    rowId: string;
+    fromTaskId: string;
+    toTaskId: string;
+    startMs: number;
+    endMs: number;
+    durationMinutes: number;
+  }>;
+  inventoryCoverages: Array<{
+    id: string;
+    demandId: string;
+    itemCode: string;
+    requestedQuantity: number;
+    coveredQuantity: number;
+    priority: number;
+    dueDateMs: number;
+    fullyCovered: boolean;
+  }>;
+}
+
 export interface ScheduleJobResponse {
   jobId: string;
   scenarioName: string | null;
@@ -331,6 +387,12 @@ export function fetchVersions() {
 
 export function fetchVersion(versionId: string, baseUrl?: string) {
   return requestJson<VersionSummaryResponse>(`/api/v1/versions/${encodeURIComponent(versionId)}`, {
+    ...(baseUrl ? { baseUrl } : {}),
+  });
+}
+
+export function fetchGanttData(versionId: string, baseUrl?: string) {
+  return requestJson<GanttDataResponse>(`/api/v1/versions/${encodeURIComponent(versionId)}/gantt-data`, {
     ...(baseUrl ? { baseUrl } : {}),
   });
 }

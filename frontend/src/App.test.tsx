@@ -5,6 +5,7 @@ import App from "./App";
 import {
   cancelScheduleJob,
   fetchBackendHealth,
+  fetchGanttData,
   fetchScheduleJob,
   fetchScheduleJobs,
   fetchSession,
@@ -23,6 +24,7 @@ vi.mock("./lib/api", async () => {
   return {
     cancelScheduleJob: vi.fn(),
     fetchBackendHealth: vi.fn(),
+    fetchGanttData: vi.fn(),
     fetchScheduleJob: vi.fn(),
     fetchScheduleJobs: vi.fn(),
     fetchSession: vi.fn(),
@@ -42,6 +44,7 @@ vi.mock("./lib/api", async () => {
 
 const mockedFetchSession = vi.mocked(fetchSession);
 const mockedFetchBackendHealth = vi.mocked(fetchBackendHealth);
+const mockedFetchGanttData = vi.mocked(fetchGanttData);
 const mockedFetchVersions = vi.mocked(fetchVersions);
 const mockedLogin = vi.mocked(login);
 const mockedSubmitSampleSchedule = vi.mocked(submitSampleSchedule);
@@ -81,6 +84,20 @@ const jobVersion = {
   totalMakespan: 480,
 };
 
+const ganttData = {
+  versionId: "v1",
+  versionName: "Snow Beer dashboard baseline",
+  status: "RELEASED",
+  createdBy: "admin",
+  releaseNote: "published",
+  kpis: { totalWeightedTardiness: 0, totalMakespan: 480, lateTaskCount: 1, averageUtilization: 0.7 },
+  rows: [{ id: "line-1", label: "包装一线", resourceType: "PACKAGING_LINE", sortOrder: 1 }],
+  bars: [{ id: "task-1", rowId: "line-1", startMs: 1_800_000_000_000, endMs: 1_800_003_600_000, label: "灌装批次 A", productCode: "SKU-A", priority: 1, dueDateMs: 1_800_003_000_000, late: true, tardinessMinutes: 10, pinned: false }],
+  downtimes: [{ id: "down-1", rowId: "line-1", startMs: 1_800_004_000_000, endMs: 1_800_004_600_000, downtimeType: "MAINTENANCE", source: "sample", description: "计划检修" }],
+  changeovers: [],
+  inventoryCoverages: [],
+};
+
 const generatedScheduleRequest = {
   scenarioName: "formal-import-dv-test",
   tasks: [{ taskId: "task-1", durationMinutes: 30 }],
@@ -95,6 +112,7 @@ beforeEach(() => {
     timestamp: "2026-06-12T00:00:00Z",
   });
   mockedFetchVersions.mockResolvedValue([version]);
+  mockedFetchGanttData.mockResolvedValue(ganttData);
   mockedFetchVersion.mockResolvedValue(jobVersion);
   mockedLogin.mockResolvedValue({ authenticated: true, username: "admin", role: "ADMIN" });
   mockedSubmitSampleSchedule.mockResolvedValue({
@@ -362,6 +380,19 @@ describe("App", () => {
     expect(table).toContainElement(screen.getByRole("rowgroup"));
     expect(screen.getAllByRole("columnheader")).toHaveLength(5);
     expect(screen.getAllByRole("cell").length).toBeGreaterThan(0);
+  });
+
+  it("opens the native Gantt review from the left rail", async () => {
+    render(<App />);
+
+    await screen.findByRole("heading", { name: "智能排产工作台" });
+    await userEvent.click(screen.getByRole("button", { name: "Gantt 评审" }));
+
+    expect(await screen.findByRole("heading", { name: "Gantt 评审" })).toBeInTheDocument();
+    expect(mockedFetchGanttData).toHaveBeenCalledWith("v1");
+    expect(await screen.findByRole("button", { name: "任务 灌装批次 A" })).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: "任务 灌装批次 A" }));
+    expect(screen.getByLabelText("任务详情 灌装批次 A")).toBeInTheDocument();
   });
 
   it("expands a successful job into an in-page version review", async () => {
