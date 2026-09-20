@@ -1,10 +1,22 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent } from "react";
 import { MinusOutlined, PlusOutlined, ReloadOutlined } from "@ant-design/icons";
 import { Alert, Button, Empty, Select, Spin, Tag } from "antd";
 import { fetchGanttData, fetchVersions, type GanttDataResponse, type VersionSummaryResponse } from "../../lib/api";
 
 const MIN_ZOOM = 0.5;
 const MAX_ZOOM = 2.5;
+const DRAG_SNAP_MS = 15 * 60_000;
+
+type GanttBar = GanttDataResponse["bars"][number];
+type DraftBar = Pick<GanttBar, "rowId" | "startMs" | "endMs">;
+type DragSession = {
+  barId: string;
+  rowId: string;
+  startClientX: number;
+  startMs: number;
+  endMs: number;
+  moved: boolean;
+};
 
 function formatPoint(value: number) {
   return new Date(value).toLocaleString("zh-CN", { month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" });
@@ -42,7 +54,10 @@ export function GanttReviewPanel() {
   const [zoom, setZoom] = useState(1);
   const [versionsRefreshKey, setVersionsRefreshKey] = useState(0);
   const [ganttRefreshKey, setGanttRefreshKey] = useState(0);
+  const [draftBars, setDraftBars] = useState<Record<string, DraftBar>>({});
+  const [draggingBarId, setDraggingBarId] = useState<string | null>(null);
   const requestId = useRef(0);
+  const dragSession = useRef<DragSession | null>(null);
 
   useEffect(() => {
     const current = ++requestId.current;
@@ -70,6 +85,7 @@ export function GanttReviewPanel() {
     setLoading(true);
     setError(null);
     setSelectedBarId(null);
+    setDraftBars({});
     fetchGanttData(versionId)
       .then((payload) => {
         if (current !== requestId.current) return;
@@ -87,7 +103,8 @@ export function GanttReviewPanel() {
 
   const range = useMemo(() => data ? timelineRange(data) : null, [data]);
   const rows = useMemo(() => data ? [...data.rows].sort((left, right) => left.sortOrder - right.sortOrder) : [], [data]);
-  const selectedBar = data?.bars.find((bar) => bar.id === selectedBarId) ?? null;
+  const displayBars = useMemo(() => data ? data.bars.map((bar) => ({ ...bar, ...draftBars[bar.id] })) : [], [data, draftBars]);
+  const selectedBar = displayBars.find((bar) => bar.id === selectedBarId) ?? null;
   const naturalWidth = range ? Math.min(6400, Math.max(960, (range.span / 60_000) * 2.2)) : 960;
   const timelineWidth = naturalWidth * zoom;
   const ticks = range ? Array.from({ length: 7 }, (_, index) => ({
@@ -98,6 +115,69 @@ export function GanttReviewPanel() {
   const reload = () => {
     if (versionId) setGanttRefreshKey((value) => value + 1);
     else setVersionsRefreshKey((value) => value + 1);
+  };
+
+  const conflicts = useMemo(() => {
+    if (!data) return new Set<string>();
+    const ids = new Set<string>();
+    for (const bar of displayBars) {
+      if (!draftBars[bar.id]) continue;
+      const overlapsBar = displayBars.some((other) => other.id !== bar.id && other.rowId === bar.rowId && bar.startMs < other.endMs && other.startMs < bar.endMs);
+      const overlapsDowntime = data.downtimes.some((item) => item.rowId === bar.rowId && bar.startMs < item.endMs && item.startMs < bar.endMs);
+      if (overlapsBar || overlapsDowntime) ids.add(bar.id);
+    }
+    return ids;
+  }, [data, displayBars, draftBars]);
+
+  const startDrag = (event: ReactPointerEvent<HTMLButtonElement>, bar: GanttBar) => {
+    if (bar.pinned || event.button !== 0) return;
+    event.preventDefault();
+    event.currentTarget.setPointerCapture?.(event.pointerId);
+    dragSession.current = {
+      barId: bar.id,
+      rowId: bar.rowId,
+      startClientX: event.clientX,
+      startMs: bar.startMs,
+      endMs: bar.endMs,
+      moved: false,
+    };
+    setDraggingBarId(bar.id);
+  };
+
+  const moveDrag = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    const session = dragSession.current;
+    if (!session || !range) return;
+    const rawDeltaMs = ((event.clientX - session.startClientX) / timelineWidth) * range.span;
+    const deltaMs = event.shiftKey ? rawDeltaMs : Math.round(rawDeltaMs / DRAG_SNAP_MS) * DRAG_SNAP_MS;
+    const duration = session.endMs - session.startMs;
+    const nextStart = Math.min(range.max - duration, Math.max(range.min, session.startMs + deltaMs));
+    const rowElement = typeof document.elementFromPoint === "function" ? document.elementFromPoint(event.clientX, event.clientY)?.closest<HTMLElement>("[data-gantt-row-id]") : null;
+    const nextRowId = rowElement?.dataset.ganttRowId ?? session.rowId;
+    session.moved = session.moved || Math.abs(event.clientX - session.startClientX) >= 3 || nextRowId !== session.rowId;
+    setDraftBars((current) => ({ ...current, [session.barId]: { rowId: nextRowId, startMs: nextStart, endMs: nextStart + duration } }));
+  };
+
+  const endDrag = (event: ReactPointerEvent<HTMLButtonElement>) => {
+    if (event.currentTarget.hasPointerCapture?.(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+    dragSession.current = null;
+    setDraggingBarId(null);
+  };
+
+  const resetDraft = () => {
+    dragSession.current = null;
+    setDraggingBarId(null);
+    setDraftBars({});
+  };
+
+  const moveBarByKeyboard = (event: ReactKeyboardEvent<HTMLButtonElement>, bar: GanttBar) => {
+    if (bar.pinned || !range || (event.key !== "ArrowLeft" && event.key !== "ArrowRight")) return;
+    event.preventDefault();
+    const duration = bar.endMs - bar.startMs;
+    const direction = event.key === "ArrowRight" ? 1 : -1;
+    const nextStart = Math.min(range.max - duration, Math.max(range.min, bar.startMs + direction * DRAG_SNAP_MS));
+    setDraftBars((current) => ({ ...current, [bar.id]: { rowId: bar.rowId, startMs: nextStart, endMs: nextStart + duration } }));
   };
 
   return (
@@ -120,6 +200,7 @@ export function GanttReviewPanel() {
           <Button onClick={() => setZoom(1)}>适配</Button>
           <Button aria-label="放大甘特图" icon={<PlusOutlined />} disabled={zoom >= MAX_ZOOM} onClick={() => setZoom((value) => Math.min(MAX_ZOOM, value + 0.25))} />
           <Button aria-label="刷新甘特图" icon={<ReloadOutlined />} onClick={reload} />
+          <Button disabled={Object.keys(draftBars).length === 0} onClick={resetDraft}>重置调整</Button>
         </div>
       </header>
 
@@ -143,6 +224,15 @@ export function GanttReviewPanel() {
                 <span><i className="legend-task" />任务</span><span><i className="legend-late" />延期</span><span><i className="legend-pinned" />固定</span><span><i className="legend-downtime" />停机</span><span><i className="legend-changeover" />换型</span>
               </div>
             </div>
+            {Object.keys(draftBars).length > 0 && (
+              <Alert
+                className="gantt-draft-alert"
+                type={conflicts.size > 0 ? "warning" : "info"}
+                showIcon
+                message={`已在本地调整 ${Object.keys(draftBars).length} 个任务${conflicts.size > 0 ? `，其中 ${conflicts.size} 个存在冲突` : ""}`}
+                description="拖动未固定的任务条可调整开始时间；按住 Shift 可关闭 15 分钟吸附。当前调整尚未写回后端。"
+              />
+            )}
             {rows.length === 0 ? <Empty description="当前版本没有资源行" /> : (
               <div className="react-gantt-scroll">
                 <div className="react-gantt-board" style={{ width: `${timelineWidth + 220}px` }}>
@@ -153,7 +243,7 @@ export function GanttReviewPanel() {
                     </div>
                   </div>
                   {rows.map((row) => {
-                    const bars = data.bars.filter((item) => item.rowId === row.id);
+                    const bars = displayBars.filter((item) => item.rowId === row.id);
                     const downtimes = data.downtimes.filter((item) => item.rowId === row.id);
                     const changeovers = data.changeovers.filter((item) => item.rowId === row.id);
                     return (
@@ -166,11 +256,19 @@ export function GanttReviewPanel() {
                           {bars.map((bar) => (
                             <button
                               key={bar.id}
-                              className={`react-gantt-bar${bar.late ? " is-late" : ""}${bar.pinned ? " is-pinned" : ""}${bar.id === selectedBarId ? " is-selected" : ""}`}
+                              className={`react-gantt-bar${bar.late ? " is-late" : ""}${bar.pinned ? " is-pinned" : ""}${draftBars[bar.id] ? " is-draft" : ""}${conflicts.has(bar.id) ? " is-conflict" : ""}${bar.id === draggingBarId ? " is-dragging" : ""}${bar.id === selectedBarId ? " is-selected" : ""}`}
                               style={itemStyle(bar.startMs, bar.endMs, range.min, range.span)}
                               title={`${bar.label} · ${formatDuration(bar.startMs, bar.endMs)}`}
                               aria-label={`任务 ${bar.label}`}
-                              onClick={() => setSelectedBarId(bar.id)}
+                              aria-grabbed={bar.id === draggingBarId}
+                              onClick={() => {
+                                if (!dragSession.current?.moved) setSelectedBarId(bar.id);
+                              }}
+                              onPointerDown={(event) => startDrag(event, bar)}
+                              onPointerMove={moveDrag}
+                              onPointerUp={endDrag}
+                              onPointerCancel={endDrag}
+                              onKeyDown={(event) => moveBarByKeyboard(event, bar)}
                             >
                               <span>{bar.label}</span>
                             </button>

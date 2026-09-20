@@ -1,4 +1,4 @@
-import { act, render, screen, waitFor } from "@testing-library/react";
+import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import App from "./App";
@@ -390,7 +390,12 @@ describe("App", () => {
 
     expect(await screen.findByRole("heading", { name: "Gantt 评审" })).toBeInTheDocument();
     expect(mockedFetchGanttData).toHaveBeenCalledWith("v1");
-    expect(await screen.findByRole("button", { name: "任务 灌装批次 A" })).toBeInTheDocument();
+    const taskBar = await screen.findByRole("button", { name: "任务 灌装批次 A" });
+    expect(taskBar).toBeInTheDocument();
+    const originalLeft = taskBar.style.left;
+    fireEvent.keyDown(taskBar, { key: "ArrowRight" });
+    await waitFor(() => expect(screen.getByRole("button", { name: "任务 灌装批次 A" }).style.left).not.toBe(originalLeft));
+    expect(screen.getByText(/已在本地调整 1 个任务/)).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "任务 灌装批次 A" }));
     expect(screen.getByLabelText("任务详情 灌装批次 A")).toBeInTheDocument();
   });
