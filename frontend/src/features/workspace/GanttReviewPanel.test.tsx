@@ -88,9 +88,11 @@ describe("Gantt trial solve", () => {
 
     bar.setPointerCapture = vi.fn();
     bar.releasePointerCapture = vi.fn();
-    fireEvent(bar, new MouseEvent("pointerdown", { bubbles: true, button: 0, clientX: 10 }));
+    fireEvent(bar, new MouseEvent("pointerdown", { bubbles: true, button: 0, clientX: 10, clientY: 100 }));
     expect(bar).toHaveAttribute("aria-grabbed", "true");
-    fireEvent(bar, new MouseEvent("pointermove", { bubbles: true, clientX: 40, shiftKey: false }));
+    fireEvent(bar, new MouseEvent("pointermove", { bubbles: true, clientX: 40, clientY: 160, shiftKey: false }));
+    // A floating ghost follows the pointer; the draft commit happens on pointer-up, not mid-drag.
+    expect(document.querySelector(".react-gantt-drag-ghost")).not.toBeNull();
     fireEvent(bar, new MouseEvent("pointerup", { bubbles: true }));
     await screen.findByText(/已在本地调整 1 个任务/);
     const movedBar = screen.getByRole("button", { name: "任务 任务 A" });
