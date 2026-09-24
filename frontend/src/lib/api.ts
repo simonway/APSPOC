@@ -95,6 +95,14 @@ export interface ScheduleJobResponse {
   completedAt: string | null;
 }
 
+export interface TrialSolveDraftBar {
+  barId: string;
+  rowId: string;
+  startMs: number;
+  endMs: number;
+  pinned: boolean;
+}
+
 export type ImportBatchKind =
   | "resources"
   | "recipes"
@@ -393,6 +401,14 @@ export function fetchVersion(versionId: string, baseUrl?: string) {
 
 export function fetchGanttData(versionId: string, baseUrl?: string) {
   return requestJson<GanttDataResponse>(`/api/v1/versions/${encodeURIComponent(versionId)}/gantt-data`, {
+    ...(baseUrl ? { baseUrl } : {}),
+  });
+}
+
+export function submitTrialSolve(versionId: string, draftBars: TrialSolveDraftBar[], baseUrl?: string) {
+  return requestJson<ScheduleJobResponse>(`/api/v1/versions/${encodeURIComponent(versionId)}/trial-solve`, {
+    method: "POST",
+    body: JSON.stringify({ draftBars }),
     ...(baseUrl ? { baseUrl } : {}),
   });
 }

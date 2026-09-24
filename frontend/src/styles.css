@@ -783,6 +783,9 @@ input {
 .gantt-review-header span { color: var(--color-text-secondary); }
 .gantt-review-controls { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
 .gantt-review-controls .ant-select { width: min(320px, 42vw); }
+.gantt-zoom-controls { display: inline-flex; align-items: center; overflow: hidden; border: 1px solid var(--color-border-strong); border-radius: 6px; background: var(--color-surface); }
+.gantt-zoom-controls .ant-btn { border: 0; border-radius: 0; box-shadow: none; }
+.gantt-zoom-value { min-width: 58px; padding: 0 8px; color: var(--color-text-secondary); font-variant-numeric: tabular-nums; font-weight: 700; text-align: center; }
 .gantt-loading, .gantt-empty { min-height: 240px; display: flex; align-items: center; justify-content: center; gap: 12px; }
 
 .gantt-kpi-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
@@ -793,6 +796,8 @@ input {
 .gantt-board-card { min-width: 0; overflow: hidden; padding: 18px 0 0; }
 .gantt-board-heading { padding: 0 20px 16px; }
 .gantt-draft-alert { margin: 0 20px 16px; }
+.gantt-trial-status { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; min-width: 0; margin-bottom: 12px; }
+.gantt-trial-status span { overflow-wrap: anywhere; }
 .gantt-board-heading h2 { margin: 0 0 4px; font-size: 16px; }
 .gantt-board-heading span { color: var(--color-text-secondary); font-size: 12px; }
 .gantt-legend { display: flex; flex-wrap: wrap; gap: 10px 14px; justify-content: flex-end; }

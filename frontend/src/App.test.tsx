@@ -17,6 +17,7 @@ import {
   retryScheduleJob,
   submitScheduleJob,
   submitSampleSchedule,
+  submitTrialSolve,
   uploadImportBatch,
 } from "./lib/api";
 
@@ -38,6 +39,7 @@ vi.mock("./lib/api", async () => {
     retryScheduleJob: vi.fn(),
     submitScheduleJob: vi.fn(),
     submitSampleSchedule: vi.fn(),
+    submitTrialSolve: vi.fn(),
     uploadImportBatch: vi.fn(),
   };
 });
@@ -398,6 +400,44 @@ describe("App", () => {
     expect(screen.getByText(/已在本地调整 1 个任务/)).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: "任务 灌装批次 A" }));
     expect(screen.getByLabelText("任务详情 灌装批次 A")).toBeInTheDocument();
+  });
+
+  it("shows the current Gantt zoom and supports the extended zoom levels", async () => {
+    render(<App />);
+
+    await screen.findByRole("heading", { name: "智能排产工作台" });
+    await userEvent.click(screen.getByRole("button", { name: "Gantt 评审" }));
+    await screen.findByRole("button", { name: "任务 灌装批次 A" });
+
+    const zoomValue = screen.getByLabelText("当前缩放比例");
+    expect(zoomValue).toHaveTextContent("100%");
+
+    const zoomIn = screen.getByRole("button", { name: "放大甘特图" });
+    for (let index = 0; index < 9; index += 1) await userEvent.click(zoomIn);
+    expect(zoomValue).toHaveTextContent("400%");
+    expect(zoomIn).toBeDisabled();
+
+    await userEvent.click(screen.getByRole("button", { name: "适配甘特图" }));
+    expect(zoomValue).toHaveTextContent("100%");
+  });
+
+  it.each(["ADMIN", "PLANNER", "APPROVER"])("allows %s to access Gantt trial solve and the jobs center", async (role) => {
+    mockedFetchSession.mockResolvedValueOnce({ authenticated: true, username: "planner", role });
+    render(<App />);
+    await screen.findByRole("heading", { name: "智能排产工作台" });
+    await userEvent.click(screen.getByRole("button", { name: "Gantt 评审" }));
+    expect(await screen.findByRole("button", { name: "提交试排" })).toBeDisabled();
+    await userEvent.click(screen.getByRole("button", { name: "打开排程任务中心" }));
+    expect(await screen.findByRole("heading", { name: "排程任务中心" })).toBeInTheDocument();
+  });
+
+  it("hides trial submission from a viewer", async () => {
+    mockedFetchSession.mockResolvedValueOnce({ authenticated: true, username: "viewer", role: "VIEWER" });
+    render(<App />);
+    await screen.findByRole("heading", { name: "智能排产工作台" });
+    await userEvent.click(screen.getByRole("button", { name: "Gantt 评审" }));
+    await screen.findByRole("button", { name: "任务 灌装批次 A" });
+    expect(screen.queryByRole("button", { name: "提交试排" })).not.toBeInTheDocument();
   });
 
   it("expands a successful job into an in-page version review", async () => {

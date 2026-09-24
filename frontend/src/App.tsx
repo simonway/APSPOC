@@ -64,7 +64,10 @@ export default function App() {
           activeWorkspaceKey === "jobs" ? (
             <ScheduleJobsPanel role={dashboardData.summary.userRole} />
           ) : activeWorkspaceKey === "gantt" ? (
-            <GanttReviewPanel />
+            <GanttReviewPanel
+              role={dashboardData.summary.userRole}
+              onOpenJobs={() => setActiveWorkspaceKey("jobs")}
+            />
           ) : activeWorkspaceKey === "import" || activeWorkspaceKey === "scenario" ? (
             <ImportScenarioPanel onOpenJobs={() => setActiveWorkspaceKey("jobs")} />
           ) : (

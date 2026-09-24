@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent as ReactPointerEvent } from "react";
 import { MinusOutlined, PlusOutlined, ReloadOutlined } from "@ant-design/icons";
 import { Alert, Button, Empty, Select, Spin, Tag } from "antd";
-import { fetchGanttData, fetchVersions, type GanttDataResponse, type VersionSummaryResponse } from "../../lib/api";
+import { ApiError, fetchGanttData, fetchScheduleJob, fetchVersions, submitTrialSolve, type GanttDataResponse, type ScheduleJobResponse, type TrialSolveDraftBar, type VersionSummaryResponse } from "../../lib/api";
 
-const MIN_ZOOM = 0.5;
-const MAX_ZOOM = 2.5;
+const ZOOM_LEVELS = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.25, 2.5, 3, 3.5, 4] as const;
+const FIT_ZOOM = 1;
+const MIN_ZOOM = ZOOM_LEVELS[0];
+const MAX_ZOOM = ZOOM_LEVELS[ZOOM_LEVELS.length - 1];
 const DRAG_SNAP_MS = 15 * 60_000;
 
 type GanttBar = GanttDataResponse["bars"][number];
@@ -17,6 +19,8 @@ type DragSession = {
   endMs: number;
   moved: boolean;
 };
+
+const terminalJobStatuses = new Set(["SUCCEEDED", "FAILED", "CANCELLED", "TIMEOUT"]);
 
 function formatPoint(value: number) {
   return new Date(value).toLocaleString("zh-CN", { month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit" });
@@ -44,7 +48,12 @@ function itemStyle(startMs: number, endMs: number, min: number, span: number): C
   return { left: `${left}%`, width: `${width}%` };
 }
 
-export function GanttReviewPanel() {
+interface GanttReviewPanelProps {
+  role?: string;
+  onOpenJobs?: () => void;
+}
+
+export function GanttReviewPanel({ role = "VIEWER", onOpenJobs }: GanttReviewPanelProps) {
   const [versions, setVersions] = useState<VersionSummaryResponse[]>([]);
   const [versionId, setVersionId] = useState<string | null>(null);
   const [data, setData] = useState<GanttDataResponse | null>(null);
@@ -56,50 +65,74 @@ export function GanttReviewPanel() {
   const [ganttRefreshKey, setGanttRefreshKey] = useState(0);
   const [draftBars, setDraftBars] = useState<Record<string, DraftBar>>({});
   const [draggingBarId, setDraggingBarId] = useState<string | null>(null);
-  const requestId = useRef(0);
+  const [trialJob, setTrialJob] = useState<ScheduleJobResponse | null>(null);
+  const [trialSubmitting, setTrialSubmitting] = useState(false);
+  const [trialError, setTrialError] = useState<string | null>(null);
+  const [trialResultError, setTrialResultError] = useState<string | null>(null);
+  const [trialSuccessVersionId, setTrialSuccessVersionId] = useState<string | null>(null);
+  const versionsRequestId = useRef(0);
+  const ganttRequestId = useRef(0);
+  const trialTimer = useRef<number | null>(null);
+  const trialGeneration = useRef(0);
+  const trialSubmittingRef = useRef(false);
+  const preloadedTrialVersionId = useRef<string | null>(null);
+  const activeTrialSourceId = useRef<string | null>(null);
   const dragSession = useRef<DragSession | null>(null);
+  const canRunTrialSolve = ["ADMIN", "PLANNER", "APPROVER"].includes(role.toUpperCase());
+  const terminalFailure = trialJob !== null && ["FAILED", "TIMEOUT", "CANCELLED"].includes(trialJob.status);
+  const terminalMessage = trialJob?.errorMessage || trialJob?.failureReason || "试排任务未成功，请检查调整后重试";
+  const trialActive = trialSubmitting || (trialJob !== null && !terminalJobStatuses.has(trialJob.status) && !trialError);
 
   useEffect(() => {
-    const current = ++requestId.current;
+    const current = ++versionsRequestId.current;
     setLoading(true);
     setError(null);
     fetchVersions()
       .then((items) => {
-        if (current !== requestId.current) return;
+        if (current !== versionsRequestId.current) return;
         const sorted = [...items].sort((left, right) => Date.parse(right.createdAt) - Date.parse(left.createdAt));
         setVersions(sorted);
         setVersionId((selected) => selected && sorted.some((item) => item.versionId === selected) ? selected : sorted[0]?.versionId ?? null);
         if (sorted.length === 0) setLoading(false);
       })
       .catch((reason: unknown) => {
-        if (current !== requestId.current) return;
+        if (current !== versionsRequestId.current) return;
         setError(reason instanceof Error ? reason.message : "版本列表加载失败");
         setLoading(false);
       });
-    return () => { requestId.current += 1; };
+    return () => { versionsRequestId.current += 1; };
   }, [versionsRefreshKey]);
 
   useEffect(() => {
     if (!versionId) return;
-    const current = ++requestId.current;
+    if (preloadedTrialVersionId.current === versionId) {
+      preloadedTrialVersionId.current = null;
+      return () => { ganttRequestId.current += 1; };
+    }
+    const current = ++ganttRequestId.current;
     setLoading(true);
     setError(null);
     setSelectedBarId(null);
     setDraftBars({});
     fetchGanttData(versionId)
       .then((payload) => {
-        if (current !== requestId.current) return;
+        if (current !== ganttRequestId.current) return;
         setData(payload);
         setLoading(false);
       })
       .catch((reason: unknown) => {
-        if (current !== requestId.current) return;
+        if (current !== ganttRequestId.current) return;
         setData(null);
         setError(reason instanceof Error ? reason.message : "甘特图加载失败");
         setLoading(false);
       });
-    return () => { requestId.current += 1; };
+    return () => { ganttRequestId.current += 1; };
   }, [versionId, ganttRefreshKey]);
+
+  useEffect(() => () => {
+    trialGeneration.current += 1;
+    if (trialTimer.current !== null) window.clearTimeout(trialTimer.current);
+  }, []);
 
   const range = useMemo(() => data ? timelineRange(data) : null, [data]);
   const rows = useMemo(() => data ? [...data.rows].sort((left, right) => left.sortOrder - right.sortOrder) : [], [data]);
@@ -113,8 +146,25 @@ export function GanttReviewPanel() {
   })) : [];
 
   const reload = () => {
+    invalidateTrial();
+    setTrialSuccessVersionId(null);
     if (versionId) setGanttRefreshKey((value) => value + 1);
     else setVersionsRefreshKey((value) => value + 1);
+  };
+
+  const handleVersionChange = (nextId: string) => {
+    invalidateTrial();
+    setTrialSuccessVersionId(null);
+    setVersionId(nextId);
+  };
+
+  const changeZoom = (direction: -1 | 1) => {
+    setZoom((current) => {
+      const nextLevel = direction > 0
+        ? ZOOM_LEVELS.find((level) => level > current)
+        : [...ZOOM_LEVELS].reverse().find((level) => level < current);
+      return nextLevel ?? current;
+    });
   };
 
   const conflicts = useMemo(() => {
@@ -130,7 +180,7 @@ export function GanttReviewPanel() {
   }, [data, displayBars, draftBars]);
 
   const startDrag = (event: ReactPointerEvent<HTMLButtonElement>, bar: GanttBar) => {
-    if (bar.pinned || event.button !== 0) return;
+    if (bar.pinned || trialActive || event.button !== 0) return;
     event.preventDefault();
     event.currentTarget.setPointerCapture?.(event.pointerId);
     dragSession.current = {
@@ -171,8 +221,137 @@ export function GanttReviewPanel() {
     setDraftBars({});
   };
 
+  const retryTrialQuery = () => {
+    if (!trialJob || !activeTrialSourceId.current) return;
+    setTrialError(null);
+    pollTrialJob(trialJob.jobId, trialGeneration.current, activeTrialSourceId.current);
+  };
+
+  const stopTrialPolling = () => {
+    if (trialTimer.current !== null) window.clearTimeout(trialTimer.current);
+    trialTimer.current = null;
+  };
+
+  const invalidateTrial = () => {
+    ++trialGeneration.current;
+    stopTrialPolling();
+    trialSubmittingRef.current = false;
+    setTrialSubmitting(false);
+    setTrialJob(null);
+    setTrialError(null);
+    setTrialResultError(null);
+    activeTrialSourceId.current = null;
+  };
+
+  const runTrialSolve = async () => {
+    if (!data || !versionId || !canRunTrialSolve || trialSubmittingRef.current ||
+        Object.keys(draftBars).length === 0 || conflicts.size > 0 || trialActive ||
+        trialJob?.status === "SUCCEEDED") return;
+    const changed: TrialSolveDraftBar[] = data.bars
+      .filter((bar) => draftBars[bar.id] && !bar.pinned)
+      .map((bar) => {
+        const effective = { ...bar, ...draftBars[bar.id] };
+        return { barId: bar.id, rowId: effective.rowId, startMs: effective.startMs,
+          endMs: effective.endMs, pinned: effective.pinned };
+      });
+    if (!changed.length) return;
+    const generation = ++trialGeneration.current;
+    activeTrialSourceId.current = versionId;
+    trialSubmittingRef.current = true;
+    setTrialSubmitting(true);
+    setTrialError(null);
+    setTrialJob(null);
+    try {
+      const accepted = await submitTrialSolve(versionId, changed);
+      if (trialGeneration.current !== generation) return;
+      setTrialJob(accepted);
+      if (accepted.status === "SUCCEEDED") {
+        await openTrialResult(accepted, generation);
+      } else if (!terminalJobStatuses.has(accepted.status)) {
+        pollTrialJob(accepted.jobId, generation, versionId);
+      }
+    } catch (reason) {
+      if (trialGeneration.current === generation) {
+        activeTrialSourceId.current = null;
+        setTrialError(
+          reason instanceof ApiError
+            ? reason.status === 403 ? "当前角色无权提交试排" : reason.message
+            : reason instanceof Error ? reason.message : "无法提交试排",
+        );
+      }
+    } finally {
+      if (trialGeneration.current === generation) {
+        trialSubmittingRef.current = false;
+        setTrialSubmitting(false);
+      }
+    }
+  };
+
+  const openTrialResult = async (nextJob: ScheduleJobResponse, generation: number) => {
+    if (!nextJob.versionId) {
+      setTrialResultError("试排任务已完成，但未返回新版本编号");
+      return;
+    }
+    try {
+      const [nextVersions, nextGantt] = await Promise.all([
+        fetchVersions(), fetchGanttData(nextJob.versionId),
+      ]);
+      if (trialGeneration.current !== generation || !activeTrialSourceId.current) return;
+      if (!nextVersions.some((item) => item.versionId === nextJob.versionId)) {
+        setTrialResultError(`新版本 ${nextJob.versionId} 尚未出现在版本列表，请重试打开结果`);
+        return;
+      }
+      if (nextGantt.versionId !== nextJob.versionId) {
+        setTrialResultError(`新版本 ${nextJob.versionId} 的甘特数据尚未就绪，请重试打开结果`);
+        return;
+      }
+      // Invalidate outstanding source-version/list GETs before committing the preloaded result.
+      ++ganttRequestId.current;
+      ++versionsRequestId.current;
+      preloadedTrialVersionId.current = nextJob.versionId;
+      setVersions([...nextVersions].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)));
+      setData(nextGantt);
+      setVersionId(nextJob.versionId);
+      setLoading(false);
+      setError(null);
+      setDraftBars({});
+      setSelectedBarId(null);
+      setTrialJob(null);
+      setTrialError(null);
+      setTrialResultError(null);
+      setTrialSuccessVersionId(nextJob.versionId);
+      activeTrialSourceId.current = null;
+    } catch (reason) {
+      if (trialGeneration.current === generation) {
+        setTrialResultError(reason instanceof Error ? reason.message : "无法打开试排新版本");
+      }
+    }
+  };
+
+  const pollTrialJob = (jobId: string, generation: number, sourceId: string) => {
+    stopTrialPolling();
+    trialTimer.current = window.setTimeout(async () => {
+      trialTimer.current = null;
+      try {
+        const nextJob = await fetchScheduleJob(jobId);
+        if (trialGeneration.current !== generation || activeTrialSourceId.current !== sourceId) return;
+        setTrialJob(nextJob);
+        setTrialError(null);
+        if (nextJob.status === "SUCCEEDED") {
+          await openTrialResult(nextJob, generation);
+        } else if (!terminalJobStatuses.has(nextJob.status)) {
+          pollTrialJob(jobId, generation, sourceId);
+        }
+      } catch (reason) {
+        if (trialGeneration.current === generation) {
+          setTrialError(reason instanceof Error ? reason.message : "无法刷新试排任务状态");
+        }
+      }
+    }, 1500);
+  };
+
   const moveBarByKeyboard = (event: ReactKeyboardEvent<HTMLButtonElement>, bar: GanttBar) => {
-    if (bar.pinned || !range || (event.key !== "ArrowLeft" && event.key !== "ArrowRight")) return;
+    if (bar.pinned || trialActive || !range || (event.key !== "ArrowLeft" && event.key !== "ArrowRight")) return;
     event.preventDefault();
     const duration = bar.endMs - bar.startMs;
     const direction = event.key === "ArrowRight" ? 1 : -1;
@@ -194,17 +373,43 @@ export function GanttReviewPanel() {
             value={versionId ?? undefined}
             placeholder="选择排程版本"
             options={versions.map((item) => ({ label: `${item.versionName} · ${item.status}`, value: item.versionId }))}
-            onChange={setVersionId}
+            onChange={handleVersionChange}
           />
-          <Button aria-label="缩小甘特图" icon={<MinusOutlined />} disabled={zoom <= MIN_ZOOM} onClick={() => setZoom((value) => Math.max(MIN_ZOOM, value - 0.25))} />
-          <Button onClick={() => setZoom(1)}>适配</Button>
-          <Button aria-label="放大甘特图" icon={<PlusOutlined />} disabled={zoom >= MAX_ZOOM} onClick={() => setZoom((value) => Math.min(MAX_ZOOM, value + 0.25))} />
+          <div className="gantt-zoom-controls" aria-label="甘特图缩放">
+            <Button aria-label="缩小甘特图" icon={<MinusOutlined aria-hidden="true" />} disabled={zoom <= MIN_ZOOM} onClick={() => changeZoom(-1)} />
+            <span className="gantt-zoom-value" aria-label="当前缩放比例" aria-live="polite">{Math.round(zoom * 100)}%</span>
+            <Button aria-label="放大甘特图" icon={<PlusOutlined aria-hidden="true" />} disabled={zoom >= MAX_ZOOM} onClick={() => changeZoom(1)} />
+          </div>
+          <Button aria-label="适配甘特图" onClick={() => setZoom(FIT_ZOOM)}>适配</Button>
           <Button aria-label="刷新甘特图" icon={<ReloadOutlined />} onClick={reload} />
-          <Button disabled={Object.keys(draftBars).length === 0} onClick={resetDraft}>重置调整</Button>
+          {canRunTrialSolve && (
+            <Button type="primary" loading={trialSubmitting}
+              disabled={!data || !versionId || !Object.keys(draftBars).length || conflicts.size > 0 || trialActive || trialJob?.status === "SUCCEEDED"}
+              onClick={() => void runTrialSolve()}>提交试排</Button>
+          )}
+          {onOpenJobs && <Button onClick={onOpenJobs}>打开排程任务中心</Button>}
+          <Button disabled={Object.keys(draftBars).length === 0 || trialActive} onClick={resetDraft}>重置调整</Button>
         </div>
       </header>
 
       {error && <Alert type="error" showIcon message="甘特图暂不可用" description={error} action={<Button onClick={reload}>重试</Button>} />}
+      {trialSuccessVersionId && <Alert type="success" showIcon message={`试排完成，已打开版本 ${trialSuccessVersionId}`} />}
+      {trialJob && (
+        <div className="gantt-trial-status" role="status" aria-live="polite">
+          <span>试排任务 {trialJob.jobId}</span>
+          <Tag color={
+            trialJob.status === "SUCCEEDED" ? "green" : terminalFailure ? "red" : "processing"
+          }>{trialJob.status}</Tag>
+          {onOpenJobs && <Button size="small" onClick={onOpenJobs}>打开排程任务中心</Button>}
+        </div>
+      )}
+      {terminalFailure && <Alert showIcon type="error" message="试排任务未完成" description={terminalMessage} />}
+      {trialResultError && <Alert type="warning" showIcon message="试排成功，但无法打开新版本"
+        description={trialResultError}
+        action={<Button onClick={() => trialJob && void openTrialResult(trialJob, trialGeneration.current)}>重试打开结果</Button>} />}
+      {trialError && <Alert showIcon type="warning" message="无法刷新试排任务状态"
+        description={trialError}
+        action={<Button onClick={retryTrialQuery}>重试查询</Button>} />}
       {loading && <div className="dashboard-card gantt-loading" role="status"><Spin /><span>正在加载甘特图...</span></div>}
       {!loading && !error && versions.length === 0 && <div className="dashboard-card gantt-empty"><Empty description="暂无排程版本" /></div>}
 
@@ -230,7 +435,7 @@ export function GanttReviewPanel() {
                 type={conflicts.size > 0 ? "warning" : "info"}
                 showIcon
                 message={`已在本地调整 ${Object.keys(draftBars).length} 个任务${conflicts.size > 0 ? `，其中 ${conflicts.size} 个存在冲突` : ""}`}
-                description="拖动未固定的任务条可调整开始时间；按住 Shift 可关闭 15 分钟吸附。当前调整尚未写回后端。"
+                description="拖动未固定的任务条可调整开始时间；按住 Shift 可关闭 15 分钟吸附。调整仅保存在本地，只有成功加载试排生成的新版本后才会形成新的排程版本，原版本不会被修改。"
               />
             )}
             {rows.length === 0 ? <Empty description="当前版本没有资源行" /> : (
@@ -247,7 +452,7 @@ export function GanttReviewPanel() {
                     const downtimes = data.downtimes.filter((item) => item.rowId === row.id);
                     const changeovers = data.changeovers.filter((item) => item.rowId === row.id);
                     return (
-                      <div className="react-gantt-row" key={row.id}>
+                      <div className="react-gantt-row" key={row.id} data-gantt-row-id={row.id}>
                         <div className="react-gantt-label-column"><strong>{row.label}</strong><span>{row.resourceType}</span></div>
                         <div className="react-gantt-track" style={{ width: timelineWidth }}>
                           {ticks.map((tick) => <i key={tick.position} className="react-gantt-gridline" style={{ left: `${tick.position}%` }} />)}

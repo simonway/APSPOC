@@ -15,6 +15,7 @@ import {
   retryScheduleJob,
   submitScheduleJob,
   submitSampleSchedule,
+  submitTrialSolve,
   uploadImportBatch,
 } from "./api";
 
@@ -137,8 +138,8 @@ describe("requestJson", () => {
     );
     vi.stubGlobal("fetch", fetchMock);
 
-    await expect(fetchScheduleJob("job-1", "http://api.local")).resolves.toMatchObject({ status: "SUCCEEDED" });
-    expect(fetchMock).toHaveBeenCalledWith("http://api.local/api/v1/schedule/jobs/job-1", {
+    await expect(fetchScheduleJob("job/1", "http://api.local")).resolves.toMatchObject({ status: "SUCCEEDED" });
+    expect(fetchMock).toHaveBeenCalledWith("http://api.local/api/v1/schedule/jobs/job%2F1", {
       credentials: "include",
       headers: { Accept: "application/json" },
     });
@@ -204,6 +205,25 @@ describe("requestJson", () => {
     expect(fetchMock).toHaveBeenCalledWith("http://api.local/api/v1/versions/version%2F1/gantt-data", {
       credentials: "include",
       headers: { Accept: "application/json" },
+    });
+  });
+
+  it("submits Gantt draft bars for trial solve", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ jobId: "trial-1", status: "QUEUED", solverStatus: "QUEUED" }), {
+        status: 202,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+    const draftBars = [{ barId: "task-1", rowId: "line-1", startMs: 1000, endMs: 2000, pinned: true }];
+
+    await expect(submitTrialSolve("version/1", draftBars, "http://api.local")).resolves.toMatchObject({ jobId: "trial-1" });
+    expect(fetchMock).toHaveBeenCalledWith("http://api.local/api/v1/versions/version%2F1/trial-solve", {
+      method: "POST",
+      body: JSON.stringify({ draftBars }),
+      credentials: "include",
+      headers: { Accept: "application/json", "Content-Type": "application/json" },
     });
   });
 
