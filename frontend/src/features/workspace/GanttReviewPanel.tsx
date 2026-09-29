@@ -21,6 +21,7 @@ type DragSession = {
   endMs: number;
   nextStart: number | null;
   nextRowId: string | null;
+  nextConflict: boolean;
   moved: boolean;
 };
 
@@ -68,8 +69,9 @@ export function GanttReviewPanel({ role = "VIEWER", onOpenJobs }: GanttReviewPan
   const [versionsRefreshKey, setVersionsRefreshKey] = useState(0);
   const [ganttRefreshKey, setGanttRefreshKey] = useState(0);
   const [draftBars, setDraftBars] = useState<Record<string, DraftBar>>({});
+  const [pinnedOverrides, setPinnedOverrides] = useState<Record<string, boolean>>({});
   const [draggingBarId, setDraggingBarId] = useState<string | null>(null);
-  const [dragGhost, setDragGhost] = useState<{ x: number; y: number } | null>(null);
+  const [dragGhost, setDragGhost] = useState<{ x: number; y: number; conflict: boolean } | null>(null);
   const [trialJob, setTrialJob] = useState<ScheduleJobResponse | null>(null);
   const [trialSubmitting, setTrialSubmitting] = useState(false);
   const [trialError, setTrialError] = useState<string | null>(null);
@@ -119,6 +121,7 @@ export function GanttReviewPanel({ role = "VIEWER", onOpenJobs }: GanttReviewPan
     setError(null);
     setSelectedBarId(null);
     setDraftBars({});
+    setPinnedOverrides({});
     fetchGanttData(versionId)
       .then((payload) => {
         if (current !== ganttRequestId.current) return;
@@ -141,8 +144,31 @@ export function GanttReviewPanel({ role = "VIEWER", onOpenJobs }: GanttReviewPan
 
   const range = useMemo(() => data ? timelineRange(data) : null, [data]);
   const rows = useMemo(() => data ? [...data.rows].sort((left, right) => left.sortOrder - right.sortOrder) : [], [data]);
-  const displayBars = useMemo(() => data ? data.bars.map((bar) => ({ ...bar, ...draftBars[bar.id] })) : [], [data, draftBars]);
+  const displayBars = useMemo(() => data
+    ? data.bars.map((bar) => ({ ...bar, ...draftBars[bar.id], pinned: bar.pinned || pinnedOverrides[bar.id] === true }))
+    : [], [data, draftBars, pinnedOverrides]);
+
+  // True when a bar placed at (rowId, startMs, endMs) would overlap another bar or a downtime,
+  // ignoring the bar itself. Used for both live drag highlight and drop-time conflict detection.
+  const positionConflicts = (rowId: string, startMs: number, endMs: number, ignoreBarId: string) => {
+    if (!data) return false;
+    const overlapsBar = displayBars.some((other) =>
+      other.id !== ignoreBarId && other.rowId === rowId && startMs < other.endMs && other.startMs < endMs);
+    const overlapsDowntime = data.downtimes.some((item) =>
+      item.rowId === rowId && startMs < item.endMs && item.startMs < endMs);
+    return overlapsBar || overlapsDowntime;
+  };
   const selectedBar = displayBars.find((bar) => bar.id === selectedBarId) ?? null;
+  const selectedServerBar = selectedBar && data ? data.bars.find((bar) => bar.id === selectedBar.id) ?? null : null;
+  const togglePinSelected = () => {
+    if (!selectedBarId || !selectedServerBar || selectedServerBar.pinned) return;
+    setPinnedOverrides((current) => {
+      const next = { ...current };
+      if (next[selectedBarId]) delete next[selectedBarId];
+      else next[selectedBarId] = true;
+      return next;
+    });
+  };
   const draggedBar = draggingBarId ? displayBars.find((bar) => bar.id === draggingBarId) ?? null : null;
   const naturalWidth = range ? Math.min(6400, Math.max(960, (range.span / 60_000) * 2.2)) : 960;
   const timelineWidth = naturalWidth * zoom;
@@ -185,6 +211,11 @@ export function GanttReviewPanel({ role = "VIEWER", onOpenJobs }: GanttReviewPan
     return ids;
   }, [data, displayBars, draftBars]);
 
+  // A submit is useful when there is at least one moved bar OR a user-applied pin on a previously-free bar.
+  const hasPinOnlyConstraint = data ? data.bars.some((bar) => pinnedOverrides[bar.id] === true && !bar.pinned && !draftBars[bar.id]) : false;
+  const canSubmit = Boolean(data && versionId && (Object.keys(draftBars).length > 0 || hasPinOnlyConstraint) &&
+    conflicts.size === 0 && !trialActive && trialJob?.status !== "SUCCEEDED");
+
   const startDrag = (event: ReactPointerEvent<HTMLButtonElement>, bar: GanttBar) => {
     if (bar.pinned || trialActive || event.button !== 0) return;
     event.preventDefault();
@@ -200,10 +231,11 @@ export function GanttReviewPanel({ role = "VIEWER", onOpenJobs }: GanttReviewPan
       endMs: bar.endMs,
       nextStart: null,
       nextRowId: null,
+      nextConflict: false,
       moved: false,
     };
     setDraggingBarId(bar.id);
-    setDragGhost({ x: rect.left, y: rect.top });
+    setDragGhost({ x: rect.left, y: rect.top, conflict: false });
   };
 
   const moveDrag = (event: ReactPointerEvent<HTMLButtonElement>) => {
@@ -215,11 +247,14 @@ export function GanttReviewPanel({ role = "VIEWER", onOpenJobs }: GanttReviewPan
     const nextStart = Math.min(range.max - duration, Math.max(range.min, session.startMs + deltaMs));
     const rowElement = typeof document.elementFromPoint === "function" ? document.elementFromPoint(event.clientX, event.clientY)?.closest<HTMLElement>("[data-gantt-row-id]") : null;
     const nextRowId = rowElement?.dataset.ganttRowId ?? session.rowId;
+    const nextEnd = nextStart + duration;
     session.nextStart = nextStart;
     session.nextRowId = nextRowId;
+    // Live conflict preview: red ghost signals the drop would be rejected.
+    session.nextConflict = positionConflicts(nextRowId, nextStart, nextEnd, session.barId);
     session.moved = session.moved || Math.abs(event.clientX - session.startClientX) >= 3 || nextRowId !== session.rowId;
     const pointerDeltaX = event.clientX - session.startClientX;
-    setDragGhost({ x: session.startBarLeft + pointerDeltaX, y: event.clientY - 17 });
+    setDragGhost({ x: session.startBarLeft + pointerDeltaX, y: event.clientY - 17, conflict: session.nextConflict });
   };
 
   const endDrag = (event: ReactPointerEvent<HTMLButtonElement>) => {
@@ -231,6 +266,8 @@ export function GanttReviewPanel({ role = "VIEWER", onOpenJobs }: GanttReviewPan
     setDragGhost(null);
     setDraggingBarId(null);
     if (!session || !session.moved || session.nextStart === null || session.nextRowId === null) return;
+    // Dropped on top of another bar or downtime: snap back to the original slot instead of committing a conflict.
+    if (session.nextConflict) return;
     const { barId, nextRowId: rowId, nextStart: startMs, startMs: origStart, endMs: origEnd } = session;
     const endMs = startMs + (origEnd - origStart);
     setDraftBars((current) => ({ ...current, [barId]: { rowId, startMs, endMs } }));
@@ -241,6 +278,7 @@ export function GanttReviewPanel({ role = "VIEWER", onOpenJobs }: GanttReviewPan
     setDraggingBarId(null);
     setDragGhost(null);
     setDraftBars({});
+    setPinnedOverrides({});
   };
 
   const retryTrialQuery = () => {
@@ -266,13 +304,11 @@ export function GanttReviewPanel({ role = "VIEWER", onOpenJobs }: GanttReviewPan
   };
 
   const runTrialSolve = async () => {
-    if (!data || !versionId || !canRunTrialSolve || trialSubmittingRef.current ||
-        Object.keys(draftBars).length === 0 || conflicts.size > 0 || trialActive ||
-        trialJob?.status === "SUCCEEDED") return;
+    if (!canRunTrialSolve || trialSubmittingRef.current || !canSubmit || !data || !versionId) return;
     const changed: TrialSolveDraftBar[] = data.bars
-      .filter((bar) => draftBars[bar.id] && !bar.pinned)
+      .filter((bar) => !bar.pinned && (draftBars[bar.id] || pinnedOverrides[bar.id] === true))
       .map((bar) => {
-        const effective = { ...bar, ...draftBars[bar.id] };
+        const effective = { ...bar, ...draftBars[bar.id], pinned: bar.pinned || pinnedOverrides[bar.id] === true };
         return { barId: bar.id, rowId: effective.rowId, startMs: effective.startMs,
           endMs: effective.endMs, pinned: effective.pinned };
       });
@@ -406,11 +442,11 @@ export function GanttReviewPanel({ role = "VIEWER", onOpenJobs }: GanttReviewPan
           <Button aria-label="刷新甘特图" icon={<ReloadOutlined />} onClick={reload} />
           {canRunTrialSolve && (
             <Button type="primary" loading={trialSubmitting}
-              disabled={!data || !versionId || !Object.keys(draftBars).length || conflicts.size > 0 || trialActive || trialJob?.status === "SUCCEEDED"}
+              disabled={!canSubmit}
               onClick={() => void runTrialSolve()}>提交试排</Button>
           )}
           {onOpenJobs && <Button onClick={onOpenJobs}>打开排程任务中心</Button>}
-          <Button disabled={Object.keys(draftBars).length === 0 || trialActive} onClick={resetDraft}>重置调整</Button>
+          <Button disabled={(Object.keys(draftBars).length === 0 && Object.keys(pinnedOverrides).length === 0) || trialActive} onClick={resetDraft}>重置调整</Button>
         </div>
       </header>
 
@@ -511,7 +547,7 @@ export function GanttReviewPanel({ role = "VIEWER", onOpenJobs }: GanttReviewPan
 
           {draggedBar && dragGhost && (
             <div
-              className="react-gantt-drag-ghost"
+              className={`react-gantt-drag-ghost${dragGhost.conflict ? " is-conflict" : ""}`}
               style={{ left: dragGhost.x, top: dragGhost.y, width: `${((draggedBar.endMs - draggedBar.startMs) / range.span) * timelineWidth}px` }}
             >
               {draggedBar.label}
@@ -521,7 +557,18 @@ export function GanttReviewPanel({ role = "VIEWER", onOpenJobs }: GanttReviewPan
           {selectedBar && (
             <section className="dashboard-card gantt-task-detail" aria-label={`任务详情 ${selectedBar.label}`}>
               <div><p className="eyebrow">任务详情</p><h2>{selectedBar.label}</h2></div>
-              <Tag color={selectedBar.late ? "error" : "success"}>{selectedBar.late ? "延期" : "准时"}</Tag>
+              <div className="gantt-task-detail-actions">
+                <Tag color={selectedBar.late ? "error" : "success"}>{selectedBar.late ? "延期" : "准时"}</Tag>
+                {selectedServerBar?.pinned
+                  ? <Tag color="default">服务端固定（不可移动）</Tag>
+                  : (
+                    <Button
+                      size="small"
+                      type={selectedBar.pinned ? "primary" : "default"}
+                      onClick={togglePinSelected}
+                    >{selectedBar.pinned ? "取消固定" : "固定（不可移动）"}</Button>
+                  )}
+              </div>
               <dl>
                 <div><dt>产品</dt><dd>{selectedBar.productCode}</dd></div>
                 <div><dt>开始</dt><dd>{formatPoint(selectedBar.startMs)}</dd></div>

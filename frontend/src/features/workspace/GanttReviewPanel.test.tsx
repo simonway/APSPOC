@@ -247,4 +247,51 @@ describe("Gantt trial solve", () => {
     await act(async () => { resolveStale({ ...acceptedJob, status: "SUCCEEDED", versionId: "v2" }); });
     expect(job).toHaveBeenCalledTimes(1);
   });
+
+  it("toggles pin on a selected bar and submits it as a hard constraint", async () => {
+    render(<GanttReviewPanel role="PLANNER" />);
+    const bar = await screen.findByRole("button", { name: "任务 任务 A" });
+    fireEvent.click(bar);
+    const pinButton = await screen.findByRole("button", { name: "固定（不可移动）" });
+    await userEvent.click(pinButton);
+    // The bar now renders pinned and the keyboard shortcut no longer moves it.
+    const pinnedBar = screen.getByRole("button", { name: "任务 任务 A" });
+    expect(pinnedBar.className).toContain("is-pinned");
+    fireEvent.keyDown(pinnedBar, { key: "ArrowRight" });
+    expect(screen.queryByText(/已在本地调整/)).not.toBeInTheDocument();
+    // A pin-only constraint is enough to enable submit, sent with pinned: true.
+    fireEvent.click(screen.getByRole("button", { name: "提交试排" }));
+    await act(async () => { await Promise.resolve(); });
+    expect(submit).toHaveBeenCalledWith("v1", [{
+      barId: "task-1", rowId: "line-1", startMs, endMs: startMs + 3_600_000, pinned: true,
+    }]);
+  });
+
+  it("snaps a dragged bar back when it is dropped on top of another bar", async () => {
+    gantt.mockResolvedValue({ ...sourceGantt, bars: [
+      sourceGantt.bars[0],
+      { ...sourceGantt.bars[0], id: "task-2", label: "任务 B",
+        startMs: startMs + 3_600_000, endMs: startMs + 7_200_000 },
+    ] });
+    render(<GanttReviewPanel role="PLANNER" />);
+    const bar = await screen.findByRole("button", { name: "任务 任务 A" });
+    const sameRow = document.createElement("div");
+    sameRow.dataset.ganttRowId = "line-1";
+    sameRow.closest = () => sameRow;
+    Object.defineProperty(document, "elementFromPoint", {
+      value: vi.fn(() => sameRow), configurable: true, writable: true,
+    });
+    bar.setPointerCapture = vi.fn();
+    bar.releasePointerCapture = vi.fn();
+    fireEvent(bar, new MouseEvent("pointerdown", { bubbles: true, button: 0, clientX: 10, clientY: 100 }));
+    // ~33px right = one 15-minute snap, landing inside task-2's window.
+    fireEvent(bar, new MouseEvent("pointermove", { bubbles: true, clientX: 43, clientY: 100, shiftKey: false }));
+    const ghost = document.querySelector(".react-gantt-drag-ghost");
+    expect(ghost).not.toBeNull();
+    expect(ghost?.className).toContain("is-conflict");
+    fireEvent(bar, new MouseEvent("pointerup", { bubbles: true }));
+    // Dropped on top of another bar: the draft is not committed and the bar stays put.
+    expect(screen.queryByText(/已在本地调整/)).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "任务 任务 A" })).not.toHaveClass("is-draft");
+  });
 });
