@@ -24,6 +24,8 @@ class SolverTask(BaseModel):
     pinnedStartMinutes: int | None = Field(default=None, ge=0)
     predecessorTaskIds: list[str] = Field(default_factory=list)
     setupGroup: str | None = None
+    tankId: str | None = None
+    mixingFamily: str | None = None
     materialInputs: list["SolverMaterialQuantity"] = Field(default_factory=list)
     materialOutputs: list["SolverMaterialQuantity"] = Field(default_factory=list)
 
@@ -122,6 +124,9 @@ class SolverFailureReason(BaseModel):
     message: str
     itemCode: str | None = None
     demandId: str | None = None
+    tankId: str | None = None
+    conflictingTaskIds: list[str] = Field(default_factory=list)
+    mixingFamilies: list[str] = Field(default_factory=list)
 
 
 class SolveResponse(BaseModel):
