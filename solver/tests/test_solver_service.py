@@ -958,6 +958,74 @@ class SolverServiceDowntimeTest(unittest.TestCase):
         self.assertGreaterEqual(c_fill.startMinutes, c_brew_2.endMinutes)
         self.assertEqual(c_fill.resourceId, "ferm_t2")
 
+    def _non_mixing_request(
+        self,
+        second_tank: str = "ferm_t1",
+        second_family: str = "B600",
+        overlap: bool = False,
+    ) -> SolveRequest:
+        return SolveRequest(
+            jobId="job-non-mixing",
+            scheduleStartAt=datetime(2026, 4, 15, 8, 0, tzinfo=timezone.utc),
+            horizonMinutes=240,
+            resources=[
+                SolverResource(id="ferm_t1", label="Fermentation Tank 1", resourceType="TANK", sortOrder=1),
+                SolverResource(id="ferm_t2", label="Fermentation Tank 2", resourceType="TANK", sortOrder=2),
+            ],
+            tasks=[
+                SolverTask(
+                    id="task_a", label="A500", productCode="A", durationMinutes=120,
+                    dueMinutes=240, priority=1, candidateResourceIds=["ferm_t1"],
+                    pinnedStartMinutes=0 if overlap else None,
+                    tankId="ferm_t1", mixingFamily="A500",
+                ),
+                SolverTask(
+                    id="task_b", label="B600", productCode="B", durationMinutes=120,
+                    dueMinutes=240, priority=1, candidateResourceIds=[second_tank],
+                    pinnedStartMinutes=0 if overlap else None,
+                    tankId=second_tank, mixingFamily=second_family,
+                ),
+            ],
+            objectiveWeights=ObjectiveWeights(tardiness=100, makespan=1),
+            solverConfig=SolverConfig(timeLimitSeconds=5, numSearchWorkers=1),
+        )
+
+    def test_overlapping_different_families_on_same_tank_are_infeasible_with_non_mixing_reason(self) -> None:
+        response = self.service.solve(self._non_mixing_request(overlap=True))
+
+        self.assertEqual(response.status, "INFEASIBLE")
+        self.assertEqual(response.scheduledTasks, [])
+        self.assertEqual(len(response.failureReasons), 1)
+        reason = response.failureReasons[0]
+        self.assertEqual(reason.reasonType, "NON_MIXING")
+        self.assertIn("ferm_t1", reason.message)
+        self.assertIn("task_a", reason.message)
+        self.assertIn("task_b", reason.message)
+        self.assertIn("A500", reason.message)
+        self.assertIn("B600", reason.message)
+        self.assertEqual(reason.tankId, "ferm_t1")
+        self.assertEqual(reason.conflictingTaskIds, ["task_a", "task_b"])
+        self.assertEqual(reason.mixingFamilies, ["A500", "B600"])
+
+    def test_same_mixing_family_on_same_tank_remains_feasible(self) -> None:
+        response = self.service.solve(self._non_mixing_request(second_family="A500"))
+
+        self.assertIn(response.status, {"OPTIMAL", "FEASIBLE"})
+        self.assertEqual(len(response.scheduledTasks), 2)
+
+    def test_different_tanks_remain_feasible_for_different_mixing_families(self) -> None:
+        response = self.service.solve(self._non_mixing_request(second_tank="ferm_t2"))
+
+        self.assertIn(response.status, {"OPTIMAL", "FEASIBLE"})
+        self.assertEqual(len(response.scheduledTasks), 2)
+
+    def test_tank_id_must_be_a_candidate_resource(self) -> None:
+        request = self._non_mixing_request()
+        request.tasks[0].tankId = "ferm_t2"
+
+        with self.assertRaisesRegex(ValueError, "Task task_a tankId ferm_t2 is not a candidate resource"):
+            self.service.solve(request)
+
 
 def _load_sample_request(package_name: str) -> SolveRequest:
     path = ROOT_DIR / "docs" / "sample-packages" / package_name / "08_generated_schedule_request.json"

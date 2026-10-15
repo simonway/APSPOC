@@ -309,6 +309,10 @@ class SolverService:
                 raise ValueError(
                     f"Task {task.id} pins to resource {task.pinnedResourceId}, but it is not in candidateResourceIds"
                 )
+            if task.tankId is not None and task.tankId not in task.candidateResourceIds:
+                raise ValueError(
+                    f"Task {task.id} tankId {task.tankId} is not a candidate resource"
+                )
             for predecessor_task_id in task.predecessorTaskIds:
                 if predecessor_task_id not in task_ids:
                     raise ValueError(
@@ -432,6 +436,31 @@ class SolverService:
     @staticmethod
     def _build_failure_reasons(request: SolveRequest) -> list[SolverFailureReason]:
         reasons: list[SolverFailureReason] = []
+        tasks_by_tank: dict[str, list[SolverTask]] = defaultdict(list)
+        for task in request.tasks:
+            if task.tankId and task.mixingFamily:
+                tasks_by_tank[task.tankId].append(task)
+        for tank_id in sorted(tasks_by_tank):
+            tasks = sorted(tasks_by_tank[tank_id], key=lambda task: task.id)
+            for first_index, first_task in enumerate(tasks):
+                for second_task in tasks[first_index + 1 :]:
+                    if first_task.mixingFamily == second_task.mixingFamily:
+                        continue
+                    families = [first_task.mixingFamily, second_task.mixingFamily]
+                    task_ids = [first_task.id, second_task.id]
+                    reasons.append(
+                        SolverFailureReason(
+                            reasonType="NON_MIXING",
+                            tankId=tank_id,
+                            conflictingTaskIds=task_ids,
+                            mixingFamilies=families,
+                            message=(
+                                f"NON_MIXING | tankId={tank_id} | tasks={','.join(task_ids)} | "
+                                f"mixingFamilies={','.join(families)} | "
+                                "tasks require different families on the same fermentation tank"
+                            ),
+                        )
+                    )
         for item_code in sorted(SolverService._collect_item_codes(request)):
             available_quantity = sum(
                 max(0, balance.availableQuantity - balance.safetyStockQuantity)
