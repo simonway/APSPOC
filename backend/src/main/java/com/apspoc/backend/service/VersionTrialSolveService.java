@@ -278,7 +278,9 @@ public class VersionTrialSolveService {
                 baseTask.predecessorTaskIds(),
                 baseTask.setupGroup(),
                 baseTask.materialInputs(),
-                baseTask.materialOutputs()
+                baseTask.materialOutputs(),
+                baseTask.tankId(),
+                baseTask.mixingFamily()
         );
     }
 

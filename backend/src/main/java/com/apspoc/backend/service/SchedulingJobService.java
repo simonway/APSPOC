@@ -367,6 +367,15 @@ public class SchedulingJobService {
                     if (reason.demandId() != null && !reason.demandId().isBlank()) {
                         parts.add("demandId=" + reason.demandId());
                     }
+                    if (reason.tankId() != null && !reason.tankId().isBlank()) {
+                        parts.add("tankId=" + reason.tankId());
+                    }
+                    if (reason.conflictingTaskIds() != null && !reason.conflictingTaskIds().isEmpty()) {
+                        parts.add("conflictingTaskIds=" + String.join(",", reason.conflictingTaskIds()));
+                    }
+                    if (reason.mixingFamilies() != null && !reason.mixingFamilies().isEmpty()) {
+                        parts.add("mixingFamilies=" + String.join(",", reason.mixingFamilies()));
+                    }
                     if (reason.message() != null && !reason.message().isBlank()) {
                         parts.add(reason.message());
                     }
@@ -439,7 +448,9 @@ public class SchedulingJobService {
                                                 material.itemCode(),
                                                 material.quantity()
                                         ))
-                                        .toList()
+                                        .toList(),
+                                task.tankId(),
+                                task.mixingFamily()
                         ))
                         .toList(),
                 request.downtimes().stream()

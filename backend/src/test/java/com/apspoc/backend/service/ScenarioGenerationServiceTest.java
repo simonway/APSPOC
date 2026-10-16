@@ -184,7 +184,9 @@ class ScenarioGenerationServiceTest {
                                 List.of("reactor_r01"),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("RM-100", 2)),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("INT-100", 1)),
-                                "REACT_A"
+                                "REACT_A",
+                                null,
+                                null
                         ),
                         new GenerateScenarioRequest.RecipeInput(
                                 "rcp_fg100_v1",
@@ -196,7 +198,9 @@ class ScenarioGenerationServiceTest {
                                 List.of("pack_p01"),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("INT-100", 1)),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("FG-100", 1)),
-                                "PACK_STD"
+                                "PACK_STD",
+                                null,
+                                null
                         )
                 ),
                 List.of(new GenerateScenarioRequest.DemandInput(
@@ -261,7 +265,9 @@ class ScenarioGenerationServiceTest {
                                         new CreateScheduleJobRequest.MaterialQuantityInput("HOPS_A_LOT", 1)
                                 ),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("WORT_A500_LOT", 1)),
-                                "BREW_A500"
+                                "BREW_A500",
+                                null,
+                                null
                         ),
                         new GenerateScenarioRequest.RecipeInput(
                                 "rcp_a500_main_p3",
@@ -273,7 +279,9 @@ class ScenarioGenerationServiceTest {
                                 List.of("ferm_t1"),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("WORT_A500_LOT", 1)),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("FERMENTED_A500_LOT", 1)),
-                                "FERM_A500"
+                                "FERM_A500",
+                                null,
+                                null
                         ),
                         new GenerateScenarioRequest.RecipeInput(
                                 "rcp_a500_main_p3",
@@ -285,7 +293,9 @@ class ScenarioGenerationServiceTest {
                                 List.of("filt_f1"),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("FERMENTED_A500_LOT", 1)),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("BRIGHT_A500_LOT", 1)),
-                                "FILT_A500"
+                                "FILT_A500",
+                                null,
+                                null
                         ),
                         new GenerateScenarioRequest.RecipeInput(
                                 "rcp_a500_main_p3",
@@ -302,7 +312,9 @@ class ScenarioGenerationServiceTest {
                                         new CreateScheduleJobRequest.MaterialQuantityInput("LBL_A_LOT", 1)
                                 ),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("31015630002000000", 1)),
-                                "PKG_500"
+                                "PKG_500",
+                                null,
+                                null
                         )
                 ),
                 List.of(new GenerateScenarioRequest.DemandInput(
@@ -388,7 +400,9 @@ class ScenarioGenerationServiceTest {
                                         new CreateScheduleJobRequest.MaterialQuantityInput("HOPS_A_LOT", 1)
                                 ),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("WORT_A500_LOT", 1)),
-                                "BREW_A500"
+                                "BREW_A500",
+                                null,
+                                null
                         ),
                         new GenerateScenarioRequest.RecipeInput(
                                 "rcp_a500_phase4",
@@ -400,7 +414,9 @@ class ScenarioGenerationServiceTest {
                                 List.of("ferm_t1"),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("WORT_A500_LOT", 1)),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("FERMENTED_A500_LOT", 1)),
-                                "FERM_A500"
+                                "FERM_A500",
+                                null,
+                                null
                         ),
                         new GenerateScenarioRequest.RecipeInput(
                                 "rcp_a500_phase4",
@@ -412,7 +428,9 @@ class ScenarioGenerationServiceTest {
                                 List.of("mature_t1"),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("FERMENTED_A500_LOT", 1)),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("MATURE_A500_LOT", 1)),
-                                "MATURE_A500"
+                                "MATURE_A500",
+                                null,
+                                null
                         ),
                         new GenerateScenarioRequest.RecipeInput(
                                 "rcp_a500_phase4",
@@ -424,7 +442,9 @@ class ScenarioGenerationServiceTest {
                                 List.of("filt_f1"),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("MATURE_A500_LOT", 1)),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("FILTERED_A500_LOT", 1)),
-                                "FILT_A500"
+                                "FILT_A500",
+                                null,
+                                null
                         ),
                         new GenerateScenarioRequest.RecipeInput(
                                 "rcp_a500_phase4",
@@ -436,7 +456,9 @@ class ScenarioGenerationServiceTest {
                                 List.of("bright_t1"),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("FILTERED_A500_LOT", 1)),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("BRIGHT_A500_LOT", 1)),
-                                "BRIGHT_A500"
+                                "BRIGHT_A500",
+                                null,
+                                null
                         ),
                         new GenerateScenarioRequest.RecipeInput(
                                 "rcp_a500_phase4",
@@ -453,7 +475,9 @@ class ScenarioGenerationServiceTest {
                                         new CreateScheduleJobRequest.MaterialQuantityInput("LBL_A_LOT", 1)
                                 ),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("31015630002000000", 1)),
-                                "PKG_500"
+                                "PKG_500",
+                                null,
+                                null
                         ),
                         new GenerateScenarioRequest.RecipeInput(
                                 "rcp_c700_phase4",
@@ -465,7 +489,9 @@ class ScenarioGenerationServiceTest {
                                 List.of("mash_k1"),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("MALT_C_LOT", 1)),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("WORT_C700_BREW_1", 1)),
-                                "BREW_C700"
+                                "BREW_C700",
+                                null,
+                                null
                         ),
                         new GenerateScenarioRequest.RecipeInput(
                                 "rcp_c700_phase4",
@@ -477,7 +503,9 @@ class ScenarioGenerationServiceTest {
                                 List.of("mash_k2"),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("MALT_C_LOT", 1)),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("WORT_C700_BREW_2", 1)),
-                                "BREW_C700"
+                                "BREW_C700",
+                                null,
+                                null
                         ),
                         new GenerateScenarioRequest.RecipeInput(
                                 "rcp_c700_phase4",
@@ -492,7 +520,9 @@ class ScenarioGenerationServiceTest {
                                         new CreateScheduleJobRequest.MaterialQuantityInput("WORT_C700_BREW_2", 1)
                                 ),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("FERMENTED_C700_LOT", 1)),
-                                "FERM_C700"
+                                "FERM_C700",
+                                null,
+                                null
                         ),
                         new GenerateScenarioRequest.RecipeInput(
                                 "rcp_c700_phase4",
@@ -507,7 +537,9 @@ class ScenarioGenerationServiceTest {
                                         new CreateScheduleJobRequest.MaterialQuantityInput("CAP_C_LOT", 1)
                                 ),
                                 List.of(new CreateScheduleJobRequest.MaterialQuantityInput("31015670002000000", 1)),
-                                "PKG_700"
+                                "PKG_700",
+                                null,
+                                null
                         )
                 ),
                 List.of(

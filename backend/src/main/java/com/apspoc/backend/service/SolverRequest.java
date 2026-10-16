@@ -48,7 +48,9 @@ public record SolverRequest(
             List<String> predecessorTaskIds,
             String setupGroup,
             List<MaterialQuantity> materialInputs,
-            List<MaterialQuantity> materialOutputs
+            List<MaterialQuantity> materialOutputs,
+            String tankId,
+            String mixingFamily
     ) {
         public Task {
             candidateResourceIds = List.copyOf(candidateResourceIds);
@@ -56,6 +58,8 @@ public record SolverRequest(
             setupGroup = setupGroup == null || setupGroup.isBlank() ? null : setupGroup.trim();
             materialInputs = materialInputs == null ? List.of() : List.copyOf(materialInputs);
             materialOutputs = materialOutputs == null ? List.of() : List.copyOf(materialOutputs);
+            tankId = tankId == null || tankId.isBlank() ? null : tankId.trim();
+            mixingFamily = mixingFamily == null || mixingFamily.isBlank() ? null : mixingFamily.trim();
         }
     }
 

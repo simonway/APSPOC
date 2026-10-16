@@ -109,7 +109,10 @@ class SchedulingJobServiceTest {
                         "MATERIAL_SHORTAGE",
                         "Item RM-100 requires 1 units but only 0 units are available or produced.",
                         "RM-100",
-                        null
+                        null,
+                        null,
+                        List.of(),
+                        List.of()
                 ))
         ));
 
@@ -159,7 +162,9 @@ class SchedulingJobServiceTest {
                         List.of(),
                         null,
                         List.of(new CreateScheduleJobRequest.MaterialQuantityInput("RM-100", 1)),
-                        List.of(new CreateScheduleJobRequest.MaterialQuantityInput("FG-100", 1))
+                        List.of(new CreateScheduleJobRequest.MaterialQuantityInput("FG-100", 1)),
+                        null,
+                        null
                 )),
                 List.of(),
                 new CreateScheduleJobRequest.ObjectiveWeights(100, 1),

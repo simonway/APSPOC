@@ -142,7 +142,9 @@ public record CreateScheduleJobRequest(
             List<@NotBlank String> predecessorTaskIds,
             String setupGroup,
             List<@Valid MaterialQuantityInput> materialInputs,
-            List<@Valid MaterialQuantityInput> materialOutputs
+            List<@Valid MaterialQuantityInput> materialOutputs,
+            String tankId,
+            String mixingFamily
     ) {
         public TaskInput {
             candidateResourceIds = List.copyOf(candidateResourceIds);
@@ -150,6 +152,8 @@ public record CreateScheduleJobRequest(
             setupGroup = setupGroup == null || setupGroup.isBlank() ? null : setupGroup.trim();
             materialInputs = materialInputs == null ? List.of() : List.copyOf(materialInputs);
             materialOutputs = materialOutputs == null ? List.of() : List.copyOf(materialOutputs);
+            tankId = tankId == null || tankId.isBlank() ? null : tankId.trim();
+            mixingFamily = mixingFamily == null || mixingFamily.isBlank() ? null : mixingFamily.trim();
         }
 
         public TaskInput(
@@ -178,7 +182,9 @@ public record CreateScheduleJobRequest(
                     predecessorTaskIds,
                     setupGroup,
                     List.of(),
-                    List.of()
+                    List.of(),
+                    null,
+                    null
             );
         }
 
@@ -206,7 +212,9 @@ public record CreateScheduleJobRequest(
                     List.of(),
                     null,
                     List.of(),
-                    List.of()
+                    List.of(),
+                    null,
+                    null
             );
         }
     }

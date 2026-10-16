@@ -60,7 +60,9 @@ public class ImportBatchScenarioService {
                                 row.candidateResourceIds(),
                                 row.materialInputs(),
                                 row.materialOutputs(),
-                                row.setupGroup()
+                                row.setupGroup(),
+                                row.tankId(),
+                                row.mixingFamily()
                         ))
                         .toList(),
                 importBatchService.readRows(demandsBatch, ImportedDemandRow.class).stream()

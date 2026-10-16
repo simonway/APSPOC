@@ -66,17 +66,19 @@ public class ModelImportService {
             Map.entry("predecessorTaskIds", Set.of("predecessortaskids", "predecessors", "precedence", "前置任务", "前置任务列表")),
             Map.entry("setupGroup", Set.of("setupgroup", "setup", "换型组", "换型分组"))
     );
-    private static final Map<String, Set<String>> RECIPE_HEADER_ALIASES = Map.of(
-            "recipeId", Set.of("recipeid", "recipe", "工艺路线编号", "配方编号", "路线编号"),
-            "productCode", Set.of("productcode", "product", "产品", "产品编码"),
-            "operationCode", Set.of("operationcode", "operation", "工序编码", "工序"),
-            "operationName", Set.of("operationname", "operationlabel", "工序名称", "工序名"),
-            "sequence", Set.of("sequence", "seq", "顺序", "工序顺序"),
-            "durationMinutes", Set.of("durationminutes", "duration", "时长", "持续时长", "标准工时", "工时分钟"),
-            "candidateResourceIds", Set.of("candidateresourceids", "candidateresources", "candidates", "候选资源", "候选资源列表", "可用设备"),
-            "materialInputs", Set.of("materialinputs", "inputs", "inputmaterials", "投入物料", "投料", "输入物料"),
-            "materialOutputs", Set.of("materialoutputs", "outputs", "outputmaterials", "产出物料", "产出", "输出物料"),
-            "setupGroup", Set.of("setupgroup", "setup", "换型组", "换型分组")
+    private static final Map<String, Set<String>> RECIPE_HEADER_ALIASES = Map.ofEntries(
+            Map.entry("recipeId", Set.of("recipeid", "recipe", "工艺路线编号", "配方编号", "路线编号")),
+            Map.entry("productCode", Set.of("productcode", "product", "产品", "产品编码")),
+            Map.entry("operationCode", Set.of("operationcode", "operation", "工序编码", "工序")),
+            Map.entry("operationName", Set.of("operationname", "operationlabel", "工序名称", "工序名")),
+            Map.entry("sequence", Set.of("sequence", "seq", "顺序", "工序顺序")),
+            Map.entry("durationMinutes", Set.of("durationminutes", "duration", "时长", "持续时长", "标准工时", "工时分钟")),
+            Map.entry("candidateResourceIds", Set.of("candidateresourceids", "candidateresources", "candidates", "候选资源", "候选资源列表", "可用设备")),
+            Map.entry("materialInputs", Set.of("materialinputs", "inputs", "inputmaterials", "投入物料", "投料", "输入物料")),
+            Map.entry("materialOutputs", Set.of("materialoutputs", "outputs", "outputmaterials", "产出物料", "产出", "输出物料")),
+            Map.entry("setupGroup", Set.of("setupgroup", "setup", "换型组", "换型分组")),
+            Map.entry("tankId", Set.of("tankid", "tank", "罐号", "发酵罐", "储罐")),
+            Map.entry("mixingFamily", Set.of("mixingfamily", "family", "混装家族", "家族", "混装"))
     );
     private static final Map<String, Set<String>> DEMAND_HEADER_ALIASES = Map.of(
             "demandId", Set.of("demandid", "demand", "订单号", "需求号", "需求编号", "订单编号"),
@@ -142,7 +144,9 @@ public class ModelImportService {
             "candidateResourceIds",
             "materialInputs",
             "materialOutputs",
-            "setupGroup"
+            "setupGroup",
+            "tankId",
+            "mixingFamily"
     );
     private static final List<String> DEMAND_TEMPLATE_HEADERS = List.of(
             "demandId",
@@ -382,7 +386,9 @@ public class ModelImportService {
                             "recipe",
                             lineNumber
                     ),
-                    optionalValue(row, "setupGroup", "recipe")
+                    optionalValue(row, "setupGroup", "recipe"),
+                    optionalValue(row, "tankId", "recipe"),
+                    optionalValue(row, "mixingFamily", "recipe")
             ));
         }
 

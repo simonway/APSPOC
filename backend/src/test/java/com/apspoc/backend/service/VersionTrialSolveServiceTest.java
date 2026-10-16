@@ -104,7 +104,9 @@ class VersionTrialSolveServiceTest {
                         List.of(),
                         null,
                         List.of(),
-                        List.of(new CreateScheduleJobRequest.MaterialQuantityInput("P-A", 1))
+                        List.of(new CreateScheduleJobRequest.MaterialQuantityInput("P-A", 1)),
+                        null,
+                        null
                 )),
                 List.of(),
                 new CreateScheduleJobRequest.ObjectiveWeights(100, 1),

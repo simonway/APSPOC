@@ -78,13 +78,17 @@ public record GenerateScenarioRequest(
             @NotEmpty List<@NotBlank String> candidateResourceIds,
             List<@Valid MaterialQuantityInput> materialInputs,
             List<@Valid MaterialQuantityInput> materialOutputs,
-            String setupGroup
+            String setupGroup,
+            String tankId,
+            String mixingFamily
     ) {
         public RecipeInput {
             candidateResourceIds = List.copyOf(candidateResourceIds);
             materialInputs = materialInputs == null ? List.of() : List.copyOf(materialInputs);
             materialOutputs = materialOutputs == null ? List.of() : List.copyOf(materialOutputs);
             setupGroup = setupGroup == null || setupGroup.isBlank() ? null : setupGroup.trim();
+            tankId = tankId == null || tankId.isBlank() ? null : tankId.trim();
+            mixingFamily = mixingFamily == null || mixingFamily.isBlank() ? null : mixingFamily.trim();
         }
 
         public RecipeInput(
@@ -107,7 +111,9 @@ public record GenerateScenarioRequest(
                     candidateResourceIds,
                     List.of(),
                     List.of(),
-                    setupGroup
+                    setupGroup,
+                    null,
+                    null
             );
         }
     }

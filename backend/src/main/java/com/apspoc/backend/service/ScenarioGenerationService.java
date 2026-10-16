@@ -166,7 +166,9 @@ public class ScenarioGenerationService {
                             predecessorOperationIds,
                             recipe.setupGroup(),
                             materialInputs,
-                            materialOutputs
+                            materialOutputs,
+                            recipe.tankId(),
+                            recipe.mixingFamily()
                     ));
 
                     for (String predecessorOperationId : predecessorOperationIds) {

@@ -3,6 +3,8 @@ package com.apspoc.backend.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class SolverResponseTest {
@@ -43,7 +45,10 @@ class SolverResponseTest {
                         "MATERIAL_SHORTAGE",
                         "Item RM-100 requires 1 units but only 0 units are available or produced.",
                         "RM-100",
-                        null
+                        null,
+                        null,
+                        List.of(),
+                        List.of()
                 )
         );
     }

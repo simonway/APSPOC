@@ -41,7 +41,9 @@ class VersionGanttViewServiceTest {
                         List.of(),
                         null,
                         List.of(),
-                        List.of()
+                        List.of(),
+                        null,
+                        null
                 )),
                 List.of(),
                 new CreateScheduleJobRequest.ObjectiveWeights(100, 2, 1),

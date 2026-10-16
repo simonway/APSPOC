@@ -50,7 +50,14 @@ public record SolverResponse(
             String reasonType,
             String message,
             String itemCode,
-            String demandId
+            String demandId,
+            String tankId,
+            List<String> conflictingTaskIds,
+            List<String> mixingFamilies
     ) {
+        public FailureReason {
+            conflictingTaskIds = conflictingTaskIds == null ? List.of() : List.copyOf(conflictingTaskIds);
+            mixingFamilies = mixingFamilies == null ? List.of() : List.copyOf(mixingFamilies);
+        }
     }
 }
