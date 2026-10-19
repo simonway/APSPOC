@@ -14,6 +14,8 @@
   "downtimeCount": 0,
   "setupRuleCount": 0,
   "fermentationTankRuleCaseCount": 2,
+  "brightTankTransferRuleCaseCount": 0,
+  "multiBrewFillRuleCaseCount": 0,
   "precedencePairCount": 8,
   "bridgeAdjustmentCount": 0,
   "demandCoverages": [
@@ -128,6 +130,8 @@
       ],
       "predecessorOperationIds": [],
       "setupGroup": "BREW_A500",
+      "tankId": null,
+      "mixingFamily": null,
       "materialInputs": [
         {
           "itemCode": "MALT_A_LOT",
@@ -169,6 +173,8 @@
         "dem_a500_tank_success__01_sugarization"
       ],
       "setupGroup": "FERM_A500",
+      "tankId": "ferm_t1",
+      "mixingFamily": "A500",
       "materialInputs": [
         {
           "itemCode": "WORT_A500_LOT",
@@ -206,6 +212,8 @@
         "dem_a500_tank_success__02_fermentation"
       ],
       "setupGroup": "MATURE_A500",
+      "tankId": null,
+      "mixingFamily": null,
       "materialInputs": [
         {
           "itemCode": "FERMENTED_A500_LOT",
@@ -243,6 +251,8 @@
         "dem_a500_tank_success__03_maturation_wait"
       ],
       "setupGroup": "FILT_A500",
+      "tankId": null,
+      "mixingFamily": null,
       "materialInputs": [
         {
           "itemCode": "MATURED_A500_LOT",
@@ -280,6 +290,8 @@
         "dem_a500_tank_success__04_filtration"
       ],
       "setupGroup": "PKG_500",
+      "tankId": null,
+      "mixingFamily": null,
       "materialInputs": [
         {
           "itemCode": "BRIGHT_A500_LOT",
@@ -327,6 +339,8 @@
       ],
       "predecessorOperationIds": [],
       "setupGroup": "BREW_B600",
+      "tankId": null,
+      "mixingFamily": null,
       "materialInputs": [
         {
           "itemCode": "MALT_B_LOT",
@@ -368,6 +382,8 @@
         "dem_b600_tank_success__01_sugarization"
       ],
       "setupGroup": "FERM_B600",
+      "tankId": "ferm_t2",
+      "mixingFamily": "B600",
       "materialInputs": [
         {
           "itemCode": "WORT_B600_LOT",
@@ -405,6 +421,8 @@
         "dem_b600_tank_success__02_fermentation"
       ],
       "setupGroup": "MATURE_B600",
+      "tankId": null,
+      "mixingFamily": null,
       "materialInputs": [
         {
           "itemCode": "FERMENTED_B600_LOT",
@@ -442,6 +460,8 @@
         "dem_b600_tank_success__03_maturation_wait"
       ],
       "setupGroup": "FILT_B600",
+      "tankId": null,
+      "mixingFamily": null,
       "materialInputs": [
         {
           "itemCode": "MATURED_B600_LOT",
@@ -479,6 +499,8 @@
         "dem_b600_tank_success__04_filtration"
       ],
       "setupGroup": "PKG_600",
+      "tankId": null,
+      "mixingFamily": null,
       "materialInputs": [
         {
           "itemCode": "BRIGHT_B600_LOT",
@@ -555,8 +577,8 @@
     "observedFailCount": 0,
     "expectationMismatchCount": 0,
     "failureTypes": [],
-    "contractOnly": true,
-    "contractNote": "Fermentation tank rule rows are static contract checks for future solver/backend work; they do not change the current schedule request."
+    "contractOnly": false,
+    "contractNote": "Fermentation tank non-mixing is now enforced: recipe rows carry tankId/mixingFamily plus optional pins, and the solver emits NON_MIXING on an infeasible same-tank different-family conflict."
   },
   "fermentationTankRuleCases": [
     {
@@ -598,5 +620,9 @@
       "remarks": "B600 occupies tank 2 within capacity"
     }
   ],
+  "brightTankTransferRuleSummary": null,
+  "brightTankTransferRuleCases": [],
+  "multiBrewFillRuleSummary": null,
+  "multiBrewFillRuleCases": [],
   "bridgeAdjustments": []
 }

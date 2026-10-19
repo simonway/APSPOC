@@ -102,7 +102,11 @@
           "quantity": 1
         }
       ],
-      "setupGroup": "FERM_A500"
+      "setupGroup": "FERM_A500",
+      "tankId": "ferm_t1",
+      "mixingFamily": "A500",
+      "pinnedResourceId": "ferm_t1",
+      "pinnedStartMinutes": 300
     },
     {
       "id": "dem_a500_tank_fail__03_maturation_wait",
@@ -251,7 +255,11 @@
           "quantity": 1
         }
       ],
-      "setupGroup": "FERM_B600"
+      "setupGroup": "FERM_B600",
+      "tankId": "ferm_t1",
+      "mixingFamily": "B600",
+      "pinnedResourceId": "ferm_t1",
+      "pinnedStartMinutes": 300
     },
     {
       "id": "dem_b600_tank_fail__03_maturation_wait",

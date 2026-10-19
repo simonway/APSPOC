@@ -44,10 +44,10 @@
 - `MATURATION_WAIT` consumes `FERMENTED_B600_LOT` and outputs `MATURED_B600_LOT`.
 - Filtration consumes `MATURED_B600_LOT`, proving filtration cannot bypass the maturity proxy.
 - This is a POC maturity-window approximation, not exact fermentation tank residency support.
-- `15_fermentation_tank_rules.csv` is parsed as a static contract check for future tank-rule work.
+- `15_fermentation_tank_rules.csv` is parsed as an enforced fermentation tank non-mixing contract check.
 - Fermentation tank rule cases: `2` (`0` expected PASS, `2` expected FAIL).
 - Tank-rule PASS/FAIL expectations must match static capacity and non-mixing analysis.
-- Tank-rule contract checks do not change the current schedule request or claim solver enforcement.
+- Recipe rows carry tankId/mixingFamily plus optional pins, and the solver enforces non-mixing by emitting NON_MIXING on an infeasible same-tank different-family conflict.
 - Tank-rule case `tank_fail_a500` is expected to fail with `NON_MIXING` and conflicts with `tank_fail_b600`.
 - Tank-rule case `tank_fail_b600` is expected to fail with `NON_MIXING` and conflicts with `tank_fail_a500`.
 - Every operation should preserve the recipe-level material inputs and resolved material outputs.

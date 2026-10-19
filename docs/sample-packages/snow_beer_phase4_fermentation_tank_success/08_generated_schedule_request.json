@@ -102,7 +102,9 @@
           "quantity": 1
         }
       ],
-      "setupGroup": "FERM_A500"
+      "setupGroup": "FERM_A500",
+      "tankId": "ferm_t1",
+      "mixingFamily": "A500"
     },
     {
       "id": "dem_a500_tank_success__03_maturation_wait",
@@ -251,7 +253,9 @@
           "quantity": 1
         }
       ],
-      "setupGroup": "FERM_B600"
+      "setupGroup": "FERM_B600",
+      "tankId": "ferm_t2",
+      "mixingFamily": "B600"
     },
     {
       "id": "dem_b600_tank_success__03_maturation_wait",
