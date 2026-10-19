@@ -123,8 +123,8 @@ class ModelImportServiceTest {
                 "recipes.csv",
                 "text/csv",
                 """
-                recipeId,productCode,operationCode,operationName,sequence,durationMinutes,candidateResourceIds,materialInputs,materialOutputs,setupGroup
-                rcp_pa101_v1,PA-101,REACT,Reaction Stage,1,480,"reactor_r01,reactor_r02","RM_MONO_A:2|CAT_A:1","PA-101:1",REACT_A
+                recipeId,productCode,operationCode,operationName,sequence,durationMinutes,candidateResourceIds,materialInputs,materialOutputs,setupGroup,tankId,mixingFamily
+                rcp_pa101_v1,PA-101,REACT,Reaction Stage,1,480,"reactor_r01,reactor_r02","RM_MONO_A:2|CAT_A:1","PA-101:1",REACT_A,ferm_t1,A500
                 """.getBytes(StandardCharsets.UTF_8)
         );
 
@@ -141,6 +141,8 @@ class ModelImportServiceTest {
                 new CreateScheduleJobRequest.MaterialQuantityInput("PA-101", 1)
         );
         assertThat(recipes.getFirst().setupGroup()).isEqualTo("REACT_A");
+        assertThat(recipes.getFirst().tankId()).isEqualTo("ferm_t1");
+        assertThat(recipes.getFirst().mixingFamily()).isEqualTo("A500");
     }
 
     @Test

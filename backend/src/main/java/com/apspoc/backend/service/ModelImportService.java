@@ -678,7 +678,7 @@ public class ModelImportService {
                     workbook,
                     "Recipes",
                     RECIPE_TEMPLATE_HEADERS,
-                    List.of("rcp_pa101_v1", "PA-101", "REACT", "Reaction Stage", "1", "480", "reactor_r01,reactor_r02", "RM_MONO_A:2|CAT_A:1", "PA-101:1", "REACT_A")
+                    List.of("rcp_pa101_v1", "PA-101", "REACT", "Reaction Stage", "1", "480", "reactor_r01,reactor_r02", "RM_MONO_A:2|CAT_A:1", "PA-101:1", "REACT_A", "ferm_t1", "A500")
             );
             writeTemplateSheet(
                     workbook,
@@ -1012,7 +1012,7 @@ public class ModelImportService {
                 "Use the Resources, Tasks, Recipes, Demands, InventoryBalances, Downtimes, and SetupRules sheets to prepare import data.",
                 "Keep the header row unchanged so the APS importer can match the columns.",
                 "Candidate resource ids can use comma-separated values such as reactor_r01,reactor_r02.",
-                "Recipes define operation order, durationMinutes, candidateResourceIds, optional materialInputs/materialOutputs, and optional setupGroup.",
+                "Recipes define operation order, durationMinutes, candidateResourceIds, optional materialInputs/materialOutputs, and optional setupGroup, tankId, and mixingFamily.",
                 "Recipe material columns use itemCode:quantity pairs such as RM_MONO_A:2|CAT_A:1.",
                 "Demands use dueMinutes and fixedStartMinutes as offsets in minutes from scheduleStartAt.",
                 "InventoryBalances define product-level availableQuantity, optional availableFromMinutes, and optional safetyStockQuantity.",
