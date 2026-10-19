@@ -25,6 +25,8 @@ TASK_EXPORT_FIELDS = [
     "pinnedStartMinutes",
     "predecessorTaskIds",
     "setupGroup",
+    "tankId",
+    "mixingFamily",
 ]
 DOWNTIME_EXPORT_FIELDS = ["id", "resourceId", "startMinutes", "endMinutes", "downtimeType", "source", "description"]
 
@@ -57,6 +59,10 @@ class RecipeRow:
     material_inputs: list[MaterialQuantity]
     material_outputs: list[MaterialQuantity]
     setup_group: str
+    pinned_resource_id: str | None
+    pinned_start_minutes: int | None
+    tank_id: str | None
+    mixing_family: str | None
     remarks: str
 
 
@@ -433,6 +439,9 @@ def load_recipes(package_dir: Path, resource_ids: set[str], errors: list[str]) -
         for candidate_resource_id in candidate_resource_ids:
             if candidate_resource_id not in resource_ids:
                 errors.append(f"{source}: unknown candidate resource `{candidate_resource_id}`")
+        pinned_resource_id = row.get("pinnedResourceId", "").strip() or None
+        if pinned_resource_id is not None and pinned_resource_id not in candidate_resource_ids:
+            errors.append(f"{source}: pinnedResourceId `{pinned_resource_id}` is not in candidateResourceIds")
         recipes.append(
             RecipeRow(
                 recipe_id=recipe_id,
@@ -445,6 +454,12 @@ def load_recipes(package_dir: Path, resource_ids: set[str], errors: list[str]) -
                 material_inputs=parse_material_quantities(row.get("materialInputs", "").strip(), source, "materialInputs", errors),
                 material_outputs=parse_material_quantities(row.get("materialOutputs", "").strip(), source, "materialOutputs", errors),
                 setup_group=row.get("setupGroup", "").strip(),
+                pinned_resource_id=pinned_resource_id,
+                pinned_start_minutes=parse_optional_int(
+                    row.get("pinnedStartMinutes", "").strip(), source, "pinnedStartMinutes", errors, minimum=0
+                ),
+                tank_id=row.get("tankId", "").strip() or None,
+                mixing_family=row.get("mixingFamily", "").strip() or None,
                 remarks=row.get("remarks", "").strip(),
             )
         )
@@ -1106,10 +1121,10 @@ def analyze_fermentation_tank_rules(
         "observedFailCount": sum(1 for case in cases if case["observedOutcome"] == TANK_RULE_FAIL),
         "expectationMismatchCount": len(mismatches),
         "failureTypes": sorted({failure_type for case in cases for failure_type in case["observedFailureTypes"]}),
-        "contractOnly": True,
+        "contractOnly": False,
         "contractNote": (
-            "Fermentation tank rule rows are static contract checks for future solver/backend work; "
-            "they do not change the current schedule request."
+            "Fermentation tank non-mixing is now enforced: recipe rows carry tankId/mixingFamily plus optional "
+            "pins, and the solver emits NON_MIXING on an infeasible same-tank different-family conflict."
         ),
     }
     return cases, summary
@@ -1384,12 +1399,13 @@ def build_expected_checks(
     if tank_rule_summary is not None:
         semantic_checks.extend(
             [
-                "- `15_fermentation_tank_rules.csv` is parsed as a static contract check for future tank-rule work.",
+                "- `15_fermentation_tank_rules.csv` is parsed as an enforced fermentation tank non-mixing contract check.",
                 f"- Fermentation tank rule cases: `{tank_rule_summary['caseCount']}` "
                 f"(`{tank_rule_summary['expectedPassCount']}` expected PASS, "
                 f"`{tank_rule_summary['expectedFailCount']}` expected FAIL).",
                 "- Tank-rule PASS/FAIL expectations must match static capacity and non-mixing analysis.",
-                "- Tank-rule contract checks do not change the current schedule request or claim solver enforcement.",
+                "- Recipe rows carry tankId/mixingFamily plus optional pins, and the solver enforces non-mixing by "
+                "emitting NON_MIXING on an infeasible same-tank different-family conflict.",
             ]
         )
         for case in tank_rule_cases:
@@ -1549,8 +1565,12 @@ def build_outputs(
                 )
                 operation_fixed_resource_id = demand.fixed_resource_id if recipe.sequence == 1 and demand.fixed_resource_id else None
                 operation_fixed_start_minutes = demand.fixed_start_minutes if recipe.sequence == 1 else None
-                pinned_resource_id = operation_fixed_resource_id
-                pinned_start_minutes = operation_fixed_start_minutes
+                pinned_resource_id = recipe.pinned_resource_id or operation_fixed_resource_id
+                pinned_start_minutes = (
+                    recipe.pinned_start_minutes
+                    if recipe.pinned_start_minutes is not None
+                    else operation_fixed_start_minutes
+                )
                 material_inputs = list(recipe.material_inputs)
                 material_outputs = resolve_operation_material_outputs(product_recipes, recipe)
 
@@ -1631,6 +1651,10 @@ def build_outputs(
                 }
                 if recipe.setup_group:
                     task_payload["setupGroup"] = recipe.setup_group
+                if recipe.tank_id:
+                    task_payload["tankId"] = recipe.tank_id
+                if recipe.mixing_family:
+                    task_payload["mixingFamily"] = recipe.mixing_family
                 if pinned_resource_id:
                     task_payload["pinnedResourceId"] = pinned_resource_id
                 if pinned_start_minutes is not None:
@@ -1653,6 +1677,8 @@ def build_outputs(
                         "candidateResourceIds": list(recipe.candidate_resource_ids),
                         "predecessorOperationIds": predecessor_ids,
                         "setupGroup": recipe.setup_group or None,
+                        "tankId": recipe.tank_id,
+                        "mixingFamily": recipe.mixing_family,
                         "materialInputs": material_quantities_to_dicts(material_inputs),
                         "materialOutputs": material_quantities_to_dicts(material_outputs),
                         "dueMinutes": demand.due_minutes,
