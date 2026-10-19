@@ -78,7 +78,9 @@ public class ModelImportService {
             Map.entry("materialOutputs", Set.of("materialoutputs", "outputs", "outputmaterials", "产出物料", "产出", "输出物料")),
             Map.entry("setupGroup", Set.of("setupgroup", "setup", "换型组", "换型分组")),
             Map.entry("tankId", Set.of("tankid", "tank", "罐号", "发酵罐", "储罐")),
-            Map.entry("mixingFamily", Set.of("mixingfamily", "family", "混装家族", "家族", "混装"))
+            Map.entry("mixingFamily", Set.of("mixingfamily", "family", "混装家族", "家族", "混装")),
+            Map.entry("pinnedResourceId", Set.of("pinnedresourceid", "pinnedresource", "固定资源", "锁定资源")),
+            Map.entry("pinnedStartMinutes", Set.of("pinnedstartminutes", "pinnedstart", "固定开始分钟", "锁定开始分钟"))
     );
     private static final Map<String, Set<String>> DEMAND_HEADER_ALIASES = Map.of(
             "demandId", Set.of("demandid", "demand", "订单号", "需求号", "需求编号", "订单编号"),
@@ -146,7 +148,9 @@ public class ModelImportService {
             "materialOutputs",
             "setupGroup",
             "tankId",
-            "mixingFamily"
+            "mixingFamily",
+            "pinnedResourceId",
+            "pinnedStartMinutes"
     );
     private static final List<String> DEMAND_TEMPLATE_HEADERS = List.of(
             "demandId",
@@ -388,7 +392,16 @@ public class ModelImportService {
                     ),
                     optionalValue(row, "setupGroup", "recipe"),
                     optionalValue(row, "tankId", "recipe"),
-                    optionalValue(row, "mixingFamily", "recipe")
+                    optionalValue(row, "mixingFamily", "recipe"),
+                    optionalValue(row, "pinnedResourceId", "recipe"),
+                    parseOptionalInteger(
+                            rows.sheetName(),
+                            optionalValue(row, "pinnedStartMinutes", "recipe"),
+                            "pinnedStartMinutes",
+                            "recipe",
+                            lineNumber,
+                            true
+                    )
             ));
         }
 

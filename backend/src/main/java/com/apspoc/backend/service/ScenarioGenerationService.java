@@ -97,8 +97,8 @@ public class ScenarioGenerationService {
                     );
                     String operationFixedResourceId = recipe.sequence() == 1 ? fixedResourceId : null;
                     Integer operationFixedStartMinutes = recipe.sequence() == 1 ? fixedStartMinutes : null;
-                    String baselinePinnedResourceId = operationFixedResourceId;
-                    Integer baselinePinnedStartMinutes = operationFixedStartMinutes;
+                    String baselinePinnedResourceId = recipe.pinnedResourceId() != null ? recipe.pinnedResourceId() : operationFixedResourceId;
+                    Integer baselinePinnedStartMinutes = recipe.pinnedStartMinutes() != null ? recipe.pinnedStartMinutes() : operationFixedStartMinutes;
                     List<CreateScheduleJobRequest.MaterialQuantityInput> materialInputs = recipe.materialInputs();
                     List<CreateScheduleJobRequest.MaterialQuantityInput> materialOutputs = resolveOperationMaterialOutputs(productRecipes, recipe);
                     List<String> predecessorOperationIds = buildPredecessorOperationIds(

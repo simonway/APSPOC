@@ -14,7 +14,9 @@ public record ImportedRecipeRow(
         List<CreateScheduleJobRequest.MaterialQuantityInput> materialOutputs,
         String setupGroup,
         String tankId,
-        String mixingFamily
+        String mixingFamily,
+        String pinnedResourceId,
+        Integer pinnedStartMinutes
 ) {
     public ImportedRecipeRow {
         candidateResourceIds = List.copyOf(candidateResourceIds);
@@ -23,6 +25,7 @@ public record ImportedRecipeRow(
         setupGroup = setupGroup == null || setupGroup.isBlank() ? null : setupGroup.trim();
         tankId = tankId == null || tankId.isBlank() ? null : tankId.trim();
         mixingFamily = mixingFamily == null || mixingFamily.isBlank() ? null : mixingFamily.trim();
+        pinnedResourceId = pinnedResourceId == null || pinnedResourceId.isBlank() ? null : pinnedResourceId.trim();
     }
 
     public ImportedRecipeRow(
@@ -46,6 +49,8 @@ public record ImportedRecipeRow(
                 List.of(),
                 List.of(),
                 setupGroup,
+                null,
+                null,
                 null,
                 null
         );
