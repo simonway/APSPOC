@@ -16,6 +16,7 @@ from release_smoke import BACKEND_BASE_URL
 from release_smoke import DEFAULT_PASSWORD
 from release_smoke import DEFAULT_USERNAME
 from release_smoke import BackendSmokeClient
+from release_smoke import JOB_FAILURE_STATUSES
 from release_smoke import JOB_SUCCESS_STATUSES
 from release_smoke import JOB_TERMINAL_STATUSES
 from release_smoke import SmokeError
@@ -87,6 +88,12 @@ def parse_args() -> argparse.Namespace:
         "--check-only",
         action="store_true",
         help="Validate generated package metadata without connecting to the backend.",
+    )
+    parser.add_argument(
+        "--expect-infeasible-non-mixing",
+        action="store_true",
+        help="Assert the sample is expected to fail with a NON_MIXING reason (INFEASIBLE solve "
+        "from two mixing families pinned to the same fermentation tank).",
     )
     return parser.parse_args()
 
@@ -268,6 +275,30 @@ def validate_final_job(final_job: dict[str, Any]) -> None:
         raise SmokeError(f"uat package schedule job returned unexpected solverStatus: {final_job}")
 
 
+def validate_infeasible_non_mixing_job(final_job: dict[str, Any]) -> None:
+    if final_job.get("status") not in JOB_FAILURE_STATUSES:
+        raise SmokeError(
+            "expected infeasible non-mixing schedule job to end in a terminal failure, got "
+            f"status={final_job.get('status')}: {final_job}"
+        )
+    if final_job.get("solverStatus") != "INFEASIBLE":
+        raise SmokeError(
+            "expected infeasible non-mixing schedule job solverStatus=INFEASIBLE, got "
+            f"solverStatus={final_job.get('solverStatus')}: {final_job}"
+        )
+    if final_job.get("failureReason") != "SOLVER_NO_FEASIBLE_SCHEDULE":
+        raise SmokeError(
+            "expected infeasible non-mixing schedule job failureReason=SOLVER_NO_FEASIBLE_SCHEDULE, got "
+            f"failureReason={final_job.get('failureReason')}: {final_job}"
+        )
+    error_message = final_job.get("errorMessage") or ""
+    if "NON_MIXING" not in error_message or "ferm_t1" not in error_message:
+        raise SmokeError(
+            "expected infeasible non-mixing schedule job errorMessage to contain NON_MIXING and "
+            f"the tank id ferm_t1, got errorMessage={error_message!r}: {final_job}"
+        )
+
+
 def load_package_contract_summary(package_dir: Path) -> dict[str, Any]:
     metadata_path = package_dir / "10_generated_operation_metadata.json"
     if not metadata_path.exists():
@@ -348,6 +379,7 @@ def build_summary(
     import_summary: dict[str, Any],
     generated: dict[str, Any],
     final_job: dict[str, Any],
+    expect_infeasible_non_mixing: bool = False,
 ) -> dict[str, Any]:
     scenario = generated["scenario"]
     persisted_scenario = get_generated_scenario(client, scenario["scenarioId"])
@@ -362,6 +394,7 @@ def build_summary(
         "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "backendBaseUrl": BACKEND_BASE_URL,
         "username": DEFAULT_USERNAME,
+        "expectedOutcome": "INFEASIBLE_NON_MIXING" if expect_infeasible_non_mixing else "FEASIBLE",
         "packageDir": str(package_dir),
         "sourceDataVersion": context["dataVersion"],
         "dataVersion": data_version,
@@ -443,7 +476,10 @@ def main() -> int:
         timeout_seconds=poll_timeout_seconds,
     )
     final_job["jobId"] = submitted_job["jobId"]
-    validate_final_job(final_job)
+    if args.expect_infeasible_non_mixing:
+        validate_infeasible_non_mixing_job(final_job)
+    else:
+        validate_final_job(final_job)
 
     summary = build_summary(
         client,
@@ -454,6 +490,7 @@ def main() -> int:
         import_summary=import_summary,
         generated=generated,
         final_job=final_job,
+        expect_infeasible_non_mixing=args.expect_infeasible_non_mixing,
     )
 
     summary_path.parent.mkdir(parents=True, exist_ok=True)
