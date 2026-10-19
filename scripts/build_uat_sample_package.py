@@ -1613,6 +1613,7 @@ def build_outputs(
                             )[0]
                         ]
                         if not feasible_resource_ids:
+                            requested_start_minutes = pinned_start_minutes
                             pinned_start_minutes = None
                             bridge_adjustments.append(
                                 BridgeAdjustment(
@@ -1621,8 +1622,8 @@ def build_outputs(
                                     adjustment_type="RELAX_PINNED_START",
                                     message=(
                                         "Baseline request removed pinnedStartMinutes because no candidate resource is "
-                                        f"available for the fixed interval [{operation_fixed_start_minutes}, "
-                                        f"{operation_fixed_start_minutes + recipe.duration_minutes})"
+                                        f"available for the fixed interval [{requested_start_minutes}, "
+                                        f"{requested_start_minutes + recipe.duration_minutes})"
                                     ),
                                     original_fixed_resource_id=operation_fixed_resource_id,
                                     original_fixed_start_minutes=operation_fixed_start_minutes,

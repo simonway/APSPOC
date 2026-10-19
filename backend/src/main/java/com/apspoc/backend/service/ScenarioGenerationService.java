@@ -137,14 +137,15 @@ public class ScenarioGenerationService {
                                 downtimesByResource,
                                 request.horizonMinutes()
                         )) {
-                            int requestedEndMinutes = baselinePinnedStartMinutes + recipe.durationMinutes();
+                            int requestedStartMinutes = baselinePinnedStartMinutes;
+                            int requestedEndMinutes = requestedStartMinutes + recipe.durationMinutes();
                             baselinePinnedStartMinutes = null;
                             bridgeAdjustments.add(new GeneratedScenarioResponse.BridgeAdjustmentResponse(
                                     operationId,
                                     demand.demandId(),
                                     "RELAX_PINNED_START",
                                     "Baseline request removed pinnedStartMinutes because no candidate resource is available for the fixed interval [%d, %d)"
-                                            .formatted(operationFixedStartMinutes, requestedEndMinutes),
+                                            .formatted(requestedStartMinutes, requestedEndMinutes),
                                     operationFixedResourceId,
                                     operationFixedStartMinutes,
                                     baselinePinnedResourceId,
